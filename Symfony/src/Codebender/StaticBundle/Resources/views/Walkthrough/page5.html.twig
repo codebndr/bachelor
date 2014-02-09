@@ -1,0 +1,28 @@
+{% extends 'CodebenderStaticBundle:Walkthrough:skeleton.html.twig' %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block page_content %}
+
+	<h3>Congratulations!</h3>
+	<div style="font-size: 20px; line-height: 30px; text-align: justify">
+		<p>
+			Congratulations, you just completed the getting started guide successfuly! And we just saved you about
+			<strong>30 minutes</strong> of set up and configuration. Isn't that great? Now, check out the code you
+			previously loaded. It's quite simple really.
+		</p>
+		<p>
+			Welcome to the wonderful world of the Arduino!
+		</p>
+
+	</div>
+
+	<iframe style="height: 510px; width: 100%; margin: 10px 0 10px;" allowTransparency="true" src="//codebender.cc/embed/sketch:8283" frameborder="0"></iframe>
+	{% if not is_granted('ROLE_USER') %}
+		<hr class="soften">
+		<h4>Get a {{ site_name }} account to code, flash your device and share your work online.</h4>
+		{% render controller('codebender_user.usercontroller:inlineRegisterAction', { 'referrer' : app.request.query.get('referrer'), 'referral_code' : app.request.query.get('referral_code')}) %}
+	{% endif %}
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends '::container.html.twig' %}
+{% block title "Library Example" %}
+
+{% block javascripts %}
+{% endblock %}
+
+{% block body_options %} onload="prettyPrint()"{% endblock %}
+{% block mainspan %}
+    <div class="page-header row-fluid" >
+            <h1>{{library}} : {{ example }}</h1>
+    </div>
+
+    <div class="row-fluid">
+
+    {% include 'CodebenderGenericBundle:Default:project_wrapper.html.twig' %}
+    <hr>
+    <p>You can easily embed this example to your blog or website by copying the following code:</p>
+    {% include 'CodebenderGenericBundle:Default:library_example_embeddable_code.html.twig' with {'library': library, 'example': example} %}
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends '::container.html.twig' %}
+{% block title "Project Info" %}
+
+{% block javascripts %}
+{% endblock %}
+
+{% block mainspan %}
+
+<style type="text/css" media="screen">
+    #verify_div {
+        display: none;
+    }
+
+    #serial_hud {
+        height: 300px;
+    }
+</style>
+
+	<div class="page-header row-fluid" >
+		<h1>
+			{{site_name}} project
+			{% if parent is not null %}
+				<small style="float: right; display: inline-block;">
+					cloned from
+					<a href="{{ path("CodebenderGenericBundle_project", {"id":parent["id"]}) }}">
+						{{ parent["owner"] }}/{{ parent["name"] }}
+					</a>
+				</small>
+			{% endif %}
+		</h1>
+		{#
+				<h1>{{ project_name }}<small>By <a href="{{path('CodebenderGenericBundle_user',{'user':owner['username'] })}}">{{ owner['username'] }}</a> ({{owner['firstname']}} {{owner['lastname']}})</small></h1>
+		#}
+	</div>
+
+	<div class="row-fluid">
+
+        {#TODO: Redo it an a less fucked up way#}
+        <iframe style="height: 510px; width: 100%; margin: 10px 0 10px;" allowTransparency="true" src="{{ path("CodebenderGenericBundle_embed_project", {id: project_id}) }}" frameborder="0"></iframe>
+        <div class="well">
+            <h4>Serial Monitor: </h4>
+            <script type="text/javascript" src="{{ path("CodebenderGenericBundle_embedded_compilerflasher_js") }}"></script>
+            <div id="cb_cf" data-sections="serialmonitor"></div>
+        </div>
+
+
+		<h5>Description: </h5>
+		{% render controller("CodebenderUtilitiesBundle:Default:renderDescription", {'id': project_id}) %}
+
+		<br />
+		<hr class="soften">
+
+		<div class="row-fluid">
+            <h3>Embeddable code</h3>
+            <p>Use the following code to embed this sketch in your blog or website.</p>
+            {% include 'CodebenderGenericBundle:Default:project_embeddable_code.html.twig' with {'project_id': project_id}%}
+        </div>
+    </div>
+{% endblock %}

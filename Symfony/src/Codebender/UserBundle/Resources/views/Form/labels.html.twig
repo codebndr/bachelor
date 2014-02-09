@@ -1,0 +1,21 @@
+{# Overriding default form theme #}
+{% block form_label %}
+{% spaceless %}
+    {% if required %}
+        {% set attr = attr|merge({'class': attr.class|default('') ~ ' required control-label'}) %}
+    {% endif %}
+    <label><strong>{{ label|trans }}</strong></label>
+{% endspaceless %}
+{% endblock %}
+
+{% block form_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+    <ul>
+        {% for error in errors %}
+            <li class="control-group error"><span class="help-inline error-info"><i>{{ error.message }}</i></span></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_errors %}

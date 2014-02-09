@@ -1,0 +1,23 @@
+{# src/Codebender/UserBundle/Resources/views/User/resetting.email.twig #}
+
+{% block subject %}Resetting your password{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+Hello {{ user.username }} !
+
+You can reset your password by accessing {{ confirmationUrl }}
+
+Greetings,
+the {{ site_name }} team
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{#
+    You can of course render the html directly here.
+    Including a template as done here allows keeping things DRY by using
+    the template inheritance in it
+#}
+{#{% include 'CodebenderUserBundle:User:resetting_email.html.twig' %}#}
+{% endblock %}

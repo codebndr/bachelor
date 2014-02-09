@@ -1,0 +1,78 @@
+# CodebenderProjectBundle_create:
+#     pattern:  /create/{owner}/{name}/{description}
+#     defaults: { _controller: codebender_project.projectmanager:createAction }
+# 
+# CodebenderProjectBundle_delete:
+#     pattern:  /delete/{id}
+#     defaults: { _controller: codebender_project.projectmanager:deleteAction }
+# 
+# CodebenderProjectBundle_clone:
+#     pattern:  /clone/{owner}/{id}
+#     defaults: { _controller: codebender_project.projectmanager:cloneAction }
+# 
+# CodebenderProjectBundle_rename:
+#     pattern:  /rename/{id}/{new_name}
+#     defaults: { _controller: codebender_project.projectmanager:renameAction }
+# 
+# CodebenderProjectBundle_list:
+#     pattern:  /list/{owner}
+#     defaults: { _controller: codebender_project.projectmanager:listAction }
+# 
+# CodebenderProjectBundle_getowner:
+#     pattern:  /getowner/{id}
+#     defaults: { _controller: codebender_project.projectmanager:getOwnerAction }
+# 
+# CodebenderProjectBundle_getdescription:
+#     pattern:  /getdescription/{id}
+#     defaults: { _controller: codebender_project.projectmanager:getDescriptionAction }
+# 
+# CodebenderProjectBundle_setdescription:
+#     pattern:  /setdescription/{id}/{description}
+#     defaults: { _controller: codebender_project.projectmanager:setDescriptionAction }
+# 
+# CodebenderProjectBundle_listFiles:
+#     pattern:  /listfiles/{id}/
+#     defaults: { _controller: codebender_project.projectmanager:listFilesAction }
+# 
+# CodebenderProjectBundle_createFile:
+#     pattern:  /createfile/{id}/{filename}/{code}
+#     defaults: { _controller: codebender_project.projectmanager:createFileAction }
+# 
+# CodebenderProjectBundle_deleteFile:
+#     pattern:  /deletefile/{id}/{filename}
+#     defaults: { _controller: codebender_project.projectmanager:deleteFileAction }
+# 
+# CodebenderProjectBundle_renameFile:
+#     pattern:  /renamefile/{id}/{filename}/{new_filename}
+#     defaults: { _controller: codebender_project.projectmanager:renameFileAction }
+# 
+# CodebenderProjectBundle_getFile:
+#     pattern:  /getfile/{id}/{filename}
+#     defaults: { _controller: codebender_project.projectmanager:getFileAction }
+# 
+# CodebenderProjectBundle_setFile:
+#     pattern:  /setfile/{id}/{filename}/{code}
+#     defaults: { _controller: codebender_project.projectmanager:setFileAction }
+# 
+# CodebenderProjectBundle_search:
+#     pattern: /search/project/{token}
+#     defaults: { _controller: codebender_project.projectmanager:searchAction }
+# 
+# CodebenderProjectBundle_searchName:
+#     pattern: /search/name/{token}
+#     defaults: { _controller: codebender_project.projectmanager:searchNameAction }
+# 
+# CodebenderProjectBundle_searchDescription:
+#     pattern: /search/description/{token}
+#     defaults: { _controller: codebender_project.projectmanager:searchDescriptionAction }
+# 
+# CodebenderProjectBundle_checkexists:
+#     pattern: /exists/{token}
+#     defaults: { _controller: codebender_project.projectmanager:checkExistsAction }
+#CodebenderProjectBundle_setProjectPublic:
+#    pattern: /setpublic/{id}/
+#    defaults: { _controller: codebender_project.sketchManager:setProjectPublicAction}
+#
+#CodebenderProjectBundle_setProjectPrivate:
+#    pattern: /setprivate/{id}/
+#    defaults: { _controller: codebender_project.sketchManager:setProjectPrivateAction}

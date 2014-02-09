@@ -1,0 +1,19 @@
+{% if not islocalhost  %}
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
+    <link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+{% else %}
+	<link href="{{ asset("css/bootstrap.min.css") }}" rel="stylesheet">
+	<link href="{{ asset("css/bootstrap-responsive.min.css") }}" rel="stylesheet">
+	<link href="{{ asset("css/font-awesome.css") }}" rel="stylesheet">
+    <link href="{{ asset("css/jquery-ui.min.css") }}" rel="stylesheet" type="text/css"/>
+{% endif %}
+<link href="{{ asset("css/dropzone.css") }}" rel="stylesheet">
+
+<style type="text/css">
+	#plugin0
+	{
+		float: right;
+	}
+</style>

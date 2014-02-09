@@ -1,0 +1,57 @@
+{% extends 'CodebenderStaticBundle:Partner:skeleton.html.twig' %}
+
+{% block page_header %}Digispark{% endblock %}
+{% block page_content %}
+	<div class="row-fluid">
+		<div class="span4">
+			<p>
+				<img style="border-width:1px; border-style: solid;" src="https://s3.amazonaws.com/digispark/images/t/digispark4.jpg" alt="Digispark">
+			</p>
+		</div>
+		<div class="span8">
+			<p>The micro-sized, Arduino enabled, usb development board - cheap enough to leave in any project!</p>
+
+			<p>
+				The Story: We set out to build a little brother to the wonderful Arduino line of development boards - we
+				were tired of leaving our valuable Arduino's behind in projects, or worse, ripping apart old projects to
+				build new ones! We also felt the Arduino was too big and powerful for many projects where we only needed
+				a few pins, or an SPI or I2C bus. And so the Digispark was born!
+			</p>
+			<p>
+				Plug it in, power your project with USB or external sources, and easily use existing Arduino code!
+				But with its small size and low cost you can feel free to leave it in your project, give one to a
+				friend, and use them everywhere! Just how small is it? Well it's about the size of a quarter.
+			</p>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<p>
+			codebender has partnered with Digistump, the makers of Digispark, in order to provide our users with a
+			great experience. You can use your Digispark straight from the box by selecting it from our list of
+			supported boards, and you can also check out some of the excellent examples provided by Digistump on
+			the <a href="http://www.codebender.cc/user/digistump">Digistump codebender account</a>.
+
+			For more information and documentation regarding the Digipark, please check out their
+			<a href="http://digistump.com/wiki/">wiki page</a>, where you will also find a great
+			<a href="http://digistump.com/wiki/digispark/tutorials/connecting">	getting started page</a>.
+		</p>
+
+		<p>The Specs:
+		<ul>
+			<li>Power via USB or External Source - 5v or 7-35v (automatic selection)</li>
+			<li>On-board 500ma 5V Regulator</li>
+			<li>Built-in USB (and serial debugging)</li>
+			<li>6 I/O Pins (2 are used for USB only if your program actively communicates over USB, otherwise you can
+				use all 6 even if you are programming via USB)
+			</li>
+			<li>8k Flash Memory (about 6k after bootloader)</li>
+			<li>I2C and SPI (vis USI)</li>
+			<li>PWM on 3 pins (more possible with Software PWM)</li>
+			<li>ADC on 4 pins</li>
+			<li>Power LED and Test/Status LED (on Pin0)</li>
+		</ul>
+		</p>
+	</div>
+
+{% endblock %}
+

@@ -1,0 +1,7 @@
+parameters:
+#    codebender_static.example.class: Codebender\StaticBundle\Example
+
+services:
+#    codebender_static.example:
+#        class: %codebender_static.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

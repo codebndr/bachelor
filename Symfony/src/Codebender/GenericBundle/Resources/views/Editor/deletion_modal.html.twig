@@ -1,0 +1,16 @@
+<div class="modal hide fade" id="deletionModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">&#215;</button>
+        <h3>Are you sure you want to delete your sketch?</h3>
+    </div>
+    <div class="modal-body">
+        <p>Deleting your sketch is going to destroy all of its data. This action is irreversible. If you chose to
+            delete your project, all the files associated with it are going to be destroyed and the data will be
+            irrecoverable. You <strong>WILL BE UNABLE</strong> to back up your files.</p>
+    </div>
+    <div class="modal-footer">
+        <a id='cancelDeleteProjectButton' data-dismiss="modal" class="btn">Cancel</a>
+        <a id='deleteProjectButton' href="{{ path('CodebenderUtilitiesBundle_deleteproject', {'id':project_id}) }}" onclick='disableDeleteModalButtons()' class="btn btn-danger"><i
+                class="icon-trash icon-white"></i> Delete!</a>
+    </div>
+</div>

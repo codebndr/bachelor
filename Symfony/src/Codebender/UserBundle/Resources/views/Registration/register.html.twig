@@ -1,0 +1,24 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block layout_title %}<h2>{{ site_name }} <small>an online development & collaboration platform for Arduino users, makers and engineers
+</small></h2>{% endblock %}
+{% block fos_user_content %}
+	<h4>Sign Up</h4>
+	<p>Give it a try. It only takes a couple of minutes, and it's free!</p>
+	{% include "FOSUserBundle:Registration:register_content.html.twig" %}
+{% endblock fos_user_content %}
+
+{% block extra_content %}
+	<h4>Welcome</h4>
+	<p>
+		Welcome to {{ site_name }}. {{ site_name }} is an online development environment (IDE) designed for makers,
+		which helps you develop for Arduino devices faster and easier. It's also a collaboration hub, where you can find
+		cool project made by the community, share your own ideas, or collaborate with others.
+	</p>
+	<br>
+	<a href="http://www.flickr.com/photos/mjparnell/435465575/in/photostream/"
+	   title="Image courtesy of mcclouds. Used under Creative Commons Lincense">
+		<img style="border-width: 2px; border-color: #D5D5D5; border-style: dashed; padding: 5px; display: block; margin: auto; width:50%;"
+		     src="{{ asset("images/welcome-mat.jpg") }}">
+	</a>
+{% endblock %}

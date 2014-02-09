@@ -1,0 +1,14 @@
+parameters:
+#    codebender_board.example.class: Codebender\BoardBundle\Example
+
+services:
+#    codebender_board.example:
+#        class: %codebender_board.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    codebender_board.defaultcontroller:
+        class:        Codebender\BoardBundle\Controller\DefaultController
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
+            securitycontext: "@security.context"
+            container: "@service_container"

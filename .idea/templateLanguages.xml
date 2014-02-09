@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="TemplateDataLanguageMappings">
+    <file url="file://$PROJECT_DIR$/Symfony/src/Codebender/GenericBundle/Resources/views/CompilerFlasher/compiler_scripts.js.twig" dialect="JavaScript" />
+    <file url="file://$PROJECT_DIR$/Symfony/src/Codebender/GenericBundle/Resources/views/CompilerFlasher/compilerflasher.js.twig" dialect="JavaScript" />
+    <file url="file://$PROJECT_DIR$/Symfony/src/Codebender/GenericBundle/Resources/views/CompilerFlasher/flasher_scripts.js.twig" dialect="JavaScript" />
+    <file url="file://$PROJECT_DIR$/Symfony/src/Codebender/UserBundle/Resources/views/Default/options_validation.js.twig" dialect="JavaScript" />
+  </component>
+</project>
+

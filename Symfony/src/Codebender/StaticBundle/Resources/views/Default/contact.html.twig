@@ -1,0 +1,44 @@
+{# src/Codebender/StaticBundle/Resources/views/Default/contact.html.twig #}
+{% extends '::container.html.twig' %}
+{% block title %}
+Contact {{ site_name }}
+{% endblock %}
+{% block mainspan %}
+<h2>Contact Us <small>we are super nice people!</small></h2>
+<p>Thanks for taking the time to contact us! There are a lot of ways you can reach us. You're welcome to chose any one you like, or use the form below to send us a message.</p>
+<hr class="soft"/>
+<div class="row-fluid">
+	<div class="span6">
+		<h2>Chat</h2>
+		<p>Got a quick question? Do you have an issue you would like to discuss with us in real time, or do you just wanna have a chat? You can use the built-in chat client on the website, or ping us on IRC. Just talk to the main room, or poke an operator.</p>
+		<h3>IRC</h3>
+		<ul>
+		<li>Server: freenode</li>
+		<li>Channel #codebender.cc</li>
+		</ul>
+
+		<h2>FAQ, Feedback, Feature Requests and Support</h2>
+		<p>Do you have a frequently asked question? Would you like to give us some feedback, or would you like to make a feature request? Please use the 'Feedback' button at your right or go to our <a href="https://codebender.uservoice.com/" target="_new">Support Portal</a>. You will find all the answers to your questions and if you don't, you can ask a question and we'll respond as fast as possible. And don't forget to request the feature you would like to see in {{site_name}}!</p>
+
+		<h2>Submit Bugs</h2>
+		<p>Found a bug? Please tell us about it! Use our <a href="http://github.com/codebendercc/codebender.cc/issues" target="_new">issue tracker</a> on GitHub to inform us about bugs and various issues you are experiencing with our website.</p>
+
+		<h2>Social Media</h2>
+		<p>Make sure to follow <a href="http://twitter.com/codebender_cc" target="_new">@codebender_cc</a> on Twitter and like our <a href="http://facebook.com/codebender.cc" target="_new">Facebook Group</a> to get the latest news about {{site_name}}. Just use our Twitter and Facebook widgets on the bottom of the page! :)</p>
+
+		<h2>Developers &amp; Open Source</h2>
+		<p>Are you a hacker like us? Would you like to suggest an improvement or send us a patch? Do you have a question about the internals of our application? The best place for tech talk is our <a href="https://groups.google.com/forum/?fromgroups#!forum/codebendercc" target="_new">Google Group</a>. However, if you have a bug fixes or a patch, please make a pull request on our <a href="https://github.com/codebendercc" target="_new">GitHub repository.</a></p>
+		<p>If you would like to file a bug report, please use our <a href="https://github.com/codebendercc/codebender.cc/issues" target="_new">GitHub Issues</a> tracker.</p>
+	</div>
+
+	<div class="span6">
+		<h2>Contact Form</h2>
+		<form action="{{ path('CodebenderStaticBundle_contact') }}" method="post" {{ form_enctype(form) }}>
+		    {{ form_widget(form) }}
+
+		    <input type="submit" class="btn btn-primary"/>
+		</form>
+</div>
+
+</div>
+{% endblock %}

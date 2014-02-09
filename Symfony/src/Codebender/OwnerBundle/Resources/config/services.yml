@@ -1,0 +1,11 @@
+parameters:
+#    codebender_owner.example.class: Codebender\OwnerBundle\Example
+
+services:
+#    codebender_owner.example:
+#        class: %codebender_owner.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+    codebender_owner.ownercontroller:
+        class:        Codebender\OwnerBundle\Controller\DefaultController
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"

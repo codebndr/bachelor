@@ -1,0 +1,110 @@
+{% extends '::container.html.twig' %}
+
+{% block javascripts %}
+	<!-- jQuery library (served from Google) -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<!-- bxSlider Javascript file -->
+	<script src="{{ asset("jquery.bxslider/jquery.bxslider.min.js") }}"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function ()
+		{
+			$('.bxslider').bxSlider({
+				auto: true,
+				autoControls: true,
+				speed: 1000,
+				pause:15000,
+				controls: false
+			});
+		});
+	</script>
+{% endblock %}
+
+{% block stylesheets %}
+	<!-- bxSlider CSS file -->
+	<link href=" {{ asset("jquery.bxslider/jquery.bxslider.css") }}" rel="stylesheet" />
+
+	<style>
+		body
+		{
+			padding-top:40px;
+		}
+
+		@media (max-width: 979px)
+		{
+			body
+			{
+				padding-top: 0px;
+			}
+		}
+
+		.hero-title, .hero-subtitle, .hero-paragraph-title, .hero-paragraph
+		{
+			text-align: center;
+		}
+
+		.hero-subtitle
+		{
+			color: #555555;
+		}
+
+		.hero-image
+		{
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			width: 50%;
+		}
+
+		.featured-logo
+		{
+			border-radius: 3px;
+		}
+	</style>
+{% endblock %}
+
+{% block precontainer_content %}
+	<div class="row-fluid" style="background-image: url('{{ asset("old_mathematics.png") }}');
+			margin-bottom: 20px; padding-top: 20px;">
+		<div class="span12 {#well#}">
+			<h1 class="hero-title">code fast. code easy. codebender</h1>
+
+			<h3 class="hero-subtitle">
+				<span style="display:inline-block">online development & collaboration platform for</span>
+				<span style="display:inline-block">Arduino users, makers and engineers</span>
+			</h3>
+
+		</div>
+	</div>
+{% endblock %}
+
+{% block fluidcontainer %}
+
+	<div class="row-fluid">
+		<div class="span4">
+			<p style="text-align: center; font-size: 150px"><i class="icon-edit"></i></p>
+
+			<h3 class="hero-paragraph-title">Code</h3>
+
+			<p class="hero-paragraph">Awesome editor, fast cloud-based compiler, helpful error reporting.
+				Code faster and easier</p>
+		</div>
+		<div class="span4">
+			<p style="text-align: center; font-size: 150px"><i class="icon-signin"></i></p>
+
+			<h3 class="hero-paragraph-title">Deploy</h3>
+
+			<p class="hero-paragraph">Connect your Arduino via USB, or program your Arduino Ethernet remotely
+				over the network.</p>
+		</div>
+		<div class="span4">
+			<p style="text-align: center; font-size: 150px"><i class="icon-group"></i></p>
+
+			<h3 class="hero-paragraph-title">Share</h3>
+
+			<p class="hero-paragraph">Share your work, search for existing projects and clone them,
+				or collaborate with others.</p>
+		</div>
+	</div>
+
+{% endblock %}

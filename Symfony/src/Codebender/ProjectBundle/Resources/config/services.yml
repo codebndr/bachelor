@@ -1,0 +1,21 @@
+parameters:
+#    codebender_project.example.class: Codebender\ProjectBundle\Example
+
+services:
+#    codebender_project.example:
+#        class: %codebender_project.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    codebender_project.sketchdiskfilecontroller:
+        class:        Codebender\ProjectBundle\Controller\DiskFilesController
+        arguments:
+            directory:    "%directory%"
+            type: "sketches"
+            securitycontext: "@security.context"
+
+    codebender_project.sketchmanager:
+        class:        Codebender\ProjectBundle\Controller\SketchController
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
+            diskfilecontroller: "@codebender_project.sketchdiskfilecontroller"
+            securitycontext: "@security.context"

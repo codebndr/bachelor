@@ -1,0 +1,47 @@
+{% if not islocalhost %}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/json3/3.2.4/json3.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="//code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+
+
+{% else %}
+    <script src="{{ asset("js/jquery.min.js") }}" type="text/javascript"></script>
+    <script src="{{ asset("js/jquery-ui.min.js") }}" type="text/javascript"></script>
+	<script src="{{ asset("js/json3.min.js") }}"></script>
+    <script src="{{ asset("js/bootstrap.min.js") }}"></script>
+{% endif %}
+    <script type="text/javascript" src="{{ asset("js/dropzone.min.js") }}"></script>
+
+{% include "::browser_detect.html.twig" %}
+
+{#TODO: Check out top vs. bottom javascript placement#}
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+{# Lawnchair script #}
+<script src="{{ asset("lawnchair-0.6.1.min.js") }}" type="text/javascript"></script>
+
+
+<script src="{{ asset("bootstrap-filestyle.min.js") }}" type="text/javascript"></script>
+
+<script type="text/javascript">
+    function isMobile() {
+
+        return navigator.userAgent.match(/Android/i) ? true : false
+                || navigator.userAgent.match(/BlackBerry/i) ? true : false
+                || navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false
+                || navigator.userAgent.match(/IEMobile/i) ? true : false;
+    }
+
+    window.assets_basepath = "{{ asset("./") }}";
+
+    (function(){var p=[],w=window,d=document,e=f=0;p.push('ua='+encodeURIComponent(navigator.userAgent));e|=w.ActiveXObject?1:0;e|=w.opera?2:0;e|=w.chrome?4:0;
+        e|='getBoxObjectFor' in d || 'mozInnerScreenX' in w?8:0;e|=('WebKitCSSMatrix' in w||'WebKitPoint' in w||'webkitStorageInfo' in w||'webkitURL' in w)?16:0;
+        e|=(e&16&&({}.toString).toString().indexOf("\n")===-1)?32:0;p.push('e='+e);f|='sandbox' in d.createElement('iframe')?1:0;f|='WebSocket' in w?2:0;
+        f|=w.Worker?4:0;f|=w.applicationCache?8:0;f|=w.history && history.pushState?16:0;f|=d.documentElement.webkitRequestFullScreen?32:0;f|='FileReader' in w?64:0;
+        p.push('f='+f);p.push('r='+Math.random().toString(36).substring(7));p.push('w='+screen.width);p.push('h='+screen.height);var s=d.createElement('script');
+        s.src='{{ asset("js/wb/detect.js")}}?' + p.join('&');d.getElementsByTagName('head')[0].appendChild(s);})();
+
+</script>

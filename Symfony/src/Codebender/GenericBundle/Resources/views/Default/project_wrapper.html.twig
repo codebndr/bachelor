@@ -1,0 +1,411 @@
+<link href='//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css' type="text/css" rel="stylesheet" />
+<style type="text/css">
+
+    #codeBender_embed_wrapper{
+        position: relative;
+        height: 500px;
+        width: 100%;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_header{
+        height: 34px;
+        width: 100%;
+        background: #7b88a3; /* Old browsers */
+        background: -moz-linear-gradient(top,  #7b88a3 0%, #6c7890 42%, #657186 52%, #525c6d 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7b88a3), color-stop(42%,#6c7890), color-stop(52%,#657186), color-stop(100%,#525c6d)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  #7b88a3 0%,#6c7890 42%,#657186 52%,#525c6d 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  #7b88a3 0%,#6c7890 42%,#657186 52%,#525c6d 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  #7b88a3 0%,#6c7890 42%,#657186 52%,#525c6d 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  #7b88a3 0%,#6c7890 42%,#657186 52%,#525c6d 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7b88a3', endColorstr='#525c6d',GradientType=0 ); /* IE6-9 */
+        position: absolute;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_header a.clone-link
+    {
+	    position: absolute;
+	    top: 0;
+	    right: 115px;
+	    width: 115px;
+	    height: 100%;
+	    line-height: 34px;
+	    text-align: center;
+	    border-left: 1px solid #333;
+	    background: #2e3340; /* Old browsers */
+	    background: -moz-linear-gradient(top, #666666 0%, #2e3340 100%); /* FF3.6+ */
+	    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #666666), color-stop(100%, #2e3340)); /* Chrome,Safari4+ */
+	    background: -webkit-linear-gradient(top, # #666666 0%, #2e3340 100%); /* Chrome10+,Safari5.1+ */
+	    background: -o-linear-gradient(top, # #666666 0%, #2e3340 100%); /* Opera 11.10+ */
+	    background: -ms-linear-gradient(top, # #666666 0%, #2e3340 100%); /* IE10+ */
+	    background: linear-gradient(to bottom, # #666666 0%, #2e3340 100%); /* W3C */
+	    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#2e3340', GradientType=0); /* IE6-9 */
+	    text-decoration: none;
+	    color: #fff;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_header a.clone-link-inactive
+    {
+        color: #828282;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_header a.download-link{
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 115px;
+        height: 100%;
+        line-height: 34px;
+        text-align: center;
+        border-left: 1px solid #333;
+        background: #2e3340; /* Old browsers */
+        background: -moz-linear-gradient(top,  #666666 0%, #2e3340 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#666666), color-stop(100%,#2e3340)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  ##666666 0%,#2e3340 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  ##666666 0%,#2e3340 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  ##666666 0%,#2e3340 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  ##666666 0%,#2e3340 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#666666', endColorstr='#2e3340',GradientType=0 ); /* IE6-9 */
+        border-top-right-radius: 5px;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_sidebar{
+        position: absolute;
+        left: 0;
+        top: 34px;
+        bottom: 24px;
+        width: 0px;
+        background: #d5dde6;
+        overflow-x: hidden;
+        overflow-y: auto;
+        border-left: 1px solid #999;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_sidebar .file{
+        /*background-image: linear-gradient(bottom, rgb(86,6,78) 36%, rgb(112,32,110) 68%, rgb(146,58,143) 84%);*/
+        /*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d5d7d7), color-stop(100%,#9f9f9f)); *//* Chrome,Safari4+ */
+        height: 20px;
+        line-height: 20px;
+        overflow: hidden;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_sidebar .file-selected{
+        background: #8186a2; /* Old browsers */
+        background: -moz-linear-gradient(top,  #8186a2 0%, #95a4b6 1%, #697a90 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8186a2), color-stop(1%,#95a4b6), color-stop(100%,#697a90)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  #8186a2 0%,#95a4b6 1%,#697a90 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  #8186a2 0%,#95a4b6 1%,#697a90 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  #8186a2 0%,#95a4b6 1%,#697a90 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  #8186a2 0%,#95a4b6 1%,#697a90 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#8186a2', endColorstr='#697a90',GradientType=0 ); /* IE6-9 */
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_codeContainer{
+        position: absolute;
+        left: 0px;
+        top: 34px;
+        bottom: 24px;
+        right: 0px;
+        overflow: hidden;
+        border-left: 1px solid #999;
+        border-right: 1px solid #999;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_codeWrapper{
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        background: #EEE;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_footer{
+        height: 40px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border: 1px solid #999;
+        background: #cbcdcd; /* Old browsers */
+        background: -moz-linear-gradient(top,  #cbcdcd 0%, #cbcdcd 17%, #a6a7a7 64%, #8d8d8d 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cbcdcd), color-stop(17%,#cbcdcd), color-stop(64%,#a6a7a7), color-stop(100%,#8d8d8d)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  #cbcdcd 0%,#cbcdcd 17%,#a6a7a7 64%,#8d8d8d 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  #cbcdcd 0%,#cbcdcd 17%,#a6a7a7 64%,#8d8d8d 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  #cbcdcd 0%,#cbcdcd 17%,#a6a7a7 64%,#8d8d8d 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  #cbcdcd 0%,#cbcdcd 17%,#a6a7a7 64%,#8d8d8d 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cbcdcd', endColorstr='#8d8d8d',GradientType=0 ); /* IE6-9 */
+    }
+
+    /*#codeBender_embed_wrapper #codeBender_embed_footer .codebenderLogo{*/
+        /*position: absolute;*/
+        /*right: 15px;*/
+        /*line-height: 24px;*/
+        /*color: #5f6060;*/
+        /*text-decoration: none;*/
+    /*}*/
+
+    #codeBender_embed_wrapper #codeBender_embed_footer img{
+        position: absolute;
+        left: 10px;
+        margin-top:8px;
+    }
+
+    #codeBender_embed_wrapper #codeBender_embed_footer #codeBender_flashing_plugin
+    {
+        margin-top:3px;
+        position: absolute;
+        left: 40px;
+        right:10px;
+        line-height: 24px;
+        color: #5f6060;
+        display: inline-block;
+        text-decoration: none;
+    }
+    .name
+    {
+        margin-left: 10px;
+    }
+
+    .names
+    {
+        color:white;
+        margin-left: 10px;
+        margin-top: 6px;
+    }
+
+    .names a
+    {
+        color:#a2b6e5;
+    }
+
+    .names a:hover
+    {
+        color: #899bc5;
+    }
+
+    .pre-scrollable
+    {
+        height: 420px;
+        max-height: 420px;
+        border:none;
+        overflow-y:auto;
+    }
+
+    #verify_div
+    {
+        display: inline;
+    }
+
+    #boards
+    {
+        width:43%;
+    }
+
+    #plugin_div
+    {
+        display:inline;
+    }
+
+    #ports_div
+    {
+        width: 55%;
+    }
+
+    #ports
+    {
+        width: calc(100% - 111px);
+        width: -moz-calc(100% - 111px);
+        width: -webkit-calc(100% - 111px);
+    }
+
+    #operation_output
+    {
+        bottom: 43px;
+        position: absolute;
+        right: -11px;
+        border-top-right-radius: 0px;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        border-width: 1px;
+        border-color: gray;
+        border-style: solid;
+        padding: 3px 10px 3px 10px;
+        background-color: #F7F7F4;
+    }
+
+    .alert
+    {
+        /*padding-top: 9px;*/
+	    padding-top: 5px;
+	    padding-bottom: 2px;
+        margin-left: 5px;
+	    margin-bottom:0px;
+        /*display: inline;*/
+    }
+</style>
+<style>
+	li.L0, li.L1, li.L2, li.L3, li.L4,
+	li.L5, li.L6, li.L7, li.L8, li.L9
+	{
+		background: white;
+		list-style-type: decimal !important
+	}
+	ol.linenums
+	{
+		padding-left:60px;
+		margin-left:0px;
+		background:#f0f0f0;
+	}
+	li span
+	{
+		white-space: pre;
+		tab-size: 4;
+	}
+</style>
+<script src='//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js' type='text/javascript'></script>
+<script type="text/javascript" src="{{ path("CodebenderGenericBundle_embedded_compilerflasher_js") }}"></script>
+<script type="text/javascript">
+
+    function populate(input)
+    {
+        input = JSON.parse(input);
+
+        var files = input["files"];
+        window.files = Object();
+        for(i = 0; i < files.length; i++)
+        {
+            window.files[files[i]["filename"]] = files[i]["code"];
+            $("#file_list").html($("#file_list").html()+'<div id="file_list_file_'+i+'" class="file" for="codeBender_embed_file'+i+'" onclick=\'selectFile('+i+')\'> <span class="name">'+files[i]["filename"]+'</span> </div>');
+            $("#codeBender_embed_codeWrapper").html($("#codeBender_embed_codeWrapper").html()+'<div id="codeBender_embed_file'+i+'" class="codeBender_embed_file"><pre class="prettyprint linenums pre-scrollable lang-cpp" style="background:#fff;">'+files[i]["code"]+'</pre></div>');
+        }
+
+        $("#file_list_file_0").addClass("file-selected");
+        $(".projectName").html("<a href='"+input["project"]["url"]+"'>"+input["project"]["name"]+"</a>");
+        $(".userName").html("<a href='"+input["user"]["url"]+"'>"+input["user"]["name"]+"</a>");
+        $(".download-link").attr("href", input["download_url"]);
+	    {% if is_granted('ROLE_USER') %}
+            {% if type is defined and type == "example" %}
+			    $(".clone-link").attr("href", "javascript:$('.form-search').submit()");
+            {% else %}
+			    $(".clone-link").attr("href", input["clone_url"]);
+	        {% endif %}
+	    {% else %}
+		    $(".clone-link").addClass("clone-link-inactive").attr("title", "Sign up to clone!").attr("target", "_blank")
+				    .attr("href", "{{ path('CodebenderGenericBundle_index')}}");
+		    {% if not (type is defined and type == "example") %}
+			    $(".clone-link").attr("href", $(".clone-link").attr("href") + "?referrer=" + input["user"]["name"]);
+		    {% endif %}
+	    {% endif %}
+
+
+	    window.height = parseInt($("#codeBender_embed_wrapper").css("height")) - parseInt($("#codeBender_embed_header").css("height")) - parseInt($("#codeBender_embed_footer").css("height"));
+        $("#codeBender_embed_codeContainer").css("height", height);
+        $("#codeBender_embed_codeWrapper").css("height", height*files.length);
+        $(".codeBender_embed_file").css("height", height);
+
+        if(files.length > 1)
+            sidebarToggle();
+        else
+            $("#sidebar-toggle").remove();
+    }
+
+    function selectFile(file)
+    {
+        $(".file").removeClass("file-selected");
+        $("#file_list_file_"+file).addClass("file-selected");
+        $("#codeBender_embed_codeWrapper").animate({ marginTop: (-1*height*file) }, 500);
+    }
+
+    function sidebarOpen()
+    {
+        $("#codeBender_embed_sidebar").animate({width:200},400);
+        $("#codeBender_embed_codeContainer").animate({left:200},400);
+    }
+
+    function sidebarClose()
+    {
+        $("#codeBender_embed_sidebar").animate({width:0},400);
+        $("#codeBender_embed_codeContainer").animate({left:0},400);
+    }
+
+    function sidebarToggle()
+    {
+        if(parseInt($("#codeBender_embed_sidebar").width()) == 0)
+            sidebarOpen();
+        else
+            sidebarClose();
+
+        if($("#sidebar-toggle").attr("src") == "{{ asset('images/sidebar-open.png') }}")
+            $("#sidebar-toggle").attr("src", "{{ asset('images/sidebar-close.png') }}");
+        else
+            $("#sidebar-toggle").attr("src", "{{ asset('images/sidebar-open.png') }}");
+
+    }
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        populate({{ json|json_encode()|raw }});
+
+	    $("#operation_output").text("Ready");
+
+	    window.alert_interval = window.setInterval(function(){
+		    if($(".alert").length > 0)
+		    {
+			    $("#boards").remove();
+			    $("#operation_output").remove();
+			    window.clearInterval(window.alert_interval);
+		    }
+	    }, 1000);
+    });
+</script>
+</div>
+<div id="codeBender_embed_wrapper">
+    <div id="codeBender_embed_header">
+        <div class="shadow"></div>
+        <div class="names">
+            {% if type is defined and type == "example" %}
+                <span class="projectName">Example Name</span>
+                <form class="form-search" method='post' action='{{ path('CodebenderUtilitiesBundle_newproject')}}'>
+                    <input type = "hidden" id="project_name_id" name='project_name' value = "{{ example }}">
+                    <input type = "hidden" id="code_id" name='code' value = "{{ files|json_encode() }}">
+                </form>
+            {% else %}
+                <span class="projectName">Project Name</span> by <span class="userName">User Name</span>
+            {% endif %}
+        </div>
+
+	    <a class="clone-link" href="#">clone</a>
+	    <a class="download-link" href="#">download</a>
+    </div>
+
+
+    <div id="codeBender_embed_sidebar">
+        <div class="description"></div>
+
+        <div class="fileWrapper" id="file_list">
+        </div>
+    </div>
+
+    <div id="codeBender_embed_codeContainer">
+        <div id="codeBender_embed_codeWrapper">
+        </div>
+    </div>
+
+
+    <div id="codeBender_embed_footer">
+        <img id="sidebar-toggle"  src="{{ asset('images/sidebar-open.png') }}" onclick="sidebarToggle()">
+
+        <div id="codeBender_flashing_plugin">
+            <div id="cb_cf" data-sections="usbflash"></div>
+        </div>
+
+        {#<a class="codebenderLogo" href="{{ path("CodebenderGenericBundle_index") }}">codebender</a>#}
+    </div>
+</div>

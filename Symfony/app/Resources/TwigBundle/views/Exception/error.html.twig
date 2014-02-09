@@ -1,0 +1,32 @@
+{% extends '::basement.html.twig' %}
+
+{% block body %}
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="hero-unit">
+					<div class="row-fluid">
+						<div class="span3">
+							<img src="{{ asset('images/codebender_hq_large.png') }}">
+						</div>
+						<div class="span5">
+							<h1 style="font-size:400px">{{ status_code }}</h1>
+						</div>
+						<div class="row-fluid">
+							<div class="span12">
+								<br>
+
+								<h1>Oops! Something seems to be broken :/</h1>
+
+								<h2>The server returned a "{{ status_code }} {{ status_text }}" error.</h2>
+
+								<p>We will fix it as soon as possible. We apologize for any inconvenience caused.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

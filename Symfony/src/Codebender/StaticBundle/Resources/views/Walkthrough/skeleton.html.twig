@@ -1,0 +1,16 @@
+{% extends '::container.html.twig' %}
+{% block title %}
+    {{ site_name }} - getting started
+{% endblock %}
+
+{% block mainspan %}
+    <h1>Getting Started
+        <small>Page {{ page }} of 5</small>
+    </h1>
+    <div class="row-fluid">
+        {#<p>This section will get you ready to use your first Arduino-compatible device. It will get you through all the#}
+            {#necessary steps and into using your device.
+        </p>#}
+        {% block page_content %}{% endblock %}
+    </div>
+{% endblock %}

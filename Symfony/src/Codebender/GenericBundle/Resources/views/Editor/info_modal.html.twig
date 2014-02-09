@@ -1,0 +1,35 @@
+<div class="modal hide fade" id="infoModal" style="height:80%; overflow:hidden;">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>Project Info.</h3>
+    </div>
+    <div class="modal-body span5" style="max-height:80%;%">
+        <h5>Name:</h5>
+	    <a id="name_change_link" href="javascript:void(0)" onclick="editName();"
+	       style="float:right; margin-top:-30px;">edit</a>
+	    <p id="name">{{ project_name }}</p>
+
+	    <h5>Description:</h5>
+	    <a id="description_change_link" href="javascript:void(0)" onclick="editDescription();"
+	       style="float:right; margin-top:-30px;">edit</a>
+
+	    <p id="description">{% render controller("CodebenderUtilitiesBundle:Default:renderDescription", {'id': project_id}) %}</p>
+
+
+        <div id="embed_info">
+            <h5>Embed Project</h5>
+
+             <p>You can easily embed your project to your blog or website by copying the
+                following code.</p>
+            {% include 'CodebenderGenericBundle:Default:project_embeddable_code.html.twig' with {'project_id': project_id} %}
+        </div>
+
+
+        <br>
+        <div style="display: none" id="info_modal_progress">
+            <h4 id="info_modal_progress_message">
+            </h4>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,165 @@
+{% extends '::container.html.twig' %}
+{% block title "Account Options" %}
+
+{% block stylesheets %}
+    <!-- used to fix temporarily icons-textfields alignment bug in bootstrap 2.2.0 -->
+    <style type="text/css">
+	    .input-prepend
+	    {
+		    width: 100%;
+	    }
+
+	    .option-form-input
+	    {
+		    width: 80%;
+		    width: -moz-calc(100% - 50px);
+		    width: -webkit-calc(100% - 50px);
+		    width: calc(100% - 50px);
+	    }
+
+        .input-prepend .add-on, .input-prepend .btn {
+            margin-right: -4px;
+            /*	margin-bottom: 9px;*/
+        }
+
+        .input-append, .input-prepend {
+            font-size: 12px;
+            white-space: normal;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script src='{{ asset("validation/passvalidation.js") }}' type="text/javascript"></script>
+	{% include 'CodebenderUserBundle:Default:options_validation.js.twig' %}
+{% endblock %}
+
+{% block mainspan %}
+    <h2>
+	    User Account Options
+    </h2>
+    <h5> Change your personal information, then click 'Update Profile' to update your profile.</h5>
+    <hr />
+    <div class="row-fluid">
+        <div class="span3">
+            <ul class="thumbnails">
+                <li>
+                    <a href="http://www.gravatar.com" target="_blank" class="thumbnail">
+                        <img id="user_avatar" src="{{ image }}" alt="avatar of user"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="span9">
+            <label><strong>Avatar</strong></label>
+            <p>We are using Gravatar to power your avatars. Gravatar is a great service that stores your avatar and
+                allows you to reuse it on multiple websites across the web! To change your avatar, just click on it,
+                and you will be taken to www.gravatar.com. Then login or register with the same email you use for
+                {{ site_name }}, and upload an image. That's it, you're set!</p>
+        </div>
+    </div>
+
+	{% form_theme form 'CodebenderUserBundle:Form:labels.html.twig' %}
+    <form name="form" id="options_form" action="{{ url('CodebenderUserBundle_options') }}" method="POST">
+    <div class="row-fluid">
+        <div class="span4">
+            <div class="control-group">
+                {{ form_label(form.username) }}
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        {{ form_widget(form.username) }}
+                         <span class="help-block"></span><!--used only for spacing-->
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form_label(form.firstname) }}
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        {{ form_widget(form.firstname) }}
+                        <span class="help-block">{{ form_errors(form.firstname) }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form_label(form.lastname) }}
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        {{ form_widget(form.lastname) }}
+                        <span class="help-block">{{ form_errors(form.lastname) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="control-group">
+                {{ form_label(form.email) }}
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-envelope"></i></span>
+							{{ form_widget(form.email) }}
+                        <span class="help-block">{{ form_errors(form.email) }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                {{ form_label(form.twitter) }}
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on">@</span>
+                        {{ form_widget(form.twitter) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+			<div class="control-group">
+                {{ form_label(form.currentPassword) }}
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-exclamation-sign"></i></span>
+                        {{ form_widget(form.currentPassword) }}
+                        <a href="{{ url('fos_user_resetting_request') }}" tabindex="-1">
+                            <i><span style="padding-left:20px">Forgot your password? Get a new one!</span></i>
+                        </a>
+                        <span class="help-block">{{ form_errors(form.currentPassword) }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="passwords control-group">
+                {{ form_label(form.plainPassword.new, 'New Password') }}
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-exclamation-sign iconPassNew"></i></span>
+                        {{ form_widget(form.plainPassword.new) }}
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="passwords control-group">
+                {{ form_label(form.plainPassword.confirm, 'Confirm New Password') }}
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-exclamation-sign iconPassConfirm"></i></span>
+                        {{ form_widget(form.plainPassword.confirm) }}
+                        <span class="help-block">{{form_errors(form.plainPassword.confirm)}}</span>
+                    </div>
+                </div>
+            </div>
+			<span class="help-block">{{ form_errors(form) }}</span>
+			<div style="display:none">
+				{{form_rest(form)}}
+			</div>
+        </div>
+    </div>
+    <i id="loading" class="icon-refresh icon-spin icon-large"></i>
+    <span class="help-inline update-info"></span>
+    <hr />
+    <a class="btn btn-primary" type="submit" id="modify">Update Profile </a>
+    {#//TODO Find a better way of doing it#}
+    <input type="submit" style="display: none" value="Hidden submit">
+    </form>
+{% endblock %}

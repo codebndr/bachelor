@@ -1,0 +1,27 @@
+CodebenderStaticBundle_tutorials:
+    pattern:  /tutorials
+    defaults: { _controller: CodebenderStaticBundle:Default:tutorials }
+
+CodebenderStaticBundle_walkthrough:
+    pattern:  /walkthrough/page/{page}
+    defaults: { _controller: CodebenderStaticBundle:Default:walkthrough }
+
+#CodebenderStaticBundle_contact:
+#    pattern:  /contact
+#    defaults: { _controller: CodebenderStaticBundle:Default:contact }
+#
+#CodebenderStaticBundle_contact_new:
+#    pattern:  /contact_new
+#    defaults: { _controller: CodebenderStaticBundle:Default:contact }
+
+CodebenderStaticBundle_plugin:
+    pattern:  /plugin
+    defaults: { _controller: CodebenderStaticBundle:Default:plugin }
+
+CodebenderStaticBundle_upload_bootloader:
+    pattern:  /upload/bootloader
+    defaults: { _controller: CodebenderStaticBundle:Default:uploadBootloader}
+
+CodebenderStaticBundle_eula:
+    pattern:  /eula
+    defaults: { _controller: CodebenderStaticBundle:Default:eula}

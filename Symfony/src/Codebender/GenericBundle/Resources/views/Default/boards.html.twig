@@ -1,0 +1,147 @@
+{% extends '::container.html.twig' %}
+{% block title %}
+{{ site_name }} boards
+{% endblock %}
+{% block mainspan %}
+
+<script type="text/javascript">
+    function warnDeleteBoard(deletion_path)
+    {
+        $("#deleteBoardButton").attr("href", deletion_path);
+        $("#deleteBoardModal").modal("show");
+    }
+
+    function showEditBoardModal(id, old_name, old_description)
+    {
+        $("#saveChangesButton").attr("href","javascript:editBoard("+id+")");
+        $("#editBoardModal").modal("show");
+        $("#newName").val(old_name);
+        $("#newDescription").val(old_description);
+    }
+
+    function editBoard(id) {
+        $.post("{{ path('CodebenderUtilitiesBundle_editBoard') }}", {id:id, name:$("#newName").val(), desc:$("#newDescription").val()}, function (data) {
+            $("#editBoardModal").modal('hide');
+            var obj = jQuery.parseJSON(data);
+            if (obj.success == 1) {
+            $("#name_"+id).text(obj.new_name);
+            $("#desc_"+id).text(obj.new_desc);
+            }
+            else {
+                $("#editBoardErrorModal").modal("show");
+                $("#editBoardMessage").text(obj.message);
+            }
+        });
+    }
+
+    $(document).ready(function ()
+    {
+	    $(":file").filestyle();
+    });
+</script>
+
+<h1>{{ site_name }} boards<small> le board support</small></h1>
+<div>
+	<p>We are working really hard on building a great tool for developers. For us, that includes supporting as many different boards and platforms as possible. You can find a list of all the currently supported boards below.</p>
+	<hr class="soften">
+
+    {% if is_granted('ROLE_USER') %}
+	    {% if available_boards["success"] %}
+		    <div class="row-fluid">
+			    <h3>Add Personal Boards - {{ available_boards["available"] }} available</h3>
+
+			    <form class="form-search" method='post' enctype="multipart/form-data" action='{{ path('CodebenderUtilitiesBundle_addboard') }}'>
+				    <div class="row-fluid">
+					    <div class="span12">
+						    <div>
+							    <input type="file" name="boards" class="filestyle" data-classButton="btn">
+							    <button type="submit" class="btn btn-success">Upload</button>
+						    </div>
+					    </div>
+				    </div>
+			    </form>
+		    </div>
+	    {% else %}
+		    <div class="row-fluid">
+			    <h3>Request Personal Boards</h3>
+			    <p style='text-align: justify'>
+				    Looks like you have no available private boards. If you would like to use your personal boards in
+				    {{ site_name }}, please send us an email at
+				    <a href="mailto:girder@codebender.cc">girder@codebender.cc</a> with the subject "Personal Boards".
+			    </p>
+		    </div>
+	    {% endif %}
+    {% endif %}
+	{% for board in boards %}
+	    <h4>{% if board["personal"] %}
+                <i class="icon-lock" title='Personal Board'></i>
+		    {% endif %}
+            <span id="{{ "name_" ~ board['id'] }}"> {{board["name"]}}</span>
+		    {% if board["personal"] %}
+			    <a title='Delete board'
+			            style='float:right; margin-right: 10px'
+			            href="javascript:void(0)"
+			            onClick="warnDeleteBoard('{{ path('CodebenderUtilitiesBundle_deleteboard', {'id':board['id']}) }}')">
+				    <i class="icon-trash"></i>
+			    </a>
+			    <a title='Edit board'
+			            href="javascript:void(0)"
+			            style='float:right; margin-right: 10px'
+			            onClick="showEditBoardModal({{ board['id'] }},'{{ board["name"] }}', '{{ board["description"] }}')">
+				    <i class="icon-pencil"></i>
+			    </a>
+		    {% endif %}
+	    </h4>
+		<p>
+			<span id="{{ "desc_" ~ board['id'] }}">{{board["description"]}}</span>
+        </p>
+	{% endfor %}
+</div>
+
+
+
+<div class="modal hide fade" id="deleteBoardModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">&#215;</button>
+        <h3>Are you sure you want to delete your board?</h3>
+    </div>
+    <div class="modal-body">
+        <p>Deleting your board is going to destroy all of its data. This action is irreversible. You <strong>WILL BE UNABLE</strong> to back up your board.</p>
+    </div>
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn">Cancel</a>
+        <a id="deleteBoardButton" href="" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete!</a>
+    </div>
+</div>
+
+
+<div class="modal hide fade" id="editBoardModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3>Edit Board</h3>
+    </div>
+    <div class="modal-body span6">
+        <label>Name: </label><input type="text" id="newName">
+        <label>Description: </label><input type="text" id="newDescription">
+    </div>
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn">Cancel</a>
+        <a id="saveChangesButton" href="" class="btn btn-primary"><i class="icon-download icon-white"></i> Save
+            Changes</a>
+    </div>
+</div>
+
+<div class="modal hide fade" id="editBoardErrorModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">x</button>
+        <h3>Error:</h3>
+    </div>
+    <div class="modal-body span10">
+        <label id='editBoardMessage'></label>
+    </div>
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn btn-danger">OK</a>
+    </div>
+</div>
+{% endblock %}
+

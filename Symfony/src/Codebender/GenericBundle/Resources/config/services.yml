@@ -1,0 +1,7 @@
+parameters:
+#    codebender_generic.example.class: Codebender\GenericBundle\Example
+
+services:
+#    codebender_generic.example:
+#        class: %codebender_generic.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

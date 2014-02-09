@@ -1,0 +1,6 @@
+{% for file in files %}
+<h2>{{file['filename']}}</h2>
+<div id="code-container" class="row-fluid">
+	<pre id="editor" class="prettyprint linenums">{{file['code'] | raw}}</pre>
+</div>
+{% endfor %}

@@ -1,0 +1,41 @@
+{% extends 'CodebenderStaticBundle:Partner:skeleton.html.twig' %}
+
+{% block page_header %}April Fool's Day Special{% endblock %}
+{% block page_content %}
+	<div class="row-fluid">
+		<p>
+			Welcome to codebender's April Fool's Day Special page. At codebender, we really, really like pranks, and we
+			don't wait around for April Fool's to play a good practical joke on each other. Having said that, we also
+			respect April Fool's Day as a celebration of practical pranks, with significantly reduced chance of getting
+			angry friends and spouses chasing after you. Thus, in collaboration with Olympia Circuits and Digistump, we
+			decided to seize the opportunity to add some spice in our everyday lives. Behold, two sketches for proud
+			Arno (or any Arduino Leonardo-compatible device for that matter) and Digispark owners.
+		</p>
+		<p>
+			To use these sketches, you will need to install our browser plugin (works best for Firefox and Chrome). We
+			also <strong>strongly encourage</strong> you to follow our
+			<a href="{{ path("CodebenderStaticBundle_plugin") }}">Getting Started Guide</a>, which takes care of all the
+			requirements, like device drivers for Windows and Mac and device permissions for Linux. For more info on the
+			plugin, you can visit our
+			<a href="{{ path("CodebenderStaticBundle_walkthrough", {"page":1}) }}">plugin info page</a>.
+		</p>
+
+		<h3>Arno & Arduino Leonardo Mouse Prank</h3>
+		<p>
+			If you have an Arno or an Arduino Leonardo, check out this sketch by Olympia Circuits, the makers of Arno.
+			Load the code to your device, and connect it to an unsuspecting victim's computer. It will move their mouse
+			at random intervals, and hopefully drive some poor person crazy.
+		</p>
+		<iframe height="510px" width="100%" src="//codebender.cc/embed/sketch:7400" frameborder="0"></iframe>
+
+		<h3>Digispark Caps Lock Prank</h3>
+		<p>
+			Straight from Digistump's sources comes this excellent prank. This sketch programs your Digispark to act as
+			a keyboard, and randomly turns the Caps Lock on and off every 5-15 minutes. Program your Digispark and plug
+			it to an unsuspected victim's computer. Please note, this will work on Windows and Linux, but it will
+			probably not work on Mac OS X machines.
+		</p>
+		<iframe height="510px" width="100%" src="//codebender.cc/embed/sketch:8014" frameborder="0"></iframe>
+	</div>
+{% endblock %}
+

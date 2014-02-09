@@ -1,0 +1,69 @@
+security:
+
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        codebender_user.experimental_provider:
+            id:  codebender_user.experimental_provider
+        in_memory:
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern:  ^/demo/secured/login$
+            security: false
+
+        # secured_area:
+        #     pattern:    ^/*
+        #     anonymous: ~
+        #     form_login:
+        #         login_path:  /login
+        #         check_path:  /login_check
+        #         default_target_path: /home
+        #     logout:
+        #         path:   /logout
+        #         target: /home
+        main:
+            pattern: ^/
+            form_login:
+                login_path: /
+                provider: codebender_user.experimental_provider
+#                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+            logout:
+                path: /logout
+            anonymous:    true
+            remember_me:
+                    key:      %mykey%
+                    lifetime: 31536000
+                    path:     /
+                    domain:   ~
+            #anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"
+
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/register/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/list/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/users/options, roles: ROLE_USER }
+        - { path: ^/users/setoptions, roles: ROLE_USER }
+        - { path: ^/create/*, roles: ROLE_USER }
+        - { path: ^/static/info/points, roles: ROLE_USER }
+        - { path: ^/admin/, role: ROLE_ADMIN }
+

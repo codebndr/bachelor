@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Settings">
+    <option name="pathToUrlGenerator" value="Symfony/app/cache/dev/appDevUrlGenerator.php" />
+    <option name="pathToTranslation" value="Symfony/app/cache/dev/translations" />
+    <option name="directoryToWeb" value="Symfony/web" />
+    <option name="directoryToApp" value="Symfony/app" />
+    <option name="pluginEnabled" value="true" />
+    <option name="phpHighlightServices" value="true" />
+    <option name="containerFiles">
+      <list>
+        <container_file path="Symfony/app/cache/dev/appDevDebugProjectContainer.xml" />
+      </list>
+    </option>
+  </component>
+</project>
+

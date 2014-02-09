@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>{% block title %}Codebender{% endblock %}</title>
+		<link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        {% include '::common_stylesheets.html.twig' %}
+		<style type="text/css">
+			body
+			{
+				padding-top: 60px;
+				padding-bottom: 50px;
+				background: url({{ asset("blizzard.png")}});
+			}
+
+			@media (max-width: 979px)
+			{
+				body
+				{
+					padding-top: 0px;
+				}
+			}
+		</style>
+
+		<style type="text/css">
+			#logo_small
+			{
+				width: 25px;
+				height: 25px;
+				margin-top: -3px;
+				border-radius: 3px;
+			}
+
+			#avatar
+			{
+				float: left;
+				width:25px;
+				height:25px;
+				margin: -3px 5px 0 0;
+				border-radius: 3px;
+			}
+
+		</style>
+        {% block stylesheets_base %}{% endblock %}
+        {% block stylesheets %}{% endblock %}
+
+{% include '::common_javascript.html.twig' %}
+
+<style type="text/css">
+
+.slide-out-div {
+	background: url('{{ asset("blizzard.png")}}');
+	padding: 20px;
+	width: 250px;
+/*    border: 1px solid #29216d;*/
+
+	line-height: 1em;
+	position: fixed!important;
+	height: 575px!important;
+	top: 120px!important;
+	left: -292px;
+	background-color: #CC6D00;
+	border-style: solid none solid solid;
+	border-top-color: white;
+	border-bottom-color: white;
+	border-left-color: white;
+	border-top-left-radius: 0px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 0px;
+	-webkit-box-shadow: rgba(255, 255, 255, 0.246094) 1px 1px 1px inset, rgba(0, 0, 0, 0.496094) 0px 1px 2px;
+	box-shadow: rgba(255, 255, 255, 0.246094) 1px 1px 1px inset, rgba(0, 0, 0, 0.496094) 0px 1px 2px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: bold;
+	font-size: 14px;
+	font-family: Arial, sans-serif;
+	right: 0px;
+	z-index: 9999;
+	margin-top: -60px;
+	margin-right: 0px;
+	display: block;
+}
+
+.handle
+{
+	background-image: url({{ asset("/images/indiegogo.png") }});
+	width: 32px;
+	height: 127px;
+	display: block;
+	text-indent: -99999px;
+	outline: none;
+	position: absolute;
+	top: 0%!important;
+	right: -32px;
+	background-position: initial initial;
+	background-repeat: no-repeat no-repeat;
+}
+#login_box
+{
+	background:#fff;
+	border-color: #DDD;
+	border-style: solid;
+	border-radius: 5px;
+	border-width: 1px;
+	padding: 10px;
+	top: 50px;
+	right:10px;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	display:none;
+	position:absolute;
+	width:220px;
+}
+</style>
+
+		{% block javascripts_base %}{% endblock %}
+	    {% block javascripts %}{% endblock %}
+		{% block javascripts_upload_head %}{% endblock %}
+
+		<script type="text/javascript">
+		var mouse_is_inside = false;
+
+		$(document).ready(function() {
+		    $("#login_btn").click(function() {
+		        var loginBox = $("#login_box");
+		        if (loginBox.is(":visible"))
+		            loginBox.fadeOut("fast");
+		        else
+		            loginBox.fadeIn("fast");
+		        return false;
+		    });
+
+		    $("#login_box").hover(function(){
+		        mouse_is_inside=true;
+		    }, function(){
+		        mouse_is_inside=false;
+		    });
+
+		    $("body").click(function(){
+		        if(! mouse_is_inside) $("#login_box").fadeOut("fast");
+		    });
+
+			if($(".text-error").text() != "")
+				$("#login_box").fadeIn("fast");
+		});
+
+		window.which_browser_interval = window.setInterval(function ()
+		{
+			if (typeof WhichBrowser !== 'undefined')
+			{
+				window.Browsers = new WhichBrowser();
+				var url = "{{  path('CodebenderUtilitiesBundle_logdb', {actionid : 28, meta : "OS_BROWSER_META"}) }}";
+				url = url.replace("OS_BROWSER_META", JSON.stringify({ "url": window.location.pathname, "type": (typeof Browsers.device.type === 'undefined') ? 'undefined' : Browsers.device.type, "OS": { "name": (typeof Browsers.os.name === 'undefined') ? 'undefined' : Browsers.os.name,
+					"version": (Browsers.os.version == null || typeof Browsers.os.version.original === 'undefined') ? 'undefined' : Browsers.os.version.original }, "Browser": { "name": (typeof Browsers.browser.name === 'undefined') ? 'undefined' : Browsers.browser.name,
+					"version": (typeof Browsers.browser.version === 'undefined' || Browsers.browser.version == null) ? 'undefined' : Browsers.browser.version.original}
+				}));
+				$.get(url);
+				window.clearInterval(window.which_browser_interval);
+			}
+		}, 100);
+
+		</script>
+
+		<script>
+			$(document).ready(function() {
+
+				// Click event for any anchor tag that's href starts with #
+				$('a[href^="#off"]').click(function(event) {
+
+					// The id of the section we want to go to.
+					var id = $(this).attr("href");
+
+					// An offset to push the content down from the top.
+					var offset = 41;
+
+					// Our scroll target : the top position of the
+					// section that has the id referenced by our href.
+					var target = $(id).offset().top - offset;
+
+					// The magic...smooth scrollin' goodness.
+					$('html, body').animate({scrollTop:target}, 500);
+
+					//prevent the page from jumping down to our section.
+					event.preventDefault();
+				});
+			});
+		</script>
+    </head>
+    <body {% block body_options %}{% endblock %}>
+		<div class="navbar navbar-fixed-top">
+		  <div class="navbar-inner">
+		      <a class="brand" style="margin-left: 3px;" href="{{ path('CodebenderGenericBundle_index')}}">
+			      <img id="logo_small" src="{{ asset("images/Codebender@2x.png") }}">
+			      {{ site_name }}
+		      </a>
+			  {% block examples %}
+			  {% endblock %}
+
+              {% block login_buttons %}{% endblock %}
+
+		  </div>
+		</div>
+        {% block body %}{% endblock %}
+
+		<div id="login_box" style="position: fixed;top: 50px;right:10px;">
+			{% render controller('FOSUserBundle:Security:login') %}
+        </div>
+</body>
+
+{% block misc %}{% endblock %}
+
+
+{% block javascripts_upload_bottom %}{% endblock %}
+
+
+</html>

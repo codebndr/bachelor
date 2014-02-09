@@ -1,0 +1,39 @@
+{% include 'CodebenderUserBundle:Registration:register_scripts.html.twig' %}
+
+{#{% form_theme form theme %}#}
+
+<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+	<div>
+		<div id = "register_username_id" class="control-group">
+		{{ form_widget(form.username) }}
+		</div>
+		<div id = "register_email_id" class="control-group">
+		{{ form_widget(form.email) }}
+		</div>
+		<div id = "register_password_id" class="control-group">
+		{{ form_widget(form.plainPassword.first) }}
+		</div>
+		<div id = "register_verification_id" class="control-group">
+		{{ form_widget(form.plainPassword.second) }}
+		</div>
+		<div class="text-error">
+			{{ form_errors(form.username) }}
+			{{ form_errors(form.email) }}
+			{{ form_errors(form.plainPassword.first) }}
+            {{ form_errors(form.plainPassword.second) }}
+			{{ form_errors(form) }}
+		</div>
+		<p id="register_info_id">Hi! Why don't you sign up for a {{ site_name }} account?<br /></p>
+	</div>	
+	<div style="display:none">
+		{{form_rest(form)}}
+	</div>
+    <div>
+	    <input type="submit" class="btn btn-primary" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
+	    <p>
+		    <br />
+		    By clicking Register, you agree to the codebender <a href="{{ path("CodebenderStaticBundle_eula") }}"
+		                                                         target="_blank">Terms and Conditions</a>.
+	    </p>
+    </div>
+</form>

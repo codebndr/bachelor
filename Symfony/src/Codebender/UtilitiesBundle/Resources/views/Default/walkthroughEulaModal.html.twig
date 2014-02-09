@@ -1,0 +1,92 @@
+<script >
+    {% if is_granted('ROLE_USER') %}
+		{% if user["eula"] == false %}
+		    $(document).ready(function ()
+		    {
+			    if (window.location.pathname.indexOf("static/eula") == -1)
+			    {
+				    $("#eulaModal").modal();
+				    $("#eulaModal").modal('show');
+			    }
+		    });
+        {% else %}
+		    {% if user["walkthrough_status"] is defined and user["walkthrough_status"] < 5 and user['registration_date']['date']|date("U") > '2013-12-22'|date('U')%}
+		    $(document).ready(function ()
+		    {
+			    if (!isMobile())
+			    {
+				    if (window.location.pathname.indexOf("static/walkthrough/page") == -1)
+				    {
+					    $("#walkthroughModal").modal();
+					    $("#walkthroughModal").modal('show');
+					    $('#walkthroughModal').on('shown', function ()
+					    {
+						    setTimeout(function ()
+						    {
+							    {% if user["walkthrough_status"] >0 %}
+							    window.location.replace("{{ path("CodebenderStaticBundle_walkthrough", { "page" : user["walkthrough_status"] }) }}");
+							    {% else %}
+							    window.location.replace("{{ path("CodebenderStaticBundle_walkthrough", { "page" : 1 }) }}");
+							    {% endif %}
+						    }, 10000);
+					    })
+				    }
+			    }
+		    });
+		    {% endif %}
+		{% endif %}
+    {% endif %}
+
+</script>
+
+<div class="modal hide fade" data-backdrop="static"  id="walkthroughModal" style="height:80%; overflow:hidden;">
+    <div class="modal-header">
+        <h3>Getting Started.</h3>
+    </div>
+    <div class="modal-body span5" style="max-height:80%;">
+        <h4>Hello there!</h4>
+        <p style="text-align: justify">
+            Thanks for choosing codebender! Before you can continue browsing codebender, please take 2 minutes to follow our
+            Getting Started guide. It will guide you through the process of installing our plugin, and if it's the first time you follow
+            the guide, you will also be rewarded with <strong>50 codebender points</strong>, which you can use to unlock
+            extra features or claim codebender swag as gifts.
+        </p>
+        <hr>
+        <h5>
+            <i class="icon-spinner icon-spin"></i> Please wait to be redirected there or simply follow this
+            {% if user["walkthrough_status"] is defined and user["walkthrough_status"] > 0%}
+                <a href="{{ path("CodebenderStaticBundle_walkthrough", { "page" : user["walkthrough_status"] }) }}"> link</a>.
+            {% else %}
+                <a href="{{ path("CodebenderStaticBundle_walkthrough", { "page" : 1 }) }}"> link</a>.
+            {% endif %}
+
+        </h5>
+    </div>
+</div>
+
+<div class="modal hide fade" data-backdrop="static" id="eulaModal" style="height:80%; overflow:hidden;">
+	<div class="modal-header">
+		<h3>Terms and Conditions</h3>
+	</div>
+	<div class="modal-body span5" style="max-height:80%;">
+		<h4>Update!</h4>
+		<p style="text-align: justify">
+			Hi there, we'd like to inform you that the Terms and Conditions for using codebender have been updated. In
+			order to keep using codebender, you will need to accept the new
+			<a href="{{ path("CodebenderStaticBundle_eula") }}"
+			   target="_blank">
+				Terms and Conditions
+			</a>.
+		</p>
+		<p>
+			We apologize for the inconvenience. If you'd like to know more about the change, or you want to give us your
+			feedback, we're always available at girder@codebender.cc
+		</p>
+		<p style="text-align:center">
+			<a href="{{ path("CodebenderUtilitiesBundle_acceptEula") }}" class="btn btn-large btn-primary">
+				I accept the Terms and Conditions
+			</a>
+		</p>
+	</div>
+</div>
+

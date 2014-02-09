@@ -1,0 +1,51 @@
+{% extends '::template.html.twig' %}
+
+{#
+{% block stylesheets_base %}
+{{ parent() }}
+{% endblock %}
+#}
+
+
+{% block content %}
+	{% block precontainer_content %}{% endblock %}
+
+	<div id="mycontainer" class="container">
+
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+			    <div class="alert alert-success flash-notice">
+			        <h4>{{ flashMessage }}</h4>
+			    </div>
+			{% endfor %}
+
+            {% for flashMessage in app.session.flashbag.get('error') %}
+			    <div class="alert alert-error flash-notice">
+			        <h4>{{ flashMessage }}</h4>
+			    </div>
+			{% endfor %}
+
+			<div class="container-fluid">
+			{% block fluidcontainer %}
+				<div class="row-fluid">
+					{% if is_granted('ROLE_USER') %}		      
+					{% block sidebar %}
+					<div class="span4">
+					    {% render controller("CodebenderUtilitiesBundle:Default:sidebar") %}
+					</div>    	
+					{% endblock %}
+					<div class="span8">
+					{% else %}
+					<div class="span12">
+					{% endif %}
+					{% block alert %}
+					{% endblock %}
+					{% block mainspan %}
+		
+					{% endblock %}
+				    </div><!--/span-->
+	
+			  </div><!--/row-->
+			{% endblock %}
+			</div><!--/.fluid-container-->	
+	</div><!--/container-->
+{% endblock %}

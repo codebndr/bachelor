@@ -1,0 +1,46 @@
+parameters:
+#    codebender_user.example.class: Codebender\UserBundle\Example
+
+services:
+#    codebender_user.example:
+#        class: %codebender_user.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+services:
+    codebender_user.usercontroller:
+        class:        Codebender\UserBundle\Controller\DefaultController
+        scope: request
+        arguments:
+            templating:  "@templating"
+            securityContext: "@security.context"
+            entityManager: "@doctrine.orm.entity_manager"
+            container: "@service_container"
+
+    codebender_user.optionscontroller:
+        class: Codebender\UserBundle\Controller\OptionsController
+        scope: request
+        arguments:
+            templating:  "@templating"
+            securityContext: "@security.context"
+            container: "@service_container"
+            request: "@request"
+            usermanager: "@fos_user.user_manager"
+            encoderFactory: "@security.encoder_factory"
+            entityManager: "@doctrine.orm.entity_manager"
+
+    codebender_user.experimental_provider:
+        class: Codebender\UserBundle\Security\Provider\ExperimentalProvider
+        public: false
+        arguments: ["@fos_user.user_manager"]
+
+    codebender_user.registration.form.type:
+        class: Codebender\UserBundle\Form\Type\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: codebender_user_registration }
+
+    codebender_user.form.handler.registration:
+        class: Codebender\UserBundle\Form\Handler\RegistrationFormHandler
+        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer", "@fos_user.util.token_generator"]
+        scope: request
+        public: false

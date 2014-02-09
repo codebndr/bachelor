@@ -1,0 +1,143 @@
+function setOperationProgress(percentage) {
+    $("#operation_output").html("Working...");
+}
+function setOperationOutput(message) {
+    $("#operation_output").html(message);
+}
+
+function load_files()
+{
+    return window.files;
+}
+
+function saveBoard() {
+    new Lawnchair(function () {
+        this.save({key:'board', name:$("#boards option:selected").text()});
+    });
+
+    window.selectedBoard = window.boards_list[$("#boards").prop("selectedIndex")];
+}
+
+function loadBoard() {
+    Lawnchair(function () {
+        this.exists('board', function (exists) {
+            if (exists) {
+                this.get('board', function (config) {
+                    $("#boards").val(config.name)
+                })
+            }
+            window.selectedBoard = window.boards_list[$("#boards").prop("selectedIndex")];
+        });
+    });
+}
+    function getMaxSize() {
+    return parseInt(window.selectedBoard["upload"]["maximum_size"]);
+}
+
+function generate_payload(format, logging) {
+    logging = (typeof logging === "undefined") ? false : logging;
+    var files = load_files();
+
+    var count = 0;
+    var files_array = Array();
+    jQuery.each(files, function (i, val) {
+        files_array[count++] = {"filename":i, "content":$("<div/>").html(val).text()};
+    });
+
+    if(logging)
+        var payload = {"files":files_array, "logging":logging, "format":format, "version":"105", "build":window.selectedBoard["build"]};
+    else
+        var payload = {"files":files_array, "format":format, "version":"105", "build":window.selectedBoard["build"]};
+
+    return JSON.stringify(payload)
+}
+
+function verify() {
+
+    var payload = generate_payload("syntax");
+
+    if (typeof hideSketchSize == 'function')
+        hideSketchSize();
+    setOperationProgress(90);
+    $.post("{{ path('CodebenderUtilitiesBundle_compile')}}", payload, function (data) {
+        var obj = jQuery.parseJSON(data);
+        if (obj.success == 0) {
+            $("#compile").addClass("btn-warning");
+            $("#compile_icon").addClass("icon-remove");
+            setOperationOutput("Verification failed.")
+        }
+        else
+        {
+            $("#compile").addClass("btn-success");
+            $("#compile_icon").addClass("icon-ok");
+            setOperationOutput("<p>Verification Successful!</p>")
+        }
+        $("#compile_icon").removeClass("icon-check").addClass("icon-white");
+
+        window.setTimeout(function () {
+            $("#compile").removeClass("btn-success").removeClass("btn-warning");
+            $("#compile_icon").removeClass("icon-white").removeClass("icon-remove").removeClass("icon-ok").addClass("icon-check");
+        }, 500);
+        if (obj.success == 0)
+        {
+            if (typeof verification_onFail == 'function')
+                verification_onFail(obj.message);
+        }
+        else
+        {
+            if (typeof hideErrorOutput== 'function')
+            {
+                hideErrorOutput();
+            }
+        }
+    });
+}
+
+function getHex() {
+
+    var payload = generate_payload("hex");
+    if (typeof hideSketchSize == 'function')
+        hideSketchSize();
+    setOperationProgress(90);
+    $.post("{{ path('CodebenderUtilitiesBundle_compile')}}", payload, function (data) {
+        var obj = jQuery.parseJSON(data);
+        if (obj.success == 0) {
+            $("#hex").addClass("btn-warning");
+            setOperationOutput("<p>Verification failed.</p>")
+        }
+        else
+        {
+            $("#hex").addClass("btn-success");
+            $("#getHexFormInput").val(JSON.stringify({hex : obj.output}));
+            $("#getHexForm").submit();
+            setOperationOutput("<p>Verification Successful!</p>")
+        }
+
+        window.setTimeout(function () {
+            $("#hex").removeClass("btn-success").removeClass("btn-warning");
+        }, 500);
+
+        if (obj.success == 0)
+        {
+            if (typeof verification_onFail == 'function')
+                verification_onFail(obj.message);
+        }
+        else
+        {
+            if (typeof hideErrorOutput == 'function')
+                hideErrorOutput();
+        }
+    });
+}
+
+function logging()
+{
+    var payload = generate_payload("binary", true);
+
+
+    $.post("{{ path('CodebenderUtilitiesBundle_compile')}}", payload, function (data) {
+        var obj = jQuery.parseJSON(data);
+        console.log(data);
+
+    });
+}

@@ -1,0 +1,82 @@
+<script type="text/javascript">
+$(document).ready(function()
+{
+	$('.project_link').popover();
+});
+
+function warnDeleteProject(deletion_path)
+{
+	$("#deleteProjectButton").attr("href", deletion_path);
+	$("#deleteProjectModal").modal("show");
+}
+
+function disableDeleteModalButtons()
+{
+    $("#deleteProjectButton").addClass("disabled");
+    $("#deleteProjectButton").html("<i class='icon-spinner icon-spin'></i> Working...</a>");
+    $("#cancelDeleteProjectButton").hide();
+}
+</script>
+<div class="well">
+<ul class="nav nav-list" id="sidebar-list-header">
+    <li><a href="{{ path('CodebenderGenericBundle_index') }}"><i class="icon-home"></i>Home</a></li>
+</ul>
+<ul class="nav nav-list" id="sidebar-list-main" style="max-height:600px; overflow:auto;">
+	<li class="nav-header">Projects</li>
+   	{% if files%}
+	    {% for file in files %}
+	        <li>
+				<a rel="popover" data-delay=1500 class="project_link {% if file['is_public'] %}public_project{% else %}private_project{% endif %}" data-trigger="hover" data-html="true"
+				   style="overflow: hidden; text-overflow: ellipsis; width: 60%; width: -moz-calc(100% - 59px);
+				   width: -webkit-calc(100% - 59px); width: calc(100% - 59px);"
+				   data-placement="right" data-content="
+<p>
+{% include "CodebenderUtilitiesBundle:Default:project_privacy_view.html.twig" with {"is_public": file['is_public'], "verbose": true} %}
+</p>
+<h6>Description:</h6>
+<p>{% render controller("CodebenderUtilitiesBundle:Default:renderDescription", {'id':file['id']}) %}</p>
+<h6>Files:</h6>
+<p>{% render controller("CodebenderUtilitiesBundle:Default:listFilenames", {'id':file['id'], 'show_ino':1}) %}</p>
+"
+				data-original-title="{{ file['name'] }}" href="{{ path('CodebenderGenericBundle_project', { 'id': file['id'] }) }}">
+					{% include "CodebenderUtilitiesBundle:Default:project_privacy_view.html.twig" with {"is_public": file['is_public'], "verbose": false} %}
+					{{ file['name'] }}
+				</a>
+		        <button style=" float: right; margin-top: -25px; margin-right: 22px; padding: 0px;"
+		                onclick="location.href='{{ path('CodebenderUtilitiesBundle_download', { 'id' : file['id'] }) }}'"
+		                class="btn btn-link">
+		        <i class="icon-download-alt"></i>
+		        </button>
+		        <button style=" float: right; margin-top: -25px; padding: 0px; padding-right: 15px; margin-right: -15px"
+		                onClick="warnDeleteProject('{{ path('CodebenderUtilitiesBundle_deleteproject', {'id':file['id']}) }}')"
+		                class="btn btn-link">
+		        <i class="icon-trash"></i>
+		        </button>
+			</li>
+	    {% endfor %}
+	{% endif %}
+</ul>
+<ul class="nav nav-list" id="sidebar-list-footer">
+
+	<!-- <li class="active"><a href="#">Link</a></li> -->
+	<li class="nav-header" id="Links">Links</li>
+	<li><a href="{{ path('CodebenderGenericBundle_libraries') }}"><i class="icon-book"></i> Examples &amp; Libraries</a></li>
+	<li><a href="{{ path('CodebenderGenericBundle_boards') }}"><i class="icon-hdd"></i> Supported Boards</a></li>
+	<li><a href="{{ path("CodebenderStaticBundle_walkthrough", {"page":1}) }}"><i class="icon-exclamation-sign"></i> Getting Started</a></li>
+    <li><a href="{{ path('CodebenderStaticBundle_upload_bootloader') }}"><i class="icon-upload"></i> Upload Bootloader</a></li>
+</ul>
+</div>
+
+<div class="modal hide fade" id="deleteProjectModal">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">&#215;</button>
+    <h3>Are you sure you want to delete your sketch?</h3>
+  </div>
+  <div class="modal-body">
+    <p>Deleting your sketch is going to destroy all of its data. This action is irreversible. If you choose to delete your project, all the files associated with it are going to be destroyed and the data will be irrecoverable. You <strong>WILL BE UNABLE</strong> to back up your files.</p>
+  </div>
+  <div class="modal-footer">
+    <a id="cancelDeleteProjectButton" data-dismiss="modal" class="btn">Cancel</a>
+    <a id="deleteProjectButton" onclick="disableDeleteModalButtons()" href="" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete!</a>
+  </div>
+</div>

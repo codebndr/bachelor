@@ -1,0 +1,20 @@
+parameters:
+#    codebender_upload.example.class: Codebender\UploadBundle\Example
+
+services:
+#    codebender_upload.example:
+#        class: %codebender_upload.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+    codebender_upload.uploadlistener:
+         class:       Codebender\UploadBundle\EventListener\UploadListener
+         tags:
+                      - { name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}
+                      - { name: kernel.event_listener, event: oneup_uploader.validation, method: onValidate}
+         arguments:
+                      logController: "@codebender_utilities.logcontroller"
+                      securityContext: "@security.context"
+                      projectController: "@codebender_project.sketchmanager"
+
+    codebender_upload.errorhandler:
+        class:        Codebender\UploadBundle\ErrorHandler\UploadErrorHandler

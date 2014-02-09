@@ -1,0 +1,87 @@
+{% extends 'CodebenderStaticBundle:Walkthrough:skeleton.html.twig' %}
+
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ path("CodebenderGenericBundle_embedded_compilerflasher_js") }}"></script>
+    <script type="text/javascript">
+        window.setTimeout(function () {
+            if ($(".alert").length == 0) {
+                window.location.replace("{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}");
+            }
+	        else
+            {
+	            $("#cb_cf").hide();
+	            $("#cb_cf").css("visibility", "visible");
+	            $("#step_output_text").hide(1000);
+	            $("#cb_cf").show(1000);
+	            $("#refresh").show(1000);
+            }
+        }, 5000);
+
+        $(document).ready(function(){
+
+            if(BrowserDetect.browser == "Chrome")
+            {
+                if(navigator.userAgent.indexOf("NT 6.2") != -1 || navigator.userAgent.indexOf("NT 6.3") != -1)
+                    $("#refresh").html("After installing the plugin, please restart Chrome to continue.");
+                else
+                    $("#refresh").html("After installing the plugin, please refresh the page to continue.");
+
+            }
+            else if(BrowserDetect.browser == "Firefox")
+            {
+                $("#refresh").html("After installing the plugin, please restart Firefox to continue.");
+            }
+
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+	    #cb_cf
+	    {
+		    visibility: hidden;
+	    }
+        #ports_div {
+            visibility: hidden;
+            width: 0px;
+            height: 0px;
+            position: fixed;
+        }
+
+        .alert {
+            font-size: 30px;
+            line-height: 50px;
+            text-align: center;
+        }
+
+        #step_output_text
+        {
+	        font-size: 30px;
+	        line-height: 50px;
+	        text-align: center;
+        }
+
+	    #refresh
+	    {
+		    font-size: 30px;
+		    line-height: 50px;
+		    text-align: center;
+		    display: none;
+	    }
+    </style>
+{% endblock %}
+
+{% block page_content %}
+	<div id="step_output_text">
+		<p>
+			Please wait
+			<i class="icon-spinner icon-spin"></i>
+		</p>
+	</div>
+
+	<div id="cb_cf" data-board="Arduino Uno" data-sections="usbflash"></div>
+	<p id="refresh">
+	</p>
+{% endblock %}

@@ -1,0 +1,46 @@
+CodebenderGenericBundle_index:
+    pattern:  /
+    defaults: { _controller: CodebenderGenericBundle:Default:index }
+
+CodebenderGenericBundle_user:
+    pattern:  /user/{user}
+    defaults: { _controller: CodebenderGenericBundle:Default:user }
+
+CodebenderGenericBundle_project:
+    pattern:  /sketch:{id}
+    defaults: { _controller: CodebenderGenericBundle:Default:project }
+
+CodebenderGenericBundle_projectfiles:
+    pattern:  /files
+    defaults: { _controller: CodebenderGenericBundle:Default:projectfiles }
+    requirements:
+       _method:  POST
+
+CodebenderGenericBundle_embed_project:
+    pattern:  /embed/sketch:{id}
+    defaults: { _controller: CodebenderGenericBundle:Default:project, embed:true }
+
+CodebenderGenericBundle_json_project:
+    pattern:  /json/sketch:{id}
+    defaults: { _controller: CodebenderGenericBundle:Default:project, json_output:true }
+
+CodebenderGenericBundle_libraries:
+    pattern: /libraries
+    defaults: {_controller: CodebenderGenericBundle:Default:libraries }
+
+CodebenderGenericBundle_example:
+    pattern: /example/{library}/{example}
+    defaults: {_controller: CodebenderGenericBundle:Default:example }
+
+CodebenderGenericBundle_embed_example:
+    pattern: /embed/example/{library}/{example}
+    defaults: {_controller: CodebenderGenericBundle:Default:example, embed:true }
+
+
+CodebenderGenericBundle_boards:
+    pattern:  /boards
+    defaults: { _controller: CodebenderGenericBundle:Default:boards}
+
+CodebenderGenericBundle_embedded_compilerflasher_js:
+    pattern:  /embed/compilerflasher.js
+    defaults: { _controller: CodebenderGenericBundle:Default:embeddedCompilerFlasherJavascript }

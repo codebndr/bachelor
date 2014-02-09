@@ -1,0 +1,59 @@
+{% extends '::container.html.twig' %}
+{% block title %}
+    {{ site_name }} - getting started
+{% endblock %}
+
+{% block javascripts %}
+	<script src={{ asset("walkthrough/lawnchair-0.6.1.min.js") }}></script>
+	<script src={{ asset("walkthrough/dom.js") }}></script>
+	<script>
+
+		$(document).ready(function ()
+		{
+			window.lc = new Lawnchair({name: "drivers"}, function ()
+			{
+				// default params: records and record in terse callbacks
+				this.get('waiting', function (waiting)
+				{
+					if (waiting !== null)
+					{
+						this.remove("waiting");
+						var status = {key: 'windows-drivers-installed', value: true};
+
+						// save it
+						this.save(status);
+						window.open('', '_self').close();
+					}
+					else
+					{
+						$("#url").text(window.location.toString());
+						$("#info").show(1000);
+					}
+				});
+			})
+		});
+
+	</script>
+{% endblock %}
+{% block mainspan %}
+    <div id="info" class="row-fluid" style="display: none; text-align: center;">
+	    <h1>Warning</h1>
+	    <p style="font-size: 100px">
+		    <i class="icon-warning-sign"></i>
+	    </p>
+        <p style="font-size: 20px; line-height: 30px">
+	        Sorry, you're not done yet. Looks like this page was opened in a different browser than the one you used for
+	        the codebender walkthrough tutorial. Please copy-paste the link for this page in the same window as the
+	        walkthrough.
+	        <br />
+	        <a id="url" href=""></a>
+        </p>
+
+	    <p style="font-size: 20px; line-height: 30px">
+		    If you are still having issues, or if you are not sure what to do next,
+		    <a href="http://codebender.uservoice.com/" target="_blank">contact us</a>.
+	    </p>
+
+	    {% block page_content %}{% endblock %}
+    </div>
+{% endblock %}

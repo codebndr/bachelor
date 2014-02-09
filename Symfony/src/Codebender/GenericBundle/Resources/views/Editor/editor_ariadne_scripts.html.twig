@@ -1,0 +1,210 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        window.webconnected = false;
+        window.heartbeatFlag = false;
+    });
+
+    function getIP()
+    {
+        var ip = $("#ip").val().split(":")[0];
+        return ip;
+    }
+
+    function getPort()
+    {
+        var port = $("#ip").val().indexOf(":") > 0 ? $("#ip").val().split(":")[1] : 80;
+        return port;
+    }
+
+    function startHeartbeatTimers()
+    {
+	    window.heartbeatFlag = true;
+		window.heartbeatReq = setInterval(function() { wscon.send("codebender.cc_heartbeat_req");},1000);
+		window.heartbeatRes = setInterval(function() {
+			if(window.heartbeatFlag == 0) {
+			webdisconnect();
+			} else {
+				window.heartbeatFlag = 0;
+			}
+		},5000);
+	}
+
+	function stopHeartbeatTimers()
+	{
+		window.heartbeatFlag = false;
+		clearInterval(window.heartbeatReq);
+		clearInterval(window.heartbeatRes);
+	}
+
+    function webconnect() {
+
+        if (window.webconnected == false)
+        {
+            var url = "{{  path('CodebenderUtilitiesBundle_logdb', {actionid : 17, meta : "TWIG_META_IP_WSMONITOR"}) }}";
+            ip = getIP();
+            port = getPort();
+
+            if (ip != "")
+            {
+                url = url.replace("TWIG_META_IP_WSMONITOR",  JSON.stringify({"ip": ip}));
+                $.get(url);
+                $("#webserial_monitor_content").show(1000);
+                window.webconnected = true;
+                $("#toggle_connect_webserial").html("Disconnect").attr("onClick", "webdisconnect();");
+                $("#webserial_hud").html("Opening WebSocket<br>");
+
+                window.wscon = new WebSocket("ws://" + ip + ":" + port);
+
+                window.wscon.onopen = function () {
+                    webserialHudAppend("WebSocket has been opened!");
+                    startHeartbeatTimers();
+                }
+
+                window.wscon.onclose = function () {
+                    setOperationOutput("WebSocket has been closed!");
+                    webdisconnect();
+                }
+
+                window.wscon.onerror = function (line) {
+                    setOperationOutput("WebSocket Error: " + line.data);
+                    webdisconnect();
+                }
+
+                window.wscon.onmessage = function (line) {
+                    if(line.data == "codebender.cc_heartbeat_res")
+                    {
+                        window.heartbeatFlag = true;
+                    }
+                    else
+                    {
+                        webserialHudAppend(line.data); //Awesome!
+                    }
+                }
+            }
+            else {
+                url = url.replace("TWIG_META_IP_WSMONITOR", JSON.stringify({"ip": "null"}));
+                $.get(url);
+                setOperationOutput("Please enter a valid network address.")
+            }
+        } else {
+            webdisconnect();
+        }
+    }
+
+
+    function webdisconnect() {
+        if (window.webconnected == true) {
+            $("#toggle_connect_webserial").html("<i class='icon-globe'></i> Monitor").attr("onClick", "webconnect();");
+            window.webconnected = false;
+
+			stopHeartbeatTimers();
+
+            if (window.wscon.readyState != window.wscon.CLOSED) {
+                window.wscon.close();
+            }
+
+            $("#webserial_monitor_content").hide(1000);
+        }
+    }
+
+    function webserialHudAppend(line) {
+        if (isNaN(line)) {
+            webserialHudWrite($("#webserial_hud").html() + line);
+        } else {
+            if (line == "13")    return;
+            if (line == "10")    webserialHudWrite($("#webserial_hud").html());
+            else webserialHudWrite($("#webserial_hud").html() + line.toString());
+        }
+    }
+
+    function webserialHudWrite(message) {
+        $("#webserial_hud").html(message);
+        $("#webserial_hud").scrollTo(99999999);
+    }
+
+
+    function webserialSendOnEnter(event) {
+        e = window.event;   // resolve event instance
+        if (e.keyCode == '13') {
+            webserialSend();
+        } else if (e.keyCode == '10') {
+            webserialSend();
+        }
+    }
+
+    function webserialSend() {
+        window.wscon.send($("#webtext2send").val());
+    }
+
+    function webflash() {
+        ip = getIP();
+        var url = "{{  path('CodebenderUtilitiesBundle_logdb', {actionid : 16, meta : "TWIG_META_IP_WEBFLASH"}) }}";
+
+        if (ip != "")
+        {
+            url = url.replace("TWIG_META_IP_WEBFLASH", JSON.stringify({"ip": ip}));
+            $.get(url);
+            setOperationProgress(30);
+            getbin(function (obj) {
+                if (obj.success == 0) {
+                    setOperationOutput("There was an error compiling.");
+                }
+                else {
+                    binary = obj["output"];
+                    $("#cloudload").addClass("btn-success");
+                    $("#cloudload_icon").addClass("icon-white");
+                    window.setTimeout(function () {
+                        $("#cloudload").removeClass("btn-success");
+                        $("#cloudload_icon").removeClass("icon-white");
+                    }, 500);
+
+
+                    setOperationProgress(70);
+                        var payload = {"ip":$("#ip").val(), "bin":binary}
+                        $.post("{{ path('CodebenderSenderBundle_tftp') }}", {"data":JSON.stringify(payload)}, function (data) {
+                            var obj = jQuery.parseJSON(data);
+                            if (obj.success == 0) {
+                                $("#compile_output").css('color', 'black');
+                                for (var i = 0; i < obj.lines.length; i++) {
+                                    $(".ace_gutter-cell").filter(function (index) {
+                                        return $(this).html() == obj.lines[i];
+                                    }).css("text-decoration", "underline").css("color", "red");
+                                }
+
+                                $("#editor").css("bottom", "150px");
+                                $("#compile_output").css("bottom", "0px");
+                                $("#compile_output").css("padding-top", "10px");
+                                $("#compile_output").css("height", "120px");
+                                $("#compile_output").addClass("well");
+                                $("#compile_output").html(obj.text);
+                                setOperationOutput("Cloud Flash failed.")
+                            }
+                            else {
+                                $("#compile_output").css('color', '');
+                                $(".ace_gutter-cell").css("text-decoration", "").css("color", "");
+                                $("#editor").css("bottom", "");
+                                $("#compile_output").css("bottom", "");
+                                $("#compile_output").css("height", "");
+                                $("#compile_output").css("padding-top", "");
+                                $("#compile_output").removeClass("well");
+
+                                var progressText = "<p>" + obj.text + "</p>";
+                                setOperationOutput(progressText)
+                                window.sketch_size = obj.size;
+                                $("#compile_output").html("");
+                            }
+                            editor.resize();
+                        });
+                }
+            });
+        }
+        else {
+            url = url.replace("TWIG_META_IP_WEBFLASH",  JSON.stringify({"ip": "null"}));
+            $.get(url);
+            setOperationOutput("Please enter a valid network address.")
+        }
+    }
+
+
+
+</script>

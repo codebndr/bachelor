@@ -1,0 +1,12 @@
+*~
+.DS_Store
+vendor/codebendercc/arduino-files/.git
+Symfony/app/phpunit.xml
+Symfony/jlog.xml
+.idea/workspace.xml
+Symfony/app/junit.xml
+Symfony/app/testdox.html
+Symfony/app/clover.xml
+Symfony/app/coverage
+Symfony/.idea
+fs_dir_samples

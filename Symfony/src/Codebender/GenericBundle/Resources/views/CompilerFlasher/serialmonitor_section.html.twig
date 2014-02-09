@@ -1,0 +1,25 @@
+<div id="serial_util">
+    <span id="speed_label" class="help-inline">Speed: </span>
+    <select id="baudrates">
+            <option>9600</option>
+            <option>19200</option>
+            <option>28800</option>
+            <option>38400</option>
+            <option>57600</option>
+            <option>115200</option>
+        </select>
+    <input id="baudrates_placeholder" style="display: none" type="text" class="form-control" disabled>
+    <button class="btn" id="toggle_connect_serial" onclick="connect();" title="Open Serial Monitor">
+        <i class="icon-list-alt"></i>
+        Open Serial Monitor
+    </button>
+
+    <div id="serial_monitor_content" style="display:none;">
+        <div class="input-append">
+            <input id="text2send" type="text" placeholder="Serial Message" onkeypress="serialSendOnEnter()">
+            <button id="serial_send" onclick="serialSend()" class="btn" title="Send Message">Send
+            </button>
+        </div>
+        <pre id="serial_hud" class="well"  style="overflow-y:scroll"></pre>
+    </div
+</div>

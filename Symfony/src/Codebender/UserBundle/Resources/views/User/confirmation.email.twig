@@ -1,0 +1,27 @@
+{# src/Codebender/UserBundle/Resources/views/User/resetting.email.twig #}
+{#TODO: Fix this shit. site_name crashes here on local app_dev for some reason#}
+{% block subject %}
+    Welcome to {% include 'CodebenderUserBundle:User:confirmation_email_site_name.html.twig' %}
+{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+Hello {{ user.username }} !
+
+Welcome to {% include 'CodebenderUserBundle:User:confirmation_email_site_name.html.twig' %}.
+To finish activating your account - please visit {{ confirmationUrl }}
+
+Regards,
+the {% include 'CodebenderUserBundle:User:confirmation_email_site_name.html.twig' %} team
+
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{#
+    You can of course render the html directly here.
+    Including a template as done here allows keeping things DRY by using
+    the template inheritance in it
+#}
+{% include 'CodebenderUserBundle:User:confirmation_email.html.twig' %}
+{% endblock %}

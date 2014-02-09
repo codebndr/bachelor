@@ -1,0 +1,107 @@
+{% extends '::container.html.twig' %}
+{% block title %}
+{{ site_name }} libraries
+{% endblock %}
+{% block mainspan %}
+<h1>{{ site_name }} libraries<small> what about them?</small></h1>
+<div class="marketing">
+	<p>{{ site_name }}'s mission is to simplify development for embedded devices, and make them easy to use by hackers, artists, and makers in general. This vision starts by making Arduino programming easier than you could ever imagine. This includes the handling of libraries, one of the biggest pains for Arduino enthusiasts.
+	<p>We are working really hard on building an excellent, intuitive and easy to use system to manage libraries automatically. We are proud of what we are building, but we are also aiming for perfection, which means we constantly go back to the drawing board.</p>
+	<p>However, that means that we are probably far from completion, and we understand your need to use commonly-found and well-known libraries in your projects. That's why we are adding a list of the most popular external libraries. We are adding these manually, and they are only meant as a temporary solution to a much bigger and more complex problem. It takes a lot of time and effort to manually add a library in our system. Time that would be much better spent in improving {{site_name}} and adding that much-needed feature you asked for. Therefore, we appreciate your patience and hope you understand why this list might be out of date, incomplete, or plain wrong. Our server monkeys are working hard on adding more.</p>
+	<hr class="soften">
+{% for key, category in categories %}
+	<h2>{{key}}</h2>
+	{% set startingChar = {} %}
+	{% if key == "External Libraries" %}
+		<div class="btn-toolbar" style="margin: 0;text-align: center;">
+			<div class="btn-group">
+				{% for library_name, library in categories["External Libraries"] %}
+					{% set lname = library_name|slice(0, 1)|capitalize %}
+					{% set startingChar = startingChar |merge( { (lname): '1' }) %}
+				{% endfor %}
+				{% for key, value in startingChar %}
+					<button class="btn btn-small" onclick="$('html, body').animate({scrollTop:$('#off{{ key }}').offset().top - 41}, 500);">{{ key }}</button>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+    <div class="accordion" id="accordion{{ key |replace({'.': '', ' ': ''})}}">
+    {% set starting = '' %}
+        {% if key == "External Libraries" %}
+	        {% for starting, value in startingChar %}
+		        <h4 id="off{{ starting}}" >{{ starting}}
+			        <i class="icon-caret-up" style="float: right;"
+			           onclick="$('html, body').animate({scrollTop: $('h2:contains(External Libraries)').offset().top - 50}, 2000);">
+		           </i>
+		        </h4>
+	            {% for library_name, library in category %}
+		            {% if library_name|slice(0,1)|capitalize == starting %}
+		            <div class="accordion-group">
+			            <div class="accordion-heading">
+				            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{ key |replace({'.': '', ' ': ''})}}" href="#collapse{{library_name|replace({'.': '', ' ': ''})}}">{{library_name}}</a>
+			            </div>
+			            <div id="collapse{{library_name|replace({'.': '', ' ': ''})}}" class="accordion-body collapse">
+				            <div class="accordion-inner">
+				            {% if library["description"] is not empty %}
+					            <p>Description:</p>
+					            <p>{{ library["description"] }}</p>
+				            {% endif %}
+				            {% if library["examples"] is defined%}
+                                {% if library["examples"] is not empty%}
+						            <p>Examples:</p>
+						            <ul>
+							            {% for example in library["examples"] %}
+								            <li><a href="{{path('CodebenderGenericBundle_example',{'library':library_name, 'example':example["name"]})}}">
+									            {{example["name"]}}
+								            </a>
+								            </li>
+							            {% endfor %}
+						            </ul>
+					            {% endif %}
+                            {% endif %}
+					            {% if library["url"] is defined%}
+						            <p><a class="btn btn-primary" target="_blank" href="{{library['url']}}" style="float:right; margin-bottom: 10px;">More Info <i class="icon-double-angle-right"></i></a></p>
+					            {% endif %}
+				            </div>
+			            </div>
+		            </div>
+		            {% endif %}
+				{% endfor %}
+	        {% endfor %}
+	    {% else %}
+		    {% for library_name, library in category %}
+		    <div class="accordion-group">
+			    <div class="accordion-heading">
+				    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{ key |replace({'.': '', ' ': ''})}}" href="#collapse{{library_name|replace({'.': '', ' ': ''})}}">{{library_name}}</a>
+			    </div>
+			    <div id="collapse{{library_name|replace({'.': '', ' ': ''})}}" class="accordion-body collapse">
+				    <div class="accordion-inner">
+					    {% if library["description"] is not empty %}
+						    <p>Description:</p>
+						    <p>{{ library["description"] }}</p>
+					    {% endif %}
+					    {% if library["examples"] is defined%}
+						    <p>Examples:</p>
+						    <ul>
+							    {% for example in library["examples"] %}
+								    <li><a href="{{path('CodebenderGenericBundle_example',{'library':library_name, 'example':example["name"]})}}">
+									    {{example["name"]}}
+								    </a>
+								    </li>
+							    {% endfor %}
+						    </ul>
+					    {% endif %}
+					    {% if library["url"] is defined%}
+						    <p><a class="btn" href="{{library['url']}}" style="float:right;">More Info <i class="icon-double-angle-right"></i>>></a></p>
+					    {% endif %}
+				    </div>
+			    </div>
+		    </div>
+		    {% endfor %}
+	    {% endif %}
+    </div>
+	<hr class="soft">
+{% endfor %}
+</div>
+{% endblock %}
+

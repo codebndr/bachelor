@@ -1,0 +1,29 @@
+Codebender\UserBundle\Entity\User:
+    properties:
+        username:
+            - Length:
+                min: 3
+                minMessage: "Your Username needs to be at least 3 characters long."
+                max: 255
+                maxMessage: "Your Username cannot be longer than 255 characters."
+
+            - Codebender\UserBundle\Validator\Constraints\UsernameConstraint: ~
+
+        plainPassword:
+            - Length:
+               min: 6
+               minMessage: "Your Password needs to be at least 6 characters long."
+               max: 255
+               maxMessage: "Your Password cannot be longer than 255 characters."
+
+            - Codebender\UserBundle\Validator\Constraints\PasswordConstraint: ~
+
+FOS\UserBundle\Form\Model\ResetPassword:
+    properties:
+        new:
+            - Length:
+                min: 6
+                minMessage: "Your New Password needs to be at least 6 characters long."
+                max: 255
+                maxMessage: "Your New Password cannot be longer than 255 characters."
+            - Codebender\UserBundle\Validator\Constraints\PasswordConstraint: ~

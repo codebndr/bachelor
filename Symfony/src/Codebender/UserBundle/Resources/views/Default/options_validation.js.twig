@@ -1,0 +1,261 @@
+
+<script type="text/javascript" charset="utf-8">
+function newPassValidation() {
+
+	var group			= $(".passwords").removeClass().addClass("control-group passwords");
+	var iconNew			= $(".iconPassNew").removeClass().addClass("iconPassNew");
+	var iconConfirm		= $(".iconPassConfirm").removeClass().addClass("iconPassConfirm");
+	var valueNew		= $("#options_plainPassword_new").val();
+	var valueConfirm	= $("#options_plainPassword_confirm").val();
+	var info			= $("#options_plainPassword_confirm").siblings('span.help-block').html('');
+			
+	var s = passvalid("options_plainPassword_new");
+
+	if (s == "valid") //New Password is valid
+	{
+		//set New to success/OK
+		iconNew.addClass("icon-ok");
+		if (valueNew == valueConfirm) //New and Confirm match
+		{
+			//set Confirm to success/OK
+			group.addClass("success");
+			iconConfirm.addClass("icon-ok");
+		}
+		else //Confirm and New(which is valid) do not match, set Confirm to error
+		{
+			if (valueConfirm.length >= 0)
+			{
+				group.addClass("error");
+				iconConfirm.addClass("icon-remove");
+				info.html('<i>Sorry, Passwords do not match!</i>');
+			}
+		}
+	}
+	else if (s == "empty") //New Password is empty
+	{
+		if (valueNew == valueConfirm) //both New and Confirm empty
+		{
+			//bring Group,New,Confirm to normal
+			group.removeClass("error success");
+			iconNew.addClass("icon-exclamation-sign");
+			iconConfirm.addClass("icon-exclamation-sign");
+		}
+		else    //Confirm not empty and different than New
+		{
+			//set Group,New,Confirm to error
+			group.addClass("error");
+			iconNew.addClass("icon-remove");
+			iconConfirm.addClass("icon-remove");
+			info.html('<i>Sorry, Passwords do not match!</i>');
+		}
+	}
+	else //New Password out of limits or not complex enough
+	{
+		//set password group to error
+		group.addClass("error");
+		iconNew.addClass("icon-remove");
+		iconConfirm.addClass("icon-remove");
+		if (s == "outOfLimits")
+			info.html('<i>Sorry, your Password needs to be at least 6 characters long</i>');
+		else
+			info.html('<i>Sorry, your New Password is <b>too simple</b>, try mix and matching Letters, Numbers or Symbols, to make it more secure.</i>');
+	}
+}
+	
+function currentPassValidation(el) {
+	
+	var group = $(el).closest('.control-group').removeClass().addClass("control-group");
+	var icon = $(el).siblings('span.add-on').children().removeClass();
+	var info = $(el).siblings('span.help-block').html('');
+			
+	if(window.passPost){window.passPost.abort();} // abort previous post request if present
+	var value = $(el).val();
+	var len = value.length;
+	
+	if (len != 0) {
+		if (len > 5 && len < 255){ //reduce validation overhead
+			if (isvalidpass(el.id))
+			{
+				group.addClass("warning");
+				icon.addClass("icon-question-sign");
+				
+				clearTimeout(window.passTimer); // Clear the passTimer to avoid duplicates.
+				
+				// check password 1000ms after user stopped typing
+				window.passTimer = setTimeout(function()
+				{ 
+					group.removeClass("warning"); 
+					icon.removeClass().addClass("icon-refresh icon-spin");
+						
+					window.passPost = $.post("{{ url('CodebenderUserBundle_iscurrentpassword') }}", { currentPassword:value },
+					function (response)
+					{
+						icon.removeClass();
+						if (response.valid)
+						{
+							group.addClass("success");
+							icon.addClass("icon-ok");
+						}
+						else
+						{
+							group.addClass("error");
+							icon.addClass("icon-remove");
+							info.html('<i>Sorry, this is not your Current Password, give it another try</i>');
+						}
+					});
+				}, 800); // inactivity timer 800ms	
+			}
+			else
+			{
+				group.addClass("error");
+				icon.addClass("icon-remove");
+				info.html('<i>Sorry, the Password you typed is not correct, give it another try</i>');
+			}
+		}
+		else
+		{
+			group.addClass("error");
+			icon.addClass("icon-remove");
+			info.html('<i>Sorry, your Password is at least 6 characters long</i>');
+		}
+	}
+	else
+		icon.addClass("icon-exclamation-sign");
+}
+ 
+function emailValidation(el) {
+
+	var group = $(el).closest('.control-group').removeClass().addClass("control-group");
+	var icon = $(el).siblings('span.add-on').children().removeClass();
+	var info = $(el).siblings('span.help-block').html('');
+	
+	if(window.emailPost){window.emailPost.abort();} // abort previous post request if present
+	var value = $(el).val();
+	if (value.length > 4) //assuming minimum valid email format a@b.c
+	{
+		if (emailReg.test(value))
+		{
+			group.addClass("warning");
+			icon.addClass("icon-question-sign");
+                  
+			clearTimeout(window.emailTimer); // Clear the emailTimer to avoid duplicates.
+                  
+			// check email availability 1000ms after user stopped typing
+			window.emailTimer = setTimeout(function()
+			{ 
+				group.removeClass("warning"); 
+				icon.removeClass().addClass("icon-refresh icon-spin");
+				
+				window.emailPost = $.post("{{ url('CodebenderUserBundle_isemailavailable') }}", { email:value },
+				function (response)
+				{
+					icon.removeClass();
+					if (response.valid == "available")
+					{
+						group.addClass("success");
+						icon.addClass("icon-ok");
+					}
+					else if (response.valid == "inUse")
+					{
+						group.addClass("error");
+						icon.addClass("icon-remove");
+						info.html('<i>Sorry, this E-mail is already in use by another member</i>');
+					}
+					else //response.valid == "own"
+						icon.addClass("icon-envelope");
+				});
+			}, 800); // inactivity timer 800ms
+		}
+		else
+		{
+			group.addClass("error");
+			icon.addClass("icon-remove");
+			info.html('<i>Sorry, this is an invalid email address</i>');
+		}
+	}
+	else
+		icon.addClass("icon-envelope");
+}
+	
+function nameValidation(el)
+{
+	var group = $(el).closest('.control-group').removeClass().addClass("control-group");
+	var icon = $(el).siblings('span.add-on').children().removeClass();
+	var info = $(el).siblings('span.help-block').html('');
+	
+	icon.addClass("icon-user");
+	var value = $(el).val();
+	if(value.length != 0){
+		if(!nameReg.test(value))
+		{
+			group.addClass("error");
+			icon.addClass("icon-remove");
+			info.html('<i>Sorry, only letters,spaces and \' - _ are allowed in your name.</i>');
+		}
+		else
+		{
+			group.addClass("success");
+			icon.addClass("icon-ok");
+		}
+	}
+}
+    
+$(document).ready(function () {
+	$("#loading").hide();
+			
+	// bind keyup event to the corresponding live validation functions
+	//"this" in this context points to the active field DOM element
+	$("#options_firstname, #options_lastname").keyup(function () {
+		nameValidation(this);});
+		 
+	$("#options_email").keyup(function () {
+		emailValidation(this);});
+			
+	$("#options_currentPassword").keyup(function () {
+		currentPassValidation(this);});
+			
+	$("#options_plainPassword_new, #options_plainPassword_confirm").keyup(newPassValidation);
+
+	$("#modify").click(function (e) {
+		e.preventDefault();
+		$("#loading").show();
+        $.post("{{ url('CodebenderUserBundle_options') }}", $('#options_form').serializeArray(),
+        function (response) {
+			var response = $.parseJSON(response);
+			var currentPassword = $("#options_currentPassword");
+			$(".help-block").html('');
+			$(".control-group").removeClass("error success");					
+			currentPassword.val('');
+					
+			//change Current Password field icon, only if it was entered correctly, otherwise leave it as is 
+			currentPassword.siblings('span.add-on').children('i.icon-ok').removeClass().addClass("icon-exclamation-sign");
+					
+			// traverse response object and display errors(if any) in fields
+			$.each( response, function(field,info){
+				if(field != "message"){
+					var el = $("#options_" + field);
+					if(field == "plainPassword_confirm")
+					{
+                        var msg = '';
+                        if(typeof info[0] != 'undefined')
+                           msg = msg+"<i class=\"icon-exclamation-sign \"></i> <i>"+info[0]+"</i></br>";
+                        if(typeof info['new'] != 'undefined')
+                            msg = msg+"<i class=\"icon-exclamation-sign \"></i> <i>"+info['new']+"</i>"
+
+						$('.passwords').addClass("error");
+						currentPassword.closest('.control-group').addClass("error");
+					}
+                    else
+                    {
+                        var msg = "<i class=\"icon-exclamation-sign \"></i> <i>"+info[0]+"</i>"
+                    }
+					el.closest('.control-group').addClass("error");
+					el.siblings('span.help-block').html(msg);
+				}
+			});
+			$("#loading").hide();
+			$(".update-info").html(response.message).show().delay(10000).fadeOut(); //TODO: don't push it to default fx queue
+		});
+	});
+});
+</script>

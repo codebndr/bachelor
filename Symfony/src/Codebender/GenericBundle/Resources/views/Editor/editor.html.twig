@@ -1,0 +1,493 @@
+{% extends '::template.html.twig' %}
+
+{% block title %} {{ project_name }} : {{ site_name }}{% endblock %}
+
+{% block stylesheets %}
+	<style type="text/css" media="screen">
+
+		html {
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		body {
+			overflow: hidden;
+			margin: 0;
+			height: 100%;
+			width: 100%;
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+		}
+
+        #container_left {
+            position: absolute;
+            top: 60px;
+            bottom: 40px;
+            left: 30px;
+            background: white;
+            padding: 0px;
+            margin-bottom: 10px;
+            width: 360px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: transparent;
+        }
+
+        #container_right {
+            position: absolute;
+            top: 60px;
+            bottom: 40px;
+            /*padding: 0px;*/
+            left: 400px;
+            right: 35px;
+            margin-bottom: 10px;
+        }
+
+        #editor {
+			position: fixed;
+			top: 60px;
+			bottom: 40px;
+			background: white;
+			padding: 0px;
+            left:400px;
+            right:35px;
+            margin-bottom: 20px;
+		}
+
+        #selection {
+			width: 250px;
+			/*		height: 200px;*/
+		}
+
+        #compile
+        {
+            margin-bottom: 10px;
+        }
+
+		#compile_output {
+			position: absolute;
+			bottom: 0px;
+			height: 0px;
+            width: 100%;
+			padding: 0px;
+            margin-bottom: 10px;
+			overflow-y: auto;
+			visibility: hidden;
+			/*	background: white;*/
+			backround-image: url(http://subtlepatterns.subtlepatterns.netdna-cdn.com/wp-content/themes/tweaker6/images/bgnoise.gif);
+			/*	width: 280px;*/
+			white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+			white-space: -pre-wrap; /* Opera 4-6 */
+			white-space: -o-pre-wrap; /* Opera 7 */
+			white-space: pre-wrap; /* css-3 */
+			word-wrap: break-word; /* Internet Explorer 5.5+ */
+			/* text-shadow: #999999 1px 1px 1px; */
+			border-width: 0px;
+		}
+
+        #compile_output_close {
+            position: absolute;
+            bottom: 0px;
+            right: 17px;
+            height: 0px;
+            width: 100%;
+            padding: 0px;
+            margin-bottom: 10px;
+            visibility: hidden;
+
+            z-index: 50;
+        }
+
+        #editor_header {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            background: #F7F7F7;
+            z-index: 50;
+            padding: 3px 10px 3px 10px;
+            border-radius: 0px 3px 0px 3px;
+            border-width: 1px;
+            border-color: rgba(0, 0, 0, 0.15);
+            border-style: solid;
+            text-align: center;
+        }
+
+        #sketch_info
+        {
+            position: absolute;
+            height: 18px;
+            bottom: 0px;
+            right: 0px;
+            margin-bottom: 10px;
+            background: #F7F7F7;
+            z-index: 50;
+            padding: 3px 15px 3px 15px;
+	        border-radius: 3px 0 3px 0;
+            border-width: 1px;
+            border-color: rgba(0, 0, 0, 0.15);
+            border-style: solid;
+            text-align: center;
+        }
+
+        #sketch_size
+        {
+            visibility: hidden;
+        }
+
+        #speed_label, #toggle_connect_serial
+        {
+            margin-bottom: 10px;
+        }
+
+        #toggle_connect_serial
+        {
+            width: 171px;
+        }
+
+        #serial_hud
+        {
+            overflow: auto;
+            width: 312px;
+            height:120px;
+        }
+
+        #text2send
+        {
+            width: 280px;
+        }
+
+        #boards
+        {
+            width: 230px;
+        }
+
+        #ports
+        {
+            width: 242px;
+        }
+
+        #baudrates
+        {
+            width: 123px;
+        }
+
+        #files_list
+        {
+            list-style-type: none;
+            margin-left: 10px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        #webserial_hud
+        {
+            overflow: auto;
+            width: 312px;
+            height: 120px;
+        }
+
+        #webtext2send
+        {
+            width: 280px;
+        }
+
+        #ip
+        {
+            width:162px;
+        }
+
+        #toggle_connect_webserial
+        {
+            width: 100px;
+        }
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+    {% include 'CodebenderGenericBundle:Editor:editor_javascript.html.twig' %}
+
+    <script type="text/javascript" src="{{ path("CodebenderGenericBundle_embedded_compilerflasher_js") }}"></script>
+    {% include 'CodebenderGenericBundle:Editor:editor_scripts.html.twig' %}
+    {% include 'CodebenderGenericBundle:Editor:editor_ariadne_scripts.html.twig' %}
+
+    <script>
+		window.youShallNotPass = true;
+		var warnMessage = "You have UNSAVED CHANGES in your project. If you leave now, your changes WILL BE LOST.";
+
+        //editor specific stuff
+		var editor;
+		$(document).ready(function () {
+
+			$.ajaxSetup({
+				cache: true
+			});
+			$.getScript("{{ asset("astyle.js") }}")
+					.done(function (script, textStatus)
+					{
+						js_format_string = Module.cwrap('js_format_string', 'string', ['string']);
+						autoFormat =
+								function ()
+								{
+									editor.getSession().setValue(js_format_string(editor.getSession().getValue()));
+								}
+						$.ajaxSetup({
+							cache: false
+						});
+
+					});
+
+			editor = ace.edit("editor");
+			editor.setTheme("ace/theme/textmate");
+			editor.getSession().setMode("ace/mode/arduino");
+
+			editor.getSession().setUseSoftTabs(false);
+			editor.getSession().on('change', function () {
+				$("#line_count").html(editor.getSession().getValue().split("\n").length);
+			});
+
+			addCommands();
+        //editor specific stuff over
+
+			window.files = {
+				{% for file in files %}
+					"{{file['filename']}}":"{{file['code'] | e('js')}}",
+				{% endfor %}
+			};
+
+			{% if files[0] is defined %}
+				window.selectedFile = "{{files[0]['filename']}}";
+				$(".filelist")[0].setAttribute("style", "font-weight:bold;");
+			{% endif %}
+
+			window.binary = null;
+			$("#line_count").html(editor.getSession().getValue().split("\n").length);
+
+			//Check for dirty state(unsaved changes)
+			window.savedfiles = refreshFiles();
+
+            $("#infoModal").on('hidden ', function () {
+                $("#info_modal_progress").hide();
+            });
+
+			window.onbeforeunload = function () {
+				if(window.youShallNotPass){
+					window.currentfiles = refreshFiles();
+					var saved=jsObjEquals( window.savedfiles, window.currentfiles );
+					if (!saved) return warnMessage;
+				}
+				else
+					window.youShallNotPass = true;
+			}
+
+			$("#save").on('click', function(){
+				window.savedfiles = refreshFiles();
+			});
+			/*  Clicking Download triggers onbeforeunload
+			 *	flag set to false to prevent raising unsaved changes alert
+			 */
+			$("#download").on('click', function(){
+				window.youShallNotPass = false;
+			});
+
+            $("#compiler_output_close_btn").on('click', function(){
+                hideErrorOutput();
+            });
+
+            $( "#editor" ).resizable({
+                maxHeight: $("#container_right").height()-100,
+                minHeight: 100,
+                handles: 's',
+                resize: function(event, ui) {
+                    if( $('#editor').css("bottom") == "40px")
+                        $('#editor').css("height","");
+                    else
+                    {
+                        var setHeight = $("#editor").height();
+                        $('#compile_output').css("height",$("#container_right").height()-setHeight-32);
+                        $('#compile_output_close').css("bottom", $('#compile_output').height() + 10 );
+                        $('#editor').css("bottom",$("#container_right").height()-$("#editor").height()+28);
+                        editor.resize();
+                        $('#editor').css("height","");
+                    }
+
+                }
+            });
+
+            {% if is_public %}
+                window.isPublic = true;
+                $("#embed_info").show();
+            {% else %}
+                window.isPublic = false;
+                $("#embed_info").hide();
+            {% endif %} ;
+
+            $("#editor .ui-resizable-handle").hide();
+
+            Dropzone.options.dropzoneForm = {
+                paramName: "file", // The name that will be used to transfer the file
+                maxFilesize: 2, // MB
+                url: "{{ oneup_uploader_endpoint('files') }}",
+                success: function(file, response){
+                    if(!response['success'])
+                    {
+                        var node, _i, _len, _ref, _results;
+                        file.previewElement.classList.add("dz-error");
+                        message = response['error'];
+                        _ref = file.previewElement.querySelectorAll("[data-dz-errormessage]");
+                        _results = [];
+                        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                            node = _ref[_i];
+                            _results.push(node.textContent = message);
+                        }
+                        return _results;
+                    }
+                    else
+                    {
+                        appendFileToFileList(response['filename'], response['code']);
+                        return file.previewElement.classList.add("dz-success");
+                    }
+
+                }
+            }
+        });
+	</script>
+{% endblock %}
+
+{% block content %}
+    {% include 'CodebenderGenericBundle:Editor:creation_modal.html.twig' %}
+    {% include 'CodebenderGenericBundle:Editor:deletion_modal.html.twig' %}
+    {% include 'CodebenderGenericBundle:Editor:filename_modal.html.twig' %}
+    {% include 'CodebenderGenericBundle:Editor:filedelete_modal.html.twig' %}
+    {% include 'CodebenderGenericBundle:Editor:info_modal.html.twig' %}
+
+				<div id="container_left">
+					<h4>
+						<span id='editor_heading_privacy_icon'>{% include "CodebenderUtilitiesBundle:Default:project_privacy_view.html.twig" with {"is_public": is_public, "verbose": false} %}</span>
+						<span id='editor_heading_project_name'>{{ project_name }}</span>
+                        <a href="{{ path('CodebenderUtilitiesBundle_clone',{'id':project_id}) }}" style="float: right; margin-right: 10px;">
+                            <i class="icon-copy" style="margin-top: 6px; margin-right: -4px;"></i>
+                            <small>Clone Project</small>
+                        </a>
+                    </h4>
+                        <ul id="files_list">
+                            {% for file in files %}
+                                <li>
+                                    <a class="filelist" href="javascript:void(0)" onclick="selectFile('{{ file['filename'] }}');">
+                                        {{ file['filename'] }}
+                                    </a>
+                                    {% if file['filename'] != project_name ~ ".ino" %}
+                                        <a class="deletefilebutton" href="javascript:void(0)" style="float:right; margin-right: 10px"
+                                           title="Delete File" onclick="deleteFileModal('{{ file['filename'] }}')">
+                                            <i class="icon-remove"></i>
+                                        </a>
+                                        <a class="renamefilebutton" href="javascript:void(0)" style="float:right;" title="Rename File"
+                                           onclick="renameFilenameModal('{{ file['filename'] }}')">
+                                            <i class="icon-pencil"></i>
+                                        </a>
+                                    {% else %}
+                                        <a data-toggle="modal" style="float:right; margin-right: 10px"
+                                           title="Add New File" href="#creationModal">
+                                            <i class="icon-plus"></i>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+
+                    <div class="btn-group span12" style="margin-bottom:10px; margin-left:0px;">
+                        <button id="delete" title="Delete" class="btn btn-danger" data-toggle="modal" href="#deletionModal">
+                            <i id="delete_icon" class="icon-trash  icon-white"></i>
+                            Delete
+                        </button>
+                        <div class="btn-group">
+                            {#TODO make the border-radius thing in a better way like bootstrap 3#}
+                            <button style="border-radius: 0" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-caret-down"></i>
+                                Download
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a id="download" title="Download"
+                                       href="{{ path('CodebenderUtilitiesBundle_download', { 'id' : project_id }) }}">
+                                        <i class="icon-download-alt icon-white"></i>
+                                        Download .zip
+                                    </a>
+                                </li>
+                                <li>
+                                    <form id="getHexForm" action="{{ path('CodebenderUtilitiesBundle_gethex')}} "  method="post">
+                                        <input id="getHexFormInput" name="hex" type="hidden" />
+                                    </form>
+                                    <a href="javascript:void(0);" onclick="getHex();" title="Download .hex file">
+                                        <i id="hex_icon" class="icon-cog"></i>
+                                        Download .hex</a></li>
+                            </ul>
+                        </div>
+
+                        <button id="revert" class="btn" onclick="revert();" title="Go back to your last saved state">
+                            <i id="revert_icon" class="icon-arrow-left"></i>
+                            Undo All
+                        </button>
+                        <button id="save" class="btn" onclick="save();" title="Save changes">
+                            <i id="save_icon" class="icon-download"></i>
+                            Save
+                        </button>
+
+                    </div>
+
+                    <h5>Cloud Section</h5>
+
+                    <div class="input-append">
+                        <input type="text" id='ip' placeholder="IP Address">
+                        <button id="toggle_connect_webserial" onclick="webconnect();" class="btn"
+                                title="Open Cloud Serial Monitor">
+                            <i class="icon-globe"></i>
+                            Monitor
+                        </button>
+                        <button id="cloudload" onclick="webflash();" class="btn"
+                                title="Flash an arduino through the cloud">
+                            <i class="icon-globe"></i>
+                            Flash
+                        </button>
+                    </div>
+                    <div id="webserial_monitor_content" style="display:none;">
+                        <div class="input-append">
+                            <input id="webtext2send" type="text" placeholder="Web Serial Message" onkeypress="webserialSendOnEnter()">
+                            <button id="webserial_send" onclick="webserialSend()" class="btn" title="Send message"> Send
+                            </button>
+                        </div>
+                        <pre id="webserial_hud" class="well"></pre>
+                    </div>
+
+					<hr class="soften" />
+
+					<div id="cb_cf" data-sketch="{{ project_id }}" data-sections="verify usbflash serialmonitor"></div>
+
+
+                    <div id="progress" class="progress progress-striped active" style="display:none;">
+                        <div id="progress_val" class="bar" style="width: 40%;"></div>
+                    </div>
+                </div>
+				<div id="container_right">
+                    <pre id="editor">{% if files[0] is defined %}{{ files[0]['code']|raw }}{% endif %}</pre>
+                    <span id="editor_header">
+	                    <a href="javascript:void(0)" onclick="autoFormat();" title="Auto-Format Code">
+		                    <i class="icon-indent-right"></i>
+	                    </a>
+	                    <a data-toggle="modal" href="#infoModal" title="Project Info">
+		                    <i class="icon-info-sign"></i>
+	                    </a>
+	                    {#<i class="icon-resize-full"></i>#}
+                    </span>
+                    <span id="compile_output_close">
+                        <button id="compiler_output_close_btn" type="button" class="close">x</button>
+                    </span>
+                    <span id="sketch_info">
+                        <span id="lines">Number of lines: <span id="line_count">0</span></span>
+                        <span id="sketch_size"><br>Sketch size: <span id="sketch_size_number"></span> bytes</span>
+                    </span>
+                    <pre id="compile_output"></pre>
+				</div>
+{% endblock %}
+

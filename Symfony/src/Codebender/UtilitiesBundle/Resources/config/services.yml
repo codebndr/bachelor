@@ -1,0 +1,19 @@
+parameters:
+#    codebender_utilities.example.class: Codebender\UtilitiesBundle\Example
+
+services:
+#    codebender_utilities.example:
+#        class: %codebender_utilities.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+    codebender_utilities.handler:
+        class:        Codebender\UtilitiesBundle\Handler\DefaultHandler
+
+    codebender_utilities.referralcodecontroller:
+        class:        Codebender\UtilitiesBundle\Controller\ReferralCodeController
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"
+
+    codebender_utilities.logcontroller:
+            class:        Codebender\UtilitiesBundle\Controller\LogController
+            arguments:
+                entityManager: "@doctrine.orm.entity_manager"

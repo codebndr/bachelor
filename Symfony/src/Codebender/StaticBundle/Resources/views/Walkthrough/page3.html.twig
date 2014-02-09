@@ -1,0 +1,604 @@
+{% extends 'CodebenderStaticBundle:Walkthrough:skeleton.html.twig' %}
+
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ path("CodebenderGenericBundle_embedded_compilerflasher_js") }}"></script>
+	<script src={{ asset("walkthrough/lawnchair-0.6.1.min.js") }}></script>
+	<script src={{ asset("walkthrough/dom.js") }}></script>
+
+	{#Windows Functions#}
+	<script type="text/javascript">
+		function enableWindowsFunctions()
+		{
+			window.lc = new Lawnchair({name: "drivers"}, function ()
+			{
+				// default params: records and record in terse callbacks
+				var waiting = {key: 'waiting', value: true};
+
+				// save it
+				this.save(waiting);
+			});
+
+			window.lcInterval = window.setInterval(function ()
+			{
+				window.lc.get('windows-drivers-installed', function (status)
+				{
+					if (status !== null)
+					{
+						window.clearInterval(window.lcInterval);
+						window.location.assign("{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}");
+					}
+				});
+			}, 1000);
+
+			window.sock = null;
+		}
+
+		function windowsDownloadDrivers()
+		{
+			window.location.replace("{{ asset("drivers/windows-driver-installer.zip") }}");
+			$("#windows-directions").hide(1000);
+			$("#windows-directions-two").show(1000);
+		}
+
+		function windowsDownloadDriversBack()
+		{
+			$("#windows-directions").show(1000);
+			$("#windows-directions-two").hide(1000);
+		}
+
+	</script>
+
+	{#Mac Functions#}
+	<script type="text/javascript">
+		function enableMacFunctions()
+		{
+			window.lc = new Lawnchair({name: "drivers"}, function (){});
+
+			window.lcInterval = window.setInterval(function ()
+			{
+				window.lc.get('mac-drivers-installed', function (status)
+				{
+					if (status !== null)
+					{
+						window.clearInterval(window.lcInterval);
+						window.location.assign("{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}");
+					}
+				});
+			}, 1000);
+
+			window.sock = null;
+		}
+
+		function macWebSocketStart()
+		{
+			window.macSocketConnectInterval = window.setInterval(function ()
+			{
+
+				if (window.sock == null)
+				{
+					wsuri = "ws://localhost:9010";
+
+					window.sock = new WebSocket(wsuri);
+
+
+					sock.onopen = function ()
+					{
+						window.clearInterval(window.macSocketConnectInterval);
+
+						console.log("connected to " + wsuri);
+					}
+
+					sock.onclose = function (e)
+					{
+						console.log("connection closed (" + e.code + ")");
+						window.sock = null;
+						macWebSocketStart();
+					}
+
+					sock.onmessage = function (e)
+					{
+						console.log("message received: " + e.data);
+
+						if (e.data == "installation complete")
+						{
+							sock.send("installation complete ack");
+						}
+						else if (e.data == "ack ack")
+						{
+							console.log("DRIVER INSTALLATION SUCCESSFUL");
+							$("#mac-user-instructions").text("All good! Moving you to the next page.")
+							window.setTimeout(function ()
+							{
+								var status = {key: 'mac-drivers-installed', value: true};
+								window.lc.save(status);
+							}, 3000);
+						}
+					}
+
+				}
+			}, 2000);
+		}
+
+		function macWebSocketStop()
+		{
+			if (window.sock != null)
+				window.sock.close();
+			window.clearInterval(window.macSocketConnectInterval);
+		}
+
+		function macDownloadDrivers()
+		{
+			if(typeof WebSocket == "function")
+			{
+				window.location.replace("{{ asset("drivers/driver-installer.zip") }}");
+				$("#mac-directions").hide(1000);
+				$("#mac-directions-two").show(1000);
+				macWebSocketStart();
+			}
+			else
+			{
+				window.location.replace("{{ asset("drivers/ftdi.zip") }}");
+			}
+		}
+
+		function macDownloadDriversBack()
+		{
+			$("#mac-directions").show(1000);
+			$("#mac-directions-two").hide(1000);
+			macWebSocketStop();
+		}
+
+	</script>
+
+	{#Linux Functions#}
+	<script type="text/javascript">
+		function enableLinuxFunctions()
+		{
+			window.lc = new Lawnchair({name: "permissions"}, function (){});
+
+			window.lcInterval = window.setInterval(function ()
+			{
+				window.lc.get('fixed-and-logout', function (status)
+				{
+					if (status !== null)
+					{
+						window.clearInterval(window.lcInterval);
+						window.location.assign("{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}");
+					}
+				});
+			}, 100);
+
+			window.sock = null;
+
+		}
+
+		function linuxWebSocketStart()
+		{
+			window.linuxSocketConnectInterval = window.setInterval(function (){
+
+				if(window.sock == null)
+				{
+					wsuri = "ws://localhost:9009";
+
+					window.sock = new WebSocket(wsuri);
+
+
+
+					sock.onopen = function ()
+					{
+						window.clearInterval(window.linuxSocketConnectInterval);
+
+						console.log("connected to " + wsuri);
+						linuxCheckPermissions();
+
+						window.setInterval(function () {
+							if (sock != null)
+								sock.send(JSON.stringify({"type": "ack"}));
+						}, 500);
+					}
+
+					sock.onclose = function (e)
+					{
+						console.log("connection closed (" + e.code + ")");
+						window.sock = null;
+						linuxWebSocketStart();
+					}
+
+					sock.onmessage = function (e)
+					{
+						console.log("message received: " + e.data);
+						var data = JSON.parse(e.data);
+						if (data["type"] == "version")
+						{
+							console.log(data["version"]);
+						}
+						else if (data["type"] == "check_permissions")
+						{
+							if (data["correct"])
+							{
+								console.log("PERMISSIONS CORRECT");
+								$("#linux-user-instructions").text("All good! Moving you to the next page.")
+								window.setTimeout(function(){
+									window.location.assign("{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}");
+								}, 3000);
+							}
+							else
+							{
+								console.log("PERMISSIONS NOT CORRECT");
+								$("#linux-user-instructions").text("Oh man, not cool. You need to fix your user's permissions")
+								$("#linux-fix-permissions-button").show(500);
+							}
+
+							var permissions = {key: 'permissions-correct', value: data["correct"]};
+							window.lc.save(permissions);
+						}
+						else if (data["type"] == "permissions_fixing_output")
+						{
+							if (data["success"])
+							{
+								console.log("PERMISSIONS FIX SUCCESSFUL");
+								$("#linux-user-instructions").text("All done! Now you just need to log out from your computer.")
+								$("#linux-logout-user-button").show(500);
+								$("#linux-fix-permissions-button").hide(500);
+
+							}
+							else
+							{
+								$("#linux-user-instructions").text("An error occured. Please authorize the permissions request. If you are still having issues, please contact us at girder@codebender.cc");
+								console.log("PERMISSIONS FIX FAILED " + data["error"]);
+							}
+
+							var permissions = {key: 'permissions-fixed', value: data["success"]};
+							window.lc.save(permissions);
+						}
+						else if (data["type"] == "user_logout_dialog")
+						{
+							if (data["success"])
+							{
+								console.log("USER LOGOUT SUCCESSFUL");
+								var status = {key: 'fixed-and-logout', value: true};
+								window.lc.save(status);
+
+							}
+							else
+								console.log("USER LOGOUT FAILED");
+						}
+					}
+
+				}
+			}, 2000);
+		}
+
+
+		function linuxWebSocketStop()
+		{
+			if(window.sock != null)
+			{
+				linuxExitPython();
+				window.sock.close();
+			}
+			window.clearInterval(window.linuxSocketConnectInterval);
+		}
+
+		function linuxSendMessage(message)
+		{
+			var msg = {"type": "message", "text": message};
+			sock.send(JSON.stringify(msg));
+		}
+
+		function linuxVersion()
+		{
+			var msg = {"type": "version"};
+			sock.send(JSON.stringify(msg));
+		}
+
+		function linuxCheckPermissions()
+		{
+			$("#linux-user-instructions").text("Connected. Checking permissions...")
+			var msg = {"type": "check_permissions"};
+			window.setTimeout(function(){ sock.send(JSON.stringify(msg)) }, 5000);
+		}
+
+		function linuxFixPermissions()
+		{
+			$("#linux-user-instructions").text("Fixing permissions...")
+			var msg = {"type": "fix_permissions"};
+			window.setTimeout(function () { sock.send(JSON.stringify(msg)) }, 2000);
+		}
+
+		function linuxLogoutUser()
+		{
+			var msg = {"type": "logout_user"};
+			sock.send(JSON.stringify(msg));
+		}
+
+		function linuxExitPython()
+		{
+			var msg = {"type": "close"};
+			sock.send(JSON.stringify(msg));
+		}
+
+		function linuxDownloadFixerBack()
+		{
+			$("#linux-directions").show(1000);
+			$("#linux-directions-two").hide(1000);
+			linuxWebSocketStop();
+		}
+
+		function linuxDownloadFixer()
+		{
+			window.location.replace("{{ asset("drivers/permissions-fixer.zip") }}");
+			$("#linux-directions").hide(1000);
+			$("#linux-directions-two").show(1000);
+			linuxWebSocketStart();
+		}
+
+		function linuxManualFix()
+		{
+			$("#linux-directions").hide(1000);
+			$("#linux-directions-manual").show(1000);
+		}
+
+		function linuxManualClose()
+		{
+			$("#linux-directions").show(1000);
+			$("#linux-directions-manual").hide(1000);
+		}
+
+		function linuxSkipPermissions()
+		{
+			linuxExitPython();
+			window.location.assign("{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}");
+		}
+
+
+	</script>
+
+
+	<script type="text/javascript">
+        $(document).ready(function () {
+	        if (BrowserDetect.OS == "Windows")
+	        {
+		        $("#windows-directions").show(1000);
+		        enableWindowsFunctions();
+	        }
+	        else if (BrowserDetect.OS == "Mac")
+	        {
+		        $("#mac-directions").show(1000);
+		        enableMacFunctions();
+	        }
+	        else if (BrowserDetect.OS == "Linux")
+	        {
+		        $("#linux-directions").show(1000);
+		        enableLinuxFunctions();
+	        }
+
+			//TODO: Either remove this or use it to detect Windows 8.1 vs 8.0
+//            var os = (function () {
+//                var ua = navigator.userAgent.toLowerCase();
+//                return {
+//                    isWin2K:/windows nt 5.0/.test(ua),
+//                    isXP:/windows nt 5.1/.test(ua),
+//                    isVista:/windows nt 6.0/.test(ua),
+//                    isWin7:/windows nt 6.1/.test(ua),
+//                    isWin8:/windows nt 6.2/.test(ua),
+//                    isMac:/macintosh/.test(ua),
+//                    isLinux:/linux/.test(ua)
+//                };
+//            }());
+        });
+
+    </script>
+
+{% endblock %}
+
+{% block stylesheets %}
+	<style>
+		.directions
+		{
+			font-size: 20px;
+			line-height: 30px;
+			display: none;
+		}
+
+		.directions-header
+		{
+			text-align: justify;
+		}
+
+		.directions-centered
+		{
+			text-align: center;
+		}
+
+	</style>
+	{#TODO: remove this?#}
+{% endblock %}
+
+{% block page_content %}
+    <h3>Driver Installation</h3>
+
+
+	<div id="windows-directions" class="directions">
+		<p class="directions-header">We strongly encourage you to install the required drivers for your
+			device.
+			It will only take a few seconds, and you we'll make sure that you will be able to use any Arduino
+			or Arduino-compatible device on your computer.
+		</p>
+
+		<p class="directions-centered">
+			<button class="btn btn-primary btn-large" onClick="windowsDownloadDrivers();">Download Drivers</button>
+
+			<a class="btn btn-primary btn-large" href="{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}">
+				I've done this. Next
+			</a>
+		</p>
+	</div>
+
+	<div id="windows-directions-two" class="directions">
+		<p class="directions-centered" style="font-size:100px">
+			<i class="icon-refresh icon-spin"></i>
+		</p>
+
+		<p id="windows-user-instructions" class="directions-centered">
+			Waiting for the driver installation to complete.
+		</p>
+
+		<p class="directions-centered">
+			<button class="btn btn-primary btn-large" onClick="windowsDownloadDriversBack();">Back</button>
+			<a class="btn btn-primary btn-large" href="{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}">
+				Skip
+			</a>
+		</p>
+	</div>
+
+	<div id="mac-directions" class="directions">
+		<p class="directions-header">We strongly encourage you to install the required drivers for your
+			device.
+			It will only take a few seconds, and you we'll make sure that you will be able to use any Arduino
+			or Arduino-compatible device on your computer.
+		</p>
+
+		<p class="directions-centered">
+			<button class="btn btn-primary btn-large" onClick="macDownloadDrivers();">Download Drivers</button>
+
+			<a class="btn btn-primary btn-large" href="{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}">
+				I've done this. Next
+			</a>
+		</p>
+	</div>
+
+	<div id="mac-directions-two" class="directions">
+		<p class="directions-centered" style="font-size:100px">
+			<i class="icon-refresh icon-spin"></i>
+		</p>
+		<p id="mac-user-instructions" class="directions-centered">
+			Waiting for the driver installation to complete.
+		</p>
+
+		<p class="directions-centered">
+			<button class="btn btn-primary btn-large" onClick="macDownloadDriversBack();">Back</button>
+			<a class="btn btn-primary btn-large" href="{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}">
+				Skip
+			</a>
+		</p>
+	</div>
+
+	<div id="linux-directions" class="directions">
+		<p class="directions-header">
+			In order to use your device on Linux, you need to have the correct permissions. {#We strongly suggest using
+			our permissions fix application to do that.#}
+		</p>
+
+		<p class="directions-centered">
+			{#<button class="btn btn-primary btn-large" onClick="linuxDownloadFixer();">Download Permission Fixer</button>#}
+			<button class="btn btn-primary btn-large" onClick="linuxManualFix();">Show Manual Fix</button>
+
+			<a class="btn btn-primary btn-large" href="{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}">
+				I've done this. Next
+			</a>
+		</p>
+
+		{#<p class="directions-header">#}
+			{#<i class="icon-warning-sign"></i>#}
+			{#Our automatic permission fixer is designed for Ubuntu. If you are using another Linux distribution,#}
+			{#it might or might not work for you. In any case, the manual fix should work.#}
+		{#</p>#}
+
+	</div>
+
+	<div id="linux-directions-two" class="directions">
+		<p class="directions-centered" style="font-size:100px">
+			<i class="icon-refresh icon-spin"></i>
+		</p>
+
+		<p id="linux-user-instructions" class="directions-centered">
+			Waiting for the permissions fixer to start.
+		</p>
+
+		<p class="directions-centered">
+			<button class="btn btn-primary btn-large" onClick="linuxDownloadFixerBack();">Back</button>
+			<button id="linux-fix-permissions-button" class="btn btn-primary btn-large" style="display: none;"
+			        onClick="linuxFixPermissions();">
+				Fix Permissions
+			</button>
+			<button id="linux-logout-user-button" class="btn btn-primary btn-large" style="display: none;"
+			        onClick="linuxLogoutUser();">
+				Log Out
+			</button>
+			<button class="btn btn-primary btn-large" onClick="linuxSkipPermissions()">Skip</button>
+		</p>
+	</div>
+
+	<div id="linux-directions-manual" class="directions">
+		<h4>Manual Fix:</h4>
+
+		<p>
+			On many Linux machines, the user doesn't have access to the serial ports by default. To fix this, you need
+			to use the "Terminal" app, and write down some commands. Don't worry, it will only take a minute, and we'll
+			guide you through.
+		</p>
+
+		<h4>Find out if you have access to the serial port</h4>
+
+		<p>
+			You can find out if you have access to the serial port by copy-pasting and running the following command:
+		</p>
+
+		<p class="well">
+			groups | grep $(ls -l /dev/* 2>/dev/null | grep /dev/ttyS0 | cut -d ' ' -f 5 ) > /dev/null ; if [ $? -eq 0 ];
+			then echo "ALL SET"; else echo "SORRY, NO PERMISSIONS :("; fi
+			<br />
+
+		</p>
+
+		<p>
+			The script should return either <b>ALL SET</b>, or <b>SORRY, NO PERMISSIONS :(</b>
+		</p>
+
+		<p>
+		In the first case,
+			you're all set! Otherwise, don't worry, it's an easy fix.
+		</p>
+
+		<h4>Gaining access to the Arduino devices</h4>
+
+		<p>
+			In order to talk to your Arduino, you'll need to add your user to the group that manages the serial ports.
+			Just run the following command:
+		</p>
+
+		<p class="well">
+			sudo gpasswd -a `whoami` $(ls -l /dev/* | grep /dev/ttyS0 | cut -d ' ' -f 5 )
+		</p>
+
+		<p>
+			Then enter your password. You should see something like
+			<b>Adding <em>your_username</em> to group <em>some_group</em></b>.
+			That's it!
+		</p>
+
+
+		<h4>Log Out and Log In</h4>
+
+		<p>
+			After runing the above, you will need to log out from your computer and log in again. It's <b>really</b>
+			important that you do so before you can continue.
+		</p>
+
+		<p class="directions-centered">
+			<button class="btn btn-primary btn-large" onClick="linuxManualClose();">Back</button>
+		</p>
+
+	</div>
+
+	{#<div id="step_output_text">#}
+		{#<p>#}
+			{#Please wait#}
+			{#<i class="icon-spinner icon-spin"></i>#}
+		{#</p>#}
+	{#</div>#}
+
+
+{% endblock %}

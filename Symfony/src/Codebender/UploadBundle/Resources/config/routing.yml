@@ -1,0 +1,3 @@
+#codebender_upload_homepage:
+#    pattern:  /hello/{name}
+#    defaults: { _controller: CodebenderUploadBundle:Default:index }

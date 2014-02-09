@@ -1,0 +1,62 @@
+{% extends 'CodebenderStaticBundle:Walkthrough:skeleton.html.twig' %}
+
+{% block stylesheets %}
+	<style type="text/css">
+		.img-screenshot
+		{
+			margin-top: 10px;
+			margin-bottom: 10px;
+			border-radius: 5px;
+		}
+	</style>
+{% endblock %}
+
+{% block page_content %}
+    <div id="desktop" style="display: none">
+        <h4>Ready. Set. Go!</h4>
+        <p style="text-align: justify">
+            Welcome to our Getting Started guide for new {{ site_name }} users, and more importantly, new makers and Arduino
+            users. It will guide you through all the necessary steps, and to your first successfuly programmed device.
+            This process would normally take you about 15 to 45 minutes, but we'll get you set up in as fast as 2 minutes.
+        </p>
+        <h4 style="text-align: center">
+            Here's an elaborate explanation of how it works:
+        </h4>
+        <div class="row-fluid">
+            <div class="span4 offset4">
+                <img class="img-screenshot" src="{{ asset("images/codebender_walkthrough.png") }}" title="codebender magic explained">
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span4 offset4" style="text-align: center">
+                <h3>What are you waiting for?</h3>
+                <a class="btn btn-large btn-primary" href="{{ path("CodebenderStaticBundle_walkthrough", {"page":page+1}) }}">
+                    Feel the magic!
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobile" style="display: none">
+        <h4>Oops..</h4>
+        <p style="text-align: justify">
+            It seems that you are browsing {{ site_name }} using your mobile device. Well we do not officially support them for now. That means that you can take a look around, but not upload your sketches
+            to your Arduino using this device. Sorry about that. Try using Firefox or Chrome on Windows, Mac or Linux.
+        </p>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            if(isMobile())
+            {
+                $("#mobile").show();
+                $("#desktop").hide();
+            }
+            else
+            {
+                $("#mobile").hide();
+                $("#desktop").show();
+            }
+        })
+    </script>
+{% endblock %}

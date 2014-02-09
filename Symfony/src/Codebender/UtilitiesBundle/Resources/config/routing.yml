@@ -1,0 +1,126 @@
+CodebenderUtilitiesBundle_newproject:
+    pattern:  /newproject
+    defaults: { _controller: CodebenderUtilitiesBundle:Default:newproject }
+    requirements:
+       _method:  POST
+
+CodebenderUtilitiesBundle_deleteproject:
+   pattern:  /deleteproject/{id}
+   defaults: { _controller: CodebenderUtilitiesBundle:Default:deleteproject }
+
+CodebenderUtilitiesBundle_listfilenames:
+   pattern:  /listfilenames/{id}/{show_ino}
+   defaults: { _controller: CodebenderUtilitiesBundle:Default:listFilenames }
+
+CodebenderUtilitiesBundle_changeprivacy:
+   pattern:  /changeprivacy/{id}
+   defaults: { _controller: CodebenderUtilitiesBundle:Default:changePrivacy }
+   requirements:
+      _method:  POST
+
+CodebenderUtilitiesBundle_renderprojectdescription:
+   pattern:  /getprojectdescription/{id}
+   defaults: { _controller: CodebenderUtilitiesBundle:Default:renderDescription }
+
+CodebenderUtilitiesBundle_setprojectdescription:
+   pattern:  /setprojectdescription/{id}
+   defaults: { _controller: CodebenderUtilitiesBundle:Default:setDescription }
+   requirements:
+      _method:  POST
+
+CodebenderUtilitiesBundle_setprojectname:
+  pattern:  /setprojectname/{id}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:setName }
+  requirements:
+     _method:  POST
+
+CodebenderUtilitiesBundle_renamefile:
+  pattern:  /renamefile/{id}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:renameFile }
+  requirements:
+    _method:  POST
+
+CodebenderUtilitiesBundle_clone:
+  pattern:  /clone/{id}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:clone }
+
+CodebenderUtilitiesBundle_download:
+  pattern:  /download/{id}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:download }
+
+CodebenderUtilitiesBundle_downloadexample:
+  pattern:  /downloadexample/{name}/{url}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:downloadExample }
+  requirements:
+      url: ".+"
+
+CodebenderUtilitiesBundle_log:
+  pattern:  /log/{message}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:log }
+
+CodebenderUtilitiesBundle_logdb:
+  pattern:  /logdb/{actionid}/{meta}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:logDatabase }
+  requirements:
+      meta: ".+"
+
+CodebenderUtilitiesBundle_acceptEula:
+  pattern:  /accept_eula
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:acceptEula }
+
+CodebenderUtilitiesBundle_savecode:
+  pattern:  /savecode/{id}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:saveCode }
+  requirements:
+     _method:  POST
+
+CodebenderUtilitiesBundle_createfile:
+  pattern:  /createfile/{id}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:createFile }
+  requirements:
+    _method:  POST
+
+CodebenderUtilitiesBundle_deletefile:
+  pattern:  /deletefile/{id}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:deleteFile }
+  requirements:
+    _method:  POST
+
+CodebenderUtilitiesBundle_addboard:
+  pattern:  /addboard
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:addBoard }
+
+CodebenderUtilitiesBundle_deleteboard:
+  pattern:  /deleteboard/{id}
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:deleteBoard }
+
+CodebenderUtilitiesBundle_editBoard:
+  pattern: /setboarddescription
+  defaults: { _controller: CodebenderUtilitiesBundle:Default:editBoard }
+  requirements:
+    _method: POST
+
+CodebenderUtilitiesBundle_compile:
+    pattern: /compile/
+    defaults: {_controller: CodebenderUtilitiesBundle:Default:compile }
+    requirements:
+        _method:  POST
+
+CodebenderUtilitiesBundle_flash:
+    pattern: /flash
+    defaults: {_controller: CodebenderUtilitiesBundle:Default:flash }
+
+CodebenderUtilitiesBundle_gethex:
+    pattern: /gethex
+    defaults: {_controller: CodebenderUtilitiesBundle:Default:downloadHex }
+    requirements:
+      _method: POST
+
+
+#CodebenderUtilitiesBundle_intercom:
+#    pattern: /intercom
+#    defaults: {_controller: CodebenderUtilitiesBundle:Default:intercom }
+#
+#CodebenderUtilitiesBundle_intercom_hash:
+#    pattern: /intercom_hash/{id}
+#    defaults: {_controller: CodebenderUtilitiesBundle:Default:intercomHash }

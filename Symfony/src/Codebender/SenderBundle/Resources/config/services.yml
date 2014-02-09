@@ -1,0 +1,7 @@
+parameters:
+#    codebender_sender.example.class: Codebender\SenderBundle\Example
+
+services:
+#    codebender_sender.example:
+#        class: %codebender_sender.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+
+{% block javascripts_base %}
+<script>
+$(document).ready(function()
+{	
+	$(".new-repo").click(function() 
+	{
+		$('[name=project_name]').val($("#your-repos-filter").val());
+		$("#create").submit();
+	});
+});
+</script>
+{% endblock %}
+{% block javascripts %}{% endblock %}
+
+{% block stylesheets_base %}
+<style type="text/css" media="screen">
+hr.soften
+{
+margin-top: 0px;
+height: 1px;
+background-image: -webkit-linear-gradient(left, transparent, rgba(0, 0, 0, .1), transparent);
+background-image: -moz-linear-gradient(left, transparent, rgba(0, 0, 0, .1), transparent);
+background-image: -ms-linear-gradient(left, transparent, rgba(0, 0, 0, .1), transparent);
+background-image: -o-linear-gradient(left, transparent, rgba(0, 0, 0, .1), transparent);
+border: 0;
+}
+</style>
+{% endblock %}
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+
+	{% block content %}{% endblock %}
+
+	<footer style="width:100%; position:fixed; bottom:0px; background:#121212;">
+		{% include '::footer.html.twig' %}
+	</footer>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+CodebenderSenderBundle_tftp:
+    pattern:  /tftp/
+    defaults: { _controller: CodebenderSenderBundle:Default:tftp }
+    requirements:
+        _method:  POST

@@ -1,0 +1,29 @@
+{% extends '::basement.html.twig' %}
+
+{% block login_buttons %}
+    {% if not is_granted('ROLE_USER') %}
+        <ul class="nav pull-right">
+            <script type="text/javascript">
+                function signuplink(){
+                    if ($("#offsignupnow").length > 0) {
+                        $('html, body').animate({scrollTop:$('#offsignupnow').offset().top - 41}, 500);
+                    }else{
+                        $("#sign_up").attr("href", "/#offsignupnow");
+                    }
+                }
+            </script>
+            <li id="login">
+                <a href="javascript:void(0)" id="login_btn">Log In</a>
+            </li>
+        </ul>
+    {% endif %}
+    {% if is_granted('ROLE_USER') %}
+        <ul class="nav pull-right">
+            <li><a href="{{ path('fos_user_security_logout')}}" id="logout">Log Out</a></li>
+            {% render controller("CodebenderUtilitiesBundle:Default:image") %}
+        </ul>
+        <p class="navbar-text pull-right">
+            Logged in as <a href="{{ path('CodebenderUserBundle_options') }}">{{ app.user.username }}</a>
+        </p>
+    {% endif %}
+{% endblock %}

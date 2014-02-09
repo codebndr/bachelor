@@ -1,0 +1,5 @@
+{% if is_public %}
+	<i class='icon-smile'></i>{% if verbose %} Public Project{% endif %}
+{% else %}
+	<i class='icon-lock'></i>{% if verbose %} Private Project{% endif %}
+{% endif %}

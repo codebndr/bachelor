@@ -1,0 +1,15 @@
+{% extends '::container.html.twig' %}
+{% block fluidcontainer %}
+	{% block layout_title %}{% endblock %}
+	<div class="row-fluid">
+		<div class="span6">
+			{% block fos_user_content %}{% endblock %}
+		</div><!--/span-->
+		<div class="span6">
+			{% block extra_content %}{% endblock %}
+		</div>
+		<!--/span-->
+
+	</div><!--/row-->
+{% endblock %}
+

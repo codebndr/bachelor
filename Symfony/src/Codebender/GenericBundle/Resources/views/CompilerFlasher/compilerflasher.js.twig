@@ -1,0 +1,90 @@
+$(document).ready(function () {
+
+    //verifier scripts
+    if ($("#cb_cf").length > 0)
+    {
+        if($.isNumeric($("#cb_cf").data().sketch))
+        {
+            $.post("{{ url('CodebenderGenericBundle_projectfiles') }}", {'project_id':$("#cb_cf").data().sketch}, function(data){
+                window.files = JSON.parse(data);
+            });
+        }
+
+        if ($("#cb_cf").data().sections.indexOf("verify") != -1 || !$("#cb_cf").data().board)
+            $("#cb_cf").html($("#cb_cf").html() + '{% filter escape('js') %}{% include 'CodebenderGenericBundle:CompilerFlasher:compiler_section.html.twig'%}{% endfilter %}');
+
+        if($("#cb_cf").data().sections.indexOf("verify") != -1)
+            $("#verify_div").html($("#verify_div").html() + '{% filter escape('js') %}{% include 'CodebenderGenericBundle:CompilerFlasher:verify_section.html.twig'%}{% endfilter %}');
+
+
+        $.getJSON("{{ url('CodebenderBoardBundle_listboards') }}", function (data) {
+        window.boards_list = data;
+
+	        if ($("#cb_cf").data().board){
+            for (var i = 0; i < window.boards_list.length; i++) {
+                if (window.boards_list[i]["name"] == $("#cb_cf").data().board)
+                    window.selectedBoard = window.boards_list[i];
+            }
+        }
+        else
+        {
+            $("#verify_div").html('{% filter escape('js') %}{% include 'CodebenderGenericBundle:CompilerFlasher:boardlist_section.html.twig'%}{% endfilter %}' + $("#verify_div").html());
+            for (var i = 0; i < window.boards_list.length; i++)
+                $("#boards").append($('<option></option>').val(window.boards_list[i]["name"]).html(window.boards_list[i]["name"]));
+            loadBoard();
+        }
+    });
+
+        //flasher scripts
+        if ($("#cb_cf").data().sections.indexOf("usbflash") != -1 || $("#cb_cf").data().sections.indexOf("serialmonitor") != -1)
+        {
+            $("#cb_cf").html($("#cb_cf").html() + '{% filter escape('js') %}{% include 'CodebenderGenericBundle:CompilerFlasher:plugin_section.html.twig' %}{% endfilter %}');
+            if ($("#cb_cf").data().sections.indexOf("usbflash") != -1)
+            {
+                $("#ports_div").html($("#ports_div").html() + '{% filter escape('js') %}{% include 'CodebenderGenericBundle:CompilerFlasher:usbflash_section.html.twig' %}{% endfilter %}');
+                $("#ports_div").addClass("input-append");
+
+            }
+            if ($("#cb_cf").data().sections.indexOf("serialmonitor") != -1)
+                $("#plugin_div").html($("#plugin_div").html() + '{% filter escape('js') %}{% include 'CodebenderGenericBundle:CompilerFlasher:serialmonitor_section.html.twig' %}{% endfilter %}');
+
+            initializePlugin();
+        }
+
+        $("#cb_cf").html($("#cb_cf").html() + "<div id='operation_output'></div>");
+    }
+
+    setTimeout(function()
+    {
+        try
+        {
+            if($("#alertupdatediv").length)
+                {
+                    var url = "{{  path('CodebenderUtilitiesBundle_logdb', {actionid : 27 , meta : "PLUGIN_META"}) }}";
+                    url = url.replace("PLUGIN_META", JSON.stringify({ "success": true, "plugin" : false, "alert" : $("#alertupdatediv").html()}) );
+                    $.get(url);
+                }
+                else
+                {
+                    var ports = Object();
+                    $("#ports  > option").each(function(index) {
+                        ports[index] = (this.text);
+                    });
+                    var url = "{{  path('CodebenderUtilitiesBundle_logdb', {actionid : 27, meta : "SERIAL_MONITOR_META"}) }}";
+                    url = url.replace("SERIAL_MONITOR_META", JSON.stringify({ "success": true, "plugin" : true, "ports" : ports}) );
+                    $.get(url);
+                }
+        }
+        catch(err)
+        {
+            var url = "{{  path('CodebenderUtilitiesBundle_logdb', {actionid : 27 , meta : "PLUGIN_META"}) }}";
+            url = url.replace("PLUGIN_META", JSON.stringify({ "success" : false, "error" : err }) );
+            $.get(url);
+        }
+    },5000);
+
+});
+
+
+{% include 'CodebenderGenericBundle:CompilerFlasher:compiler_scripts.js.twig' %}
+{% include 'CodebenderGenericBundle:CompilerFlasher:flasher_scripts.js.twig' %}

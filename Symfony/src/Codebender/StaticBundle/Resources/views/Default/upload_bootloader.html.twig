@@ -1,0 +1,189 @@
+{% extends '::container.html.twig' %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ path("CodebenderGenericBundle_embedded_compilerflasher_js") }}"></script>
+    <script type="text/javascript">
+        function setOperationProgress(newprogress) {
+            $("#progress").show('fast');
+            $("#progress_val").width(newprogress + '%');
+        }
+
+
+        function start() {
+            $("#start_div").hide(500);
+            $("#progress_div").show();
+
+            var url = "{{  path('CodebenderUtilitiesBundle_logdb', {actionid : 25, meta : "UPLOAD_BOOTLOADER_META"}) }}";
+            url = url.replace("UPLOAD_BOOTLOADER_META", JSON.stringify({ "programmer" : $('#programmer option:selected').val(), "board" : $('#boards option:selected').val(), "port" : $('#ports option:selected').val() }) );
+            $.get(url);
+
+
+            if (typeof window.selectedBoard["upload"]["using"] === "undefined") {
+                if (portslist.selectedIndex != -1)
+                    device = portslist.options[portslist.selectedIndex].text;
+            }
+
+
+            $.get(
+                    "{{ asset('bootloader/')}}" + window.selectedBoard['bootloader']['file'].replace(".hex", ".txt"),
+                    function (data) {
+//                        window.data = data;
+                        plugin.saveToHex(data);
+                        $("#operation_output").text("Working...");
+                        window.result = plugin.flashBootloader(
+//                                data,
+                                window.programmers[$("#programmer").val()]["communication"] == "serial" ? device :
+                                        window.programmers[$("#programmer").val()]["communication"] == "usb" ? "usb":"" ,
+                                window.programmers[$("#programmer").val()]["speed"],
+                                window.selectedBoard["build"]["mcu"],
+                                window.programmers[$("#programmer").val()]["protocol"],
+                                window.programmers[$("#programmer").val()]["force"],
+                                window.selectedBoard["bootloader"]["unlock_bits"],
+								window.selectedBoard["bootloader"]["lock_bits"],
+                                window.selectedBoard["bootloader"]["low_fuses"],
+                                window.selectedBoard["bootloader"]["high_fuses"],
+                                window.selectedBoard["bootloader"]["extended_fuses"],
+                                function (from, progress) {
+                                    if (progress <= 0) {
+                                        $("#start_div").show(500);
+                                        $("#progress_div").hide();
+                                        $("#progress_val").width('0%');
+                                        if (progress<0){
+                                            $("#error_info").show(500);
+                                        }
+                                    } else {
+                                        $("#operation_output").text(progress);
+                                    }
+                                }
+                        )
+
+
+//                        alert('Load was performed.' + $('.result').html(data));
+                    });
+        }
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        #plugin_div {
+            width: 100%
+        }
+
+        #ports_div {
+            width: 100%
+        }
+
+        #uploadusb {
+            visibility: hidden;
+            width: 0px;
+            height: 0px;
+            position: fixed;
+        }
+
+        #ports {
+            display: block;
+            width: 70%;
+            margin: auto;
+        }
+
+        #boards {
+            display: block;
+            margin: auto;
+            width: 70%;
+        }
+
+        #progress_div {
+            display: block;
+            margin: auto;
+            width: 70%;
+            font-size: 30px;
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        #progress {
+            display: block;
+            margin: auto;
+            width: 70%;
+        }
+
+        #programmer {
+            display: block;
+            margin: auto;
+            width: 70%;
+        }
+
+        .alert {
+            font-size: 30px;
+            line-height: 50px;
+            text-align: center;
+        }
+
+        #operation_output {
+            display: block;
+            margin: auto;
+            width: 70%;
+            font-size: 30px;
+        }
+        #error_info {
+            display: block;
+            margin: auto;
+            width: 70%;
+        }
+
+    </style>
+{% endblock %}
+
+{% block title "Upload Bootloader" %}
+
+    {% block mainspan %}
+        <h3>Upload Bootloader</h3>
+        <p>Please select your programmer, device and usb port from the lists below and click start the begin the upload.</p>
+
+        <div id="programmers_div">
+            <select id="programmer">
+                <script type="text/javascript">window.programmers = {};</script>
+                {% for programmer in programmers %}
+                    <option>
+                        {{ programmer["name"] }}
+                        <script type="text/javascript">
+                            window.programmers["{{ programmer['name'] }}"] = {};
+                            window.programmers["{{ programmer['name'] }}"]['name'] = "{{ programmer['name'] }}";
+                            window.programmers["{{ programmer['name'] }}"]['communication'] = "{{ programmer['communication'] }}";
+                            window.programmers["{{ programmer['name'] }}"]['protocol'] = "{{ programmer['protocol'] }}";
+                            window.programmers["{{ programmer['name'] }}"]['speed'] = "{{ programmer['speed'] }}";
+                            window.programmers["{{ programmer['name'] }}"]['force'] = "{{ programmer['force'] }}";
+
+                            {#{% for item in programmer %}#}
+                            {#window.programmers["{{programmer['name']}}"]["{{ item }}"] = "{{ item }}";#}
+                            {#{% endfor %}#}
+                        </script>
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="cb_cf" data-sections="usbflash"></div>
+        <div id="start_div">
+            <button id="start_button" onclick="start();" class="btn btn-large btn-primary"
+                    style="display: block; width: 70%;margin: auto;margin-bottom: 10px;">
+                Start
+            </button>
+        </div>
+        <div id="progress_div">
+            <p>
+                <i class="icon-spinner icon-spin"></i>
+            </p>
+        </div>
+        <script type="text/javascript">$("#progress_div").hide();</script>
+
+        <div id="progress" class="progress progress-striped active">
+            <div id="progress_val" class="bar" style="width: 0%;"></div>
+        </div>
+        <div id="error_info">
+            <p>Please check that you have set up your programmer correctly. For more information check :
+                <a href="http://www.ladyada.net/make/usbtinyisp/">USBtinyISP</a></p>
+        </div>
+        <script type="text/javascript">$("#error_info").hide();</script>
+    {% endblock %}

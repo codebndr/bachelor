@@ -1,0 +1,91 @@
+{% extends '::container.html.twig' %}
+{% block title "Plugins" %}
+{% block stylesheets %}
+	<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/fkjidelplakiboijmadcpcbpboihkmee">
+{% endblock %}
+{% block mainspan %}
+	<div class="page-header">
+		<h1>The Plugin</h1>
+		<small>Downloading the correct plugin for your browser or OS!</small>
+	</div>
+	<object id="plugin0" type="application/x-codebendercc" width="0" height="0">
+	</object>
+
+	<div>
+		<br/>
+		Jump to : <a href="#firefox">Firefox</a>, <a href="#chrome">Chrome</a>
+
+		<div id="chrome-set">
+			<h3 id="chrome">
+				Google Chrome
+				<img src='//upload.wikimedia.org/wikipedia/commons/e/e2/Google_Chrome_icon_%282011%29.svg' width="30px">,
+				Chromium
+				<img src='//upload.wikimedia.org/wikipedia/commons/5/5f/Chromium_11_Logo.svg' width="30px"/>
+				<small>(Windows, Linux, Mac)</small>
+			</h3>
+            <div>
+                <p><strong>Windows 8, 8.1</strong></p>
+                <ul>
+                    <li>Download the universal msi installer from <a id="msi-download-url" href="{{ asset('Codebendercc.msi') }}">here</a>.</li>
+                    <li>Install it to your computer.</li>
+                    <li>Enjoy!</li>
+                </ul>
+            </div>
+            <div>
+                <p><strong>Windows XP, Vista, 7, Mac, Linux</strong></p>
+                {#<div id="chrome-alert">#}
+                    {#<div id="mca" class="alert alert-error fade in">#}
+                        {#<button type="button" class="close" data-dismiss="alert">×</button>#}
+                        {#You are not using the Chrome Store Version of the plugin, do the following:#}
+                        {#<ul>#}
+                            {#<li>Remove the old plugin by going to Menu -> Tools -> Extensions</li>#}
+                            {#<li>Find the Codebender Plugin and click on the Trash Can icon</li>#}
+                            {#<li>Click <a onclick='chrome.webstore.install()'>Add to Chrome</a></li>#}
+                        {#</ul>#}
+                    {#</div>#}
+                {#</div>#}
+                <script type="text/javascript">
+                    if (navigator.userAgent.toLowerCase().indexOf('chrome') != -1) {
+                        version = document.getElementById('plugin0').version;
+                        if (version>= "1.5.3") {
+                            $("#mca").alert('close');
+                        }
+                    }else{
+                        $("#mca").alert('close');
+                    }
+                </script>
+                <ul>
+                    <li>The Codebender extension is available in the Chrome Store. <a onclick='chrome.webstore.install()'>Add
+                        to Chrome</a>.<br/>
+                    <li>Open your project and use it!
+                </ul>
+            </div>
+        </div>
+
+		<div id="firefox-set">
+			<h3 id="firefox">
+				Firefox
+				<img src='//people.mozilla.com/~faaborg/files/shiretoko/firefoxIcon/firefox-512-noshadow.png'
+					 width="30px"/>
+				<small>(Windows, Linux, Mac)</small>
+			</h3>
+
+            <p>
+                <strong>
+                    We are waiting for approval from the Mozilla Add-Ons Library. This will allow you to immediately use the plugin with just one click. Until then you can install it following the instructions below:
+                </strong>
+            </p>
+
+            <ul>
+				<li>Firefox Addons are packaged in xpi format.<br/>
+				<li>Just Download the file from <a id="xpi-download-url"
+												   href="{{ asset('codebender.xpi') }}">here</a> and your browser
+					will ask you to install the plugin.<br/>
+					<img src="{{ asset('pluginsImg/firefox-install-mess.jpg') }}" width="500px"><br/>
+				<li>Once Installed just restart your browser and you are ready!
+			</ul>
+		</div>
+
+	</div>
+
+{% endblock %}

@@ -1,0 +1,116 @@
+<script src={{ asset("validation/passvalidation.js") }} type="text/javascript"></script>
+<script>
+
+function update_username()
+{
+	$("#register_username_id").removeClass("error");
+	$("#register_username_id").removeClass("success");
+	if($("#fos_user_registration_form_username").val().length > 2)
+    {
+        var path = "{{path('CodebenderUserBundle_exists', {'username':'FORM_USERNAME_PLACEHOLDER'})}}";
+        path = path.replace('FORM_USERNAME_PLACEHOLDER', $("#fos_user_registration_form_username").val());
+		$.get(path, function (data)
+		{
+			if(data == "true")
+			{
+				$("#register_username_id").addClass("error");
+				$("#register_info_id").text("We are sorry, this username is already taken.");
+			}
+			else
+			{
+				$("#register_username_id").addClass("success");
+				$("#register_info_id").text("What a cool username!");
+			}
+		});
+    }
+	else
+	{
+		$("#register_username_id").addClass("error");
+		$("#register_info_id").text("Sorry, your username needs to be at least 3 digits long.");
+	}
+}
+
+function update_email()
+{
+	$("#register_email_id").removeClass("error");
+	$("#register_email_id").removeClass("success");
+
+	if(emailReg.test($("#fos_user_registration_form_email").val()))
+	{
+        var path = "{{path('CodebenderUserBundle_email_exists', {'email':'FORM_EMAIL_PLACEHOLDER'})}}";
+        path = path.replace('FORM_EMAIL_PLACEHOLDER', $("#fos_user_registration_form_email").val());
+		$.get(path, function (data)
+		{
+			if (data == "true")
+			{
+				$("#register_email_id").addClass("error");
+				$("#register_info_id").text("We are sorry, this email is already used.");
+			}
+			else
+			{
+				$("#register_email_id").addClass("success");
+				$("#register_info_id").text("Email Validated. Move along, move along...");
+			}
+		});
+	}
+	else
+	{
+		$("#register_email_id").addClass("error");
+		$("#register_info_id").text("Please enter a valid email.");
+	}
+}
+
+function update_password()
+{
+	$("#register_password_id").removeClass("error");
+	$("#register_password_id").removeClass("success");
+	if($("#fos_user_registration_form_plainPassword_first").val().length < 6)
+	{
+		$("#register_password_id").addClass("error");
+		$("#register_info_id").text("Sorry, your password is too short. It needs to be at least 6 characters long.");
+	}
+	else if(passvalid("fos_user_registration_form_plainPassword_first") == "tooSimple")
+	{
+		$("#register_password_id").addClass("error");
+		$("#register_info_id").text("Sorry, your password is too simple, try mix and matching Letters, Numbers or Symbols, to make it more secure.");
+	}
+	else
+	{
+		$("#register_info_id").text("Hooray! You've got a nice, strong and shiny password.");
+		$("#register_password_id").addClass("success");
+	}
+}
+
+function update_verification()
+{
+	$("#register_verification_id").removeClass("error");
+	$("#register_verification_id").removeClass("success");
+	if(isvalidpass("fos_user_registration_form_plainPassword_first") && ($("#fos_user_registration_form_plainPassword_first").val() == $("#fos_user_registration_form_plainPassword_second").val()))
+	{
+		$("#register_verification_id").addClass("success");
+		$("#register_info_id").text("Passwords matched. Commence Registration.");
+	}
+	else if(!isvalidpass("fos_user_registration_form_plainPassword_first"))
+	{
+		$("#register_verification_id").addClass("error");
+		$("#register_info_id").text("Sorry, your password is too simple, try mix and matching Letters, Numbers or Symbols, to make it more secure.");
+	}
+	else
+	{
+		$("#register_verification_id").addClass("error");
+		$("#register_info_id").text("Your passwords do not match.");
+	}
+}
+
+$(document).ready(function()
+{
+	$("#fos_user_registration_form_username").keyup(update_username);
+	$("#fos_user_registration_form_username").change(update_username);
+	$("#fos_user_registration_form_email").keyup(update_email);
+	$("#fos_user_registration_form_email").change(update_email);
+	$("#fos_user_registration_form_plainPassword_first").keyup(update_password);
+	$("#fos_user_registration_form_plainPassword_first").change(update_password);
+	$("#fos_user_registration_form_plainPassword_second").keyup(update_verification);
+	$("#fos_user_registration_form_plainPassword_second").change(update_verification);
+});
+</script>

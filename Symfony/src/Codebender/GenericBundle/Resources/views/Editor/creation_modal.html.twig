@@ -1,0 +1,26 @@
+<div class="modal hide fade" id="creationModal">
+    <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>New File</h3>
+    </div>
+    <div class="modal-body span5">
+        {#<p>Enter the name of the new file you'd like to create.</p>#}
+        <div class="row-fluid">
+
+                <div class="span12 input-prepend input-append" style="max-width:80%;">
+                    <span class="add-on">Create a new file:</span>
+                    <input type="text" id='createfield' placeholder="Filename" style="max-width:80%;">
+                    <button type="createbutton" class="btn btn-primary" onclick="createFile();">Create</button>
+                </div>
+
+        </div>
+        <form class="dropzone" id="dropzoneForm">
+            <input type="hidden" name="uploadType" value="file">
+            <input type="hidden" name="projectId" value="{{ project_id }}">
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <a data-dismiss="modal" class="btn">Cancel</a>
+    </div>
+</div>

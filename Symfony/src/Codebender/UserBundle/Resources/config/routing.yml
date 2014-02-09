@@ -1,0 +1,59 @@
+CodebenderUserBundle_exists:
+    pattern:  /exists/{username}
+    defaults: { _controller: codebender_user.usercontroller:existsAction }
+
+CodebenderUserBundle_email_exists:
+    pattern:  /email_exists/{email}
+    defaults: { _controller: codebender_user.usercontroller:emailExistsAction }
+
+CodebenderUserBundle_getuser:
+    pattern:  /getuser/{username}
+    defaults: { _controller: codebender_user.usercontroller:getUserAction }
+
+CodebenderUserBundle_getcurrentuser:
+    pattern:  /getcurrentuser
+    defaults: { _controller: codebender_user.usercontroller:getCurrentUserAction }
+
+CodebenderUserBundle_options:
+    pattern:  /options
+    defaults: { _controller: codebender_user.optionscontroller:optionsEditAction }
+
+CodebenderUserBundle_iscurrentpassword:
+    pattern:  /iscurrentpassword
+    defaults: { _controller: codebender_user.optionscontroller:isCurrentPasswordAction }
+    requirements:
+        _method:   POST
+
+CodebenderUserBundle_isemailavailable:
+    pattern:  /isemailavailable
+    defaults: { _controller: codebender_user.optionscontroller:isEmailAvailableAction }
+    requirements:
+        _method:   POST
+
+CodebenderUserBundle_search:
+    pattern: /search/user/{token}
+    defaults: { _controller: codebender_user.usercontroller:searchAction }
+
+CodebenderUserBundle_searchName:
+    pattern: /search/name/{token}
+    defaults: { _controller: codebender_user.usercontroller:searchNameAction }
+
+CodebenderUserBundle_searchUsername:
+    pattern: /search/username/{token}
+    defaults: { _controller: codebender_user.usercontroller:searchUsernameAction }
+
+CodebenderUserBundle_searchTwitter:
+    pattern: /search/twitter/{token}
+    defaults: { _controller: codebender_user.usercontroller:searchTwitterAction }
+
+CodebenderUserBundle_enabled:
+    pattern: /enabled
+    defaults: { _controller: codebender_user.usercontroller:enabledAction }
+
+CodebenderUserBundle_active:
+    pattern: /active
+    defaults: { _controller: codebender_user.usercontroller:activeAction }
+
+#CodebenderUserBundle_inlineregister:
+#    pattern: /inlineregister
+#    defaults: { _controller: codebender_user.usercontroller:inlineRegisterAction }

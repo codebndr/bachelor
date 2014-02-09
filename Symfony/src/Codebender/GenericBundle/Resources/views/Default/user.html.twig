@@ -1,0 +1,60 @@
+{% extends '::container.html.twig' %}
+{% block title "User Info" %}
+{% block mainspan %}
+<script src="https://platform.twitter.com/anywhere.js?id=YOUR_API_KEY&v=1" type="text/javascript" xmlns="http://www.w3.org/1999/html"></script>
+<script type="text/javascript">
+    twttr.anywhere(function (T) {
+		T.linkifyUsers();
+	});
+</script>
+<div class="row-fluid" >
+	<div class="span3">
+	<ul class="thumbnails">
+		<li>
+		<a href="javascript:void(0);" target="_blank" class="thumbnail">
+		<img id="user_avatar" src="{{image}}" alt="avatar of user"/>
+		</a>
+		</li>
+	</ul>
+	</div>
+	<div class="span9">
+		<h1>
+			{{ user["username"] }}
+			{% if user["firstname"] or user["lastname"]%}
+				({{user["firstname"]}} {{user["lastname"]}})
+			{% endif %}
+			{% include "CodebenderUtilitiesBundle:Default:codebender_karma.html.twig" with {"karma": user["karma"]} %}
+		</h1>
+		{% if user["twitter"] %}
+		<h4>
+			<a href="//twitter.com/{{ user["twitter"] }}" target="_blank">
+				<i class="icon-twitter"></i> @{{ user["twitter"] }}
+			</a>
+		</h4>
+		{% endif %}
+	</div>
+</div>
+
+<div id="user_info" class="row-fluid">
+	{% if lastTweet %}
+	<div class="span12">
+		<em style="font-weight:bold;text-align:center">latest tweet from @{{user["twitter"]}}</em>
+		<div class="well">
+			{{lastTweet}}
+		</div>
+	</div>
+	{% endif %}
+</div>
+<br />
+<table id="user_projects" class="table table-bordered">
+	<thead><tr><th>Projects</th></tr></thead>
+	{% if projects %}
+		<tbody>
+		{% for project in projects %}
+			<tr><td><a href="{{path('CodebenderGenericBundle_project',{'id':project['id']})}}">{{project['name']}}</a></td></tr>
+		{% endfor %}
+		</tbody>
+	{% endif %}
+</table>
+
+{% endblock %}

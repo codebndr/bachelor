@@ -1,0 +1,4 @@
+CodebenderBoardBundle_listboards:
+  pattern:  /listboards
+  defaults: { _controller: codebender_board.defaultcontroller:listAction }
+
