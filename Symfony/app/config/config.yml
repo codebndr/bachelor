@@ -28,7 +28,7 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     globals:
-        site_name: "codebender"
+        site_name: "codebender Bachelor"
         email_addr: %email.addr%
         compiler: %compiler%
         sender: %sender%
