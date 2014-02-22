@@ -85,7 +85,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
 
 		$link = $crawler->selectLink("test_project")->link();
 		$crawler = $client->click($link);
-		$this->assertEquals(1, $crawler->filter('h1:contains("codebender project")')->count());
+		$this->assertEquals(1, $crawler->filter('h1:contains("codebender Bachelor project")')->count());
 	}
 
 	public function testProjectActionExists()
@@ -144,7 +144,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
 		$client = static::createClient();
 
 		$crawler = $client->request('GET', '/libraries');
-		$this->assertEquals(1, $crawler->filter('html:contains("codebender libraries")')->count());
+		$this->assertEquals(1, $crawler->filter('html:contains("codebender Bachelor libraries")')->count());
 		$this->assertEquals(1, $crawler->filter('html:contains("Request Library")')->count());
 
 		$this->assertEquals(1, $crawler->filter('h2:contains("Examples")')->count());
@@ -167,8 +167,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
 		$client = static::createClient();
 
 		$crawler = $client->request('GET', '/boards');
-		$this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
-		$this->assertEquals(1, $crawler->filter('html:contains("Request Board")')->count());
+		$this->assertEquals(1, $crawler->filter('html:contains("codebender Bachelor boards")')->count());
 
 		$this->assertEquals(1, $crawler->filter('h4:contains("Arduino Uno")')->count());
 		$this->assertEquals(1, $crawler->filter('h4:contains("Arno")')->count());

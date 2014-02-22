@@ -180,8 +180,6 @@ class DefaultController extends Controller
     // @codeCoverageIgnoreEnd
 	public function projectfilesAction()
 	{
-		header('Access-Control-Allow-Origin: *');
-
 		$id = $this->getRequest()->request->get('project_id');
 
 		$projectmanager = $this->get('codebender_project.sketchmanager');
@@ -190,7 +188,10 @@ class DefaultController extends Controller
 		$project = json_decode($projectmanager->checkExistsAction($id)->getContent(), true);
 		if ($project["success"] === false)
 		{
-			return new Response("Project Not Found", 404);
+            $response = new Response("Project Not Found", 404);
+            $response->headers->set('Access-Control-Allow-Origin', '*');
+
+            return $response;
 		}
 
 		$files = $projectmanager->listFilesAction($id)->getContent();
@@ -202,7 +203,11 @@ class DefaultController extends Controller
 		{
 			$files_hashmap[$file["filename"]] = htmlspecialchars($file["code"]);
 		}
-		return new Response(json_encode($files_hashmap));
+        $response = new Response(json_encode($files_hashmap));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+        
+		return $response;
 	}
 
 	public function librariesAction()

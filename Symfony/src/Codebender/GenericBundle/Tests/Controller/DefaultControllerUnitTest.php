@@ -106,7 +106,6 @@ class DefaultControllerUnitTest extends \PHPUnit_Framework_TestCase
         $controller->expects($this->at(1))->method('get')->with($this->equalTo('codebender_user.usercontroller'))->will($this->returnValue($usercontroller));
 
         $usercontroller->expects($this->at(0))->method('getCurrentUserAction')->will($this->returnValue(new Response('{"success":true, "id":1}')));
-        $usercontroller->expects($this->at(1))->method('getTopUsersAction')->with($this->equalTo(5))->will($this->returnValue(new Response('{"success":false}')));
 
         $controller->expects($this->at(2))->method('get')->with($this->equalTo('codebender_project.sketchmanager'))->will($this->returnValue($projectmanager));
         $projectmanager->expects($this->once())->method('canCreatePrivateProjectAction')->with($this->equalTo(1))->will($this->returnValue(new Response('{"success":false}')));
@@ -120,7 +119,7 @@ class DefaultControllerUnitTest extends \PHPUnit_Framework_TestCase
         $request->expects($this->at(0))->method('hasPreviousSession')->will($this->returnValue(true));
         $logController->expects($this->once())->method('logViewAction')->with($this->equalTo(1),$this->equalTo(1),$this->equalTo('HOME_PAGE_VIEW'),$this->equalTo(""),$this->equalTo("sessionId"), $this->equalTo(true));
 
-        $controller->expects($this->once())->method('render')->with($this->equalTo('CodebenderGenericBundle:Index:list.html.twig'), $this->equalTo(array('user' => array('success' => true, 'id' => 1), 'popular_users'=>array(), 'avail_priv_proj' => array('success' => false, 'available' => 0))))->will($this->returnValue('list'));
+        $controller->expects($this->once())->method('render')->with($this->equalTo('CodebenderGenericBundle:Index:list.html.twig'), $this->equalTo(array('user' => array('success' => true, 'id' => 1), 'avail_priv_proj' => array('success' => false, 'available' => 0))))->will($this->returnValue('list'));
 
         $res = $controller->indexAction();
 
@@ -175,7 +174,6 @@ class DefaultControllerUnitTest extends \PHPUnit_Framework_TestCase
         $controller->expects($this->at(1))->method('get')->with($this->equalTo('codebender_user.usercontroller'))->will($this->returnValue($usercontroller));
 
         $usercontroller->expects($this->at(0))->method('getCurrentUserAction')->will($this->returnValue(new Response('{"success":true, "id":1}')));
-        $usercontroller->expects($this->at(1))->method('getTopUsersAction')->with($this->equalTo(5))->will($this->returnValue(new Response('{"success":true, "list":["user1","user2","user3","user4","user5"]}')));
 
         $controller->expects($this->at(2))->method('get')->with($this->equalTo('codebender_project.sketchmanager'))->will($this->returnValue($projectmanager));
         $projectmanager->expects($this->once())->method('canCreatePrivateProjectAction')->with($this->equalTo(1))->will($this->returnValue(new Response('{"success":true, "available":2}')));
@@ -189,7 +187,7 @@ class DefaultControllerUnitTest extends \PHPUnit_Framework_TestCase
         $request->expects($this->at(0))->method('hasPreviousSession')->will($this->returnValue(true));
         $logController->expects($this->once())->method('logViewAction')->with($this->equalTo(1),$this->equalTo(1),$this->equalTo('HOME_PAGE_VIEW'),$this->equalTo(""),$this->equalTo("sessionId"), $this->equalTo(true));
 
-        $controller->expects($this->once())->method('render')->with($this->equalTo('CodebenderGenericBundle:Index:list.html.twig'), $this->equalTo(array('user' => array('success' => true, 'id' => 1), 'popular_users'=>array("user1","user2","user3","user4","user5"), 'avail_priv_proj' => array('success' => true, 'available' => 2))))->will($this->returnValue('list'));
+        $controller->expects($this->once())->method('render')->with($this->equalTo('CodebenderGenericBundle:Index:list.html.twig'), $this->equalTo(array('user' => array('success' => true, 'id' => 1), 'avail_priv_proj' => array('success' => true, 'available' => 2))))->will($this->returnValue('list'));
 
         $res = $controller->indexAction();
 

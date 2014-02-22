@@ -26,7 +26,7 @@ class EditorControllerFunctionalTest extends WebTestCase
         ));
         $crawler = $client->request('GET', '/sketch:1');
 
-        $this->assertEquals(1, $crawler->filter('h1:contains("codebender project")')->count());
+        $this->assertEquals(1, $crawler->filter('h1:contains("codebender Bachelor project")')->count());
 
 
         //Private project
