@@ -27,9 +27,9 @@ class OptionsControllerFunctionalTest extends WebTestCase
         $crawler = $client->request('GET', '/users/options');
         $this->assertEquals(1, $crawler->filter('h2:contains("User Account Options")')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("optionTester")')->count());
-        $this->assertEquals("Type your current password", $crawler->filter('input')->eq(6)->attr('placeholder'));
+        $this->assertEquals("Type your current password", $crawler->filter('input')->eq(5)->attr('placeholder'));
+        $this->assertEquals("Type your new password", $crawler->filter('input')->eq(6)->attr('placeholder'));
         $this->assertEquals("Type your new password", $crawler->filter('input')->eq(7)->attr('placeholder'));
-        $this->assertEquals("Type your new password", $crawler->filter('input')->eq(8)->attr('placeholder'));
     }
 
     public function testOptionsEditAction_changeNonSensitiveSuccess()
