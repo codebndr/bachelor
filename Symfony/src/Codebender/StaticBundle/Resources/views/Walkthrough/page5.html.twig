@@ -19,10 +19,5 @@
 	</div>
 
 	<iframe style="height: 510px; width: 100%; margin: 10px 0 10px;" allowTransparency="true" src="//codebender.cc/embed/sketch:8283" frameborder="0"></iframe>
-	{% if not is_granted('ROLE_USER') %}
-		<hr class="soften">
-		<h4>Get a {{ site_name }} account to code, flash your device and share your work online.</h4>
-		{% render controller('codebender_user.usercontroller:inlineRegisterAction', { 'referrer' : app.request.query.get('referrer'), 'referral_code' : app.request.query.get('referral_code')}) %}
-	{% endif %}
 
 {% endblock %}
