@@ -294,39 +294,6 @@ class SketchControllerUnitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($response, '{"success":false,"error":"Cannot access list of project files."}');
     }
 
-
-    public function testConstructorInvalidStorageLayer()
-    {
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $security = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContext')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $fc = $this->getMockBuilder('Codebender\ProjectBundle\Controller\FilesController')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $ffc = $this->getMockBuilder('Codebender\ProjectBundle\Controller\DiskFilesController')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $thrown = false;
-        try
-        {
-        $controller = $this->getMock('Codebender\ProjectBundle\Controller\SketchController', $methods = NULL, $arguments = array($em, $ffc, $security, 'invalid'));
-        }
-        catch(\Exception $e)
-        {
-           if($e->getMessage() == 'Invalid Storage Layer')
-           $thrown = true;
-        }
-
-        $this->assertEquals($thrown, true);
-    }
-
     protected function setUp()
     {
         $this->project = $this->getMockBuilder('Codebender\ProjectBundle\Entity\Project')
