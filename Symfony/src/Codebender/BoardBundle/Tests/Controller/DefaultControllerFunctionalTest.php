@@ -4,7 +4,6 @@ namespace Codebender\BoardBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-
 class DefaultControllerFunctionalTest extends WebTestCase
 {
     public function testListAction_NotLoggedIn()
@@ -13,10 +12,21 @@ class DefaultControllerFunctionalTest extends WebTestCase
 
         $crawler = $client->request('GET', '/board/listboards');
 
-        $this->assertEquals(1, $crawler->filter('html:contains("Arduino Uno")')->count());
-        $this->assertEquals(1, $crawler->filter('html:contains("The Uno is the reference model for the Arduino platform")')->count());
-        $this->assertEquals(1, $crawler->filter('html:contains("Arduino Leonardo")')->count());
+        $response = $client->getResponse();
 
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'), $response->headers);
+
+        $json = json_decode($response->getContent());
+        $name_one = "Arduino Uno";
+        $name_two = "Arduino Leonardo";
+
+        $names = array();
+        foreach ($json AS $board) {
+            $names[] = $board->name;
+        }
+        $this->assertTrue(in_array($name_one, $names));
+        $this->assertTrue(in_array($name_two, $names));
     }
 
     public function testListAction_LoggedInHasBoard()
@@ -26,12 +36,29 @@ class DefaultControllerFunctionalTest extends WebTestCase
             'PHP_AUTH_PW' => 'testerPASS',
         ));
 
-
         $crawler = $client->request('GET', '/board/listboards');
 
-        $this->assertEquals(1, $crawler->filter('html:contains("Arduino Uno")')->count());
-        $this->assertEquals(1, $crawler->filter('html:contains("Arduino Leonardo")')->count());
-        $this->assertEquals(1, $crawler->filter('html:contains("Arduino Custom")')->count());
-        $this->assertEquals(1, $crawler->filter('html:contains("Tester\'s custom board")')->count());
+        $response = $client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode(), $response->getContent());
+        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'), $response->headers);
+
+        $json = json_decode($response->getContent());
+        $name_one = "Arduino Uno";
+        $name_two = "Arduino Leonardo";
+        $name_three = "Arduino Custom";
+        $description = 'Tester\'s custom board';
+
+        $names = array();
+        $descriptions = array();
+        foreach ($json AS $board) {
+            $names[] = $board->name;
+            $descriptions[] = $board->description;
+        }
+
+        $this->assertTrue(in_array($name_one, $names));
+        $this->assertTrue(in_array($name_two, $names));
+        $this->assertTrue(in_array($name_three, $names));
+        $this->assertTrue(in_array($description, $descriptions));
     }
 }

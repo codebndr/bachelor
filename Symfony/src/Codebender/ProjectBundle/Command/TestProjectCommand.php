@@ -41,12 +41,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($this->getContainer()->hasParameter('storagelayer') && $this->getContainer()->getParameter('storagelayer') == "disk") {
-            $this->diskInstallTests();
-        } else if ($this->getContainer()->hasParameter('storagelayer') && $this->getContainer()->getParameter('storagelayer') == "mongo") {
-            $this->mongoInstallTests();
-        } else 
-            throw new InvalidConfigurationException("Storage layer is not supported or is not set in: parameters.yml");
+        $this->diskInstallTests();
     }
 
     /**
@@ -60,10 +55,10 @@ EOT
     private function diskInstallTests()
     {
         $directory = "";
-        if ($this->getContainer()->hasParameter('disk.directory') && $this->getContainer()->getParameter('disk.directory') != null)
-            $directory = $this->getContainer()->getParameter('disk.directory');
+        if ($this->getContainer()->hasParameter('directory') && $this->getContainer()->getParameter('directory') != null)
+            $directory = $this->getContainer()->getParameter('directory');
         else 
-            throw new InvalidConfigurationException("Storage layer is disk, but no disk.directory provided in: parameters.yml");
+            throw new InvalidConfigurationException("No directory provided in: parameters.yml");
 
         $path = $this->getApplication()->getKernel()->locateResource('@CodebenderProjectBundle/Resources/files');
         
@@ -73,21 +68,6 @@ EOT
         } catch (IOExceptionInterface $e) {
             echo "An error occurred while creating your directory at ".$e->getPath();
         }
-    }
-
-    /**
-     * Install Disk Test Files into MongoDB
-     *
-     * Installs disk tests into MongoDB. This is provided the mongodb
-     * credentials provided are correct.
-     *
-     * @throws InvalidConfigurationException
-     */
-    private function mongoInstallTests()
-    {
-        ##
-        ## To Be Done
-        ##
     }
 
 }

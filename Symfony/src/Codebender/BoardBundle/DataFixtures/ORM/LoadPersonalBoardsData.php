@@ -21,15 +21,15 @@ class LoadPersonalBoardsData extends AbstractFixture implements FixtureInterface
     public function load(ObjectManager $manager)
     {
 
-        $personalplan = new PersonalBoards();
-        $personalplan->setOwner($this->getReference('admin-user'));
-        $personalplan->setDescription('Tester\'s custom plan');
-        $personalplan->setStarts(new \DateTime('2013-05-13'));
-        $personalplan->setExpires(null);
-        $personalplan->setNumber(3);
+        $personal = new PersonalBoards();
+        $personal->setOwner($this->getReference('admin-user'));
+        $personal->setDescription("Tester\'s custom board");
+        $personal->setStarts(new \DateTime('2013-05-13'));
+        $personal->setExpires(null);
+        $personal->setNumber(3);
 
 
-        $manager->persist($personalplan);
+        $manager->persist($personal);
 
         // Commit all Boards to Database
         $manager->flush();

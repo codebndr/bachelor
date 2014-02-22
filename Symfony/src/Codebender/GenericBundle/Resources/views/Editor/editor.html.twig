@@ -436,32 +436,6 @@
 
                     </div>
 
-                    <h5>Cloud Section</h5>
-
-                    <div class="input-append">
-                        <input type="text" id='ip' placeholder="IP Address">
-                        <button id="toggle_connect_webserial" onclick="webconnect();" class="btn"
-                                title="Open Cloud Serial Monitor">
-                            <i class="icon-globe"></i>
-                            Monitor
-                        </button>
-                        <button id="cloudload" onclick="webflash();" class="btn"
-                                title="Flash an arduino through the cloud">
-                            <i class="icon-globe"></i>
-                            Flash
-                        </button>
-                    </div>
-                    <div id="webserial_monitor_content" style="display:none;">
-                        <div class="input-append">
-                            <input id="webtext2send" type="text" placeholder="Web Serial Message" onkeypress="webserialSendOnEnter()">
-                            <button id="webserial_send" onclick="webserialSend()" class="btn" title="Send message"> Send
-                            </button>
-                        </div>
-                        <pre id="webserial_hud" class="well"></pre>
-                    </div>
-
-					<hr class="soften" />
-
 					<div id="cb_cf" data-sketch="{{ project_id }}" data-sections="verify usbflash serialmonitor"></div>
 
 

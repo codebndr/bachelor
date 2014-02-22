@@ -46,11 +46,7 @@ class TestProjectCommandFunctionalTest extends WebTestCase
 
         $testFiles = $kernel->locateResource('@CodebenderProjectBundle/Resources/files');
 
-        if ($kernel->getContainer()->getParameter("storagelayer") == "disk") {
-            $this->diskExecute($testFiles, $kernel);
-        } else if ($kernel->getContainer()->getParameter("storagelayer") == "mongo") {
-            $this->mongoExecute();
-        }
+        $this->diskExecute($testFiles, $kernel);
         ## More Tests can be added here if needed when more storage types are added, if ever.
     }
 
@@ -65,7 +61,7 @@ class TestProjectCommandFunctionalTest extends WebTestCase
         $finder = new Finder();
         $fs = new Filesystem();
 
-        $directory = $kernel->getContainer()->getParameter('disk.directory');
+        $directory = $kernel->getContainer()->getParameter('directory');
         $finder->files()->in($testFilesLocation);
 
         foreach ($finder as $file) {
@@ -77,18 +73,6 @@ class TestProjectCommandFunctionalTest extends WebTestCase
                 echo "An error occurred while checking if mirror was successful: ".$e->getPath();
             }
         }
-    }
-
-    /**
-     * Mongo Execution
-     *
-     * Not Yet Implemented
-     */
-    protected function mongoExecute()
-    {
-        ##
-        ## To Do Done
-        ##
     }
 
 }

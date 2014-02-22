@@ -309,10 +309,6 @@ class SketchControllerUnitTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $mfc = $this->getMockBuilder('Codebender\ProjectBundle\Controller\MongoFilesController')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $ffc = $this->getMockBuilder('Codebender\ProjectBundle\Controller\DiskFilesController')
             ->disableOriginalConstructor()
             ->getMock();
@@ -320,7 +316,7 @@ class SketchControllerUnitTest extends \PHPUnit_Framework_TestCase
         $thrown = false;
         try
         {
-        $controller = $this->getMock('Codebender\ProjectBundle\Controller\SketchController', $methods = NULL, $arguments = array($em, $mfc, $ffc, $security, 'invalid'));
+        $controller = $this->getMock('Codebender\ProjectBundle\Controller\SketchController', $methods = NULL, $arguments = array($em, $ffc, $security, 'invalid'));
         }
         catch(\Exception $e)
         {
@@ -352,16 +348,12 @@ class SketchControllerUnitTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $mfc = $this->getMockBuilder('Codebender\ProjectBundle\Controller\MongoFilesController')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
         $ffc = $this->getMockBuilder('Codebender\ProjectBundle\Controller\DiskFilesController')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
 
-        $controller = $this->getMock('Codebender\ProjectBundle\Controller\SketchController', $methods = $m, $arguments = array($em, $mfc, $ffc, $security, 'disk'));
+        $controller = $this->getMock('Codebender\ProjectBundle\Controller\SketchController', $methods = $m, $arguments = array($em, $ffc, $security, 'disk'));
         return $controller;
     }
 
@@ -379,16 +371,12 @@ class SketchControllerUnitTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $mfc = $this->getMockBuilder('Codebender\ProjectBundle\Controller\MongoFilesController')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $ffc = $this->getMockBuilder('Codebender\ProjectBundle\Controller\DiskFilesController')
             ->disableOriginalConstructor()
             ->getMock();
 
 
-        $controller = $this->getMock('Codebender\ProjectBundle\Tests\Controller\SketchControllerPrivateTester', $methods = $m, $arguments = array($em, $mfc, $ffc, $security, 'mongo'));
+        $controller = $this->getMock('Codebender\ProjectBundle\Tests\Controller\SketchControllerPrivateTester', $methods = $m, $arguments = array($em, $ffc, $security, 'mongo'));
         return $controller;
     }
 }

@@ -10,9 +10,9 @@ class EditorControllerUnitTest extends \PHPUnit_Framework_TestCase
 {
 	public function testEditAction_NoPerms()
 	{
-		$this->initParameters($em, $mf, $df, $sc);
+		$this->initParameters($em, $df, $sc);
 		/** @var SketchController $projectmanager */
-		$projectmanager = $this->getMock("Codebender\ProjectBundle\Controller\SketchController", array("checkWriteProjectPermissionsAction"), array($em, $mf, $df, $sc, "disk"));
+		$projectmanager = $this->getMock("Codebender\ProjectBundle\Controller\SketchController", array("checkWriteProjectPermissionsAction"), array($em, $df, $sc, "disk"));
 		$projectmanager->expects($this->once())->method('checkWriteProjectPermissionsAction')->with($this->equalTo(1))->will($this->returnValue(new Response('{"success":false}')));
 
 		/** @var EditorController $controller */
@@ -26,9 +26,9 @@ class EditorControllerUnitTest extends \PHPUnit_Framework_TestCase
 
 	public function testEditAction_Success()
 	{
-		$this->initParameters($em, $mf, $df, $sc);
+		$this->initParameters($em, $df, $sc);
 		/** @var SketchController $projectmanager */
-		$projectmanager = $this->getMock("Codebender\ProjectBundle\Controller\SketchController", array("checkWriteProjectPermissionsAction", "getNameAction", "getPrivacyAction", "listFilesAction"), array($em, $mf, $df, $sc, "disk"));
+		$projectmanager = $this->getMock("Codebender\ProjectBundle\Controller\SketchController", array("checkWriteProjectPermissionsAction", "getNameAction", "getPrivacyAction", "listFilesAction"), array($em, $df, $sc, "disk"));
 		$projectmanager->expects($this->once())->method('checkWriteProjectPermissionsAction')->with($this->equalTo(1))->will($this->returnValue(new Response('{"success":true}')));
 		$projectmanager->expects($this->once())->method('getNameAction')->with($this->equalTo(1))->will($this->returnValue(new Response('{"success":true, "response": "test_project"}')));
 		$projectmanager->expects($this->once())->method('getPrivacyAction')->with($this->equalTo(1))->will($this->returnValue(new Response('{"success":true, "response": true}')));
@@ -49,13 +49,9 @@ class EditorControllerUnitTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals($response->getContent(), "excellent");
 	}
 
-	private function initParameters(&$em, &$mf, &$df, &$sc)
+	private function initParameters(&$em, &$df, &$sc)
 	{
 		$em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-			->disableOriginalConstructor()
-			->getMock();
-
-		$mf = $this->getMockBuilder('Codebender\ProjectBundle\Controller\MongoFilesController')
 			->disableOriginalConstructor()
 			->getMock();
 

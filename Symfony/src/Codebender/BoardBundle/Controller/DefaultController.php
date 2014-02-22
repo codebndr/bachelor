@@ -36,8 +36,6 @@ class DefaultController extends Controller
 
 	public function listAction()
 	{
-		header('Access-Control-Allow-Origin: *');
-
 		$boards = array();
 
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -74,8 +72,11 @@ class DefaultController extends Controller
 			);
 		}
 
+        $response = new Response(json_encode($boards));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
 
-		return new Response(json_encode($boards));
+		return $response;
 	}
 
     public function editAction($id, $name, $description)
