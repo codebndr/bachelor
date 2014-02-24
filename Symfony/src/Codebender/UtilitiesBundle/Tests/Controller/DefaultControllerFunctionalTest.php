@@ -31,8 +31,6 @@ class DefaultControllerFunctionalTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('span:contains("project_to_test_new_project")')->count());
         $this->assertEquals(1, $crawler->filter('button:contains("Delete")')->count());
         $this->assertEquals(1, $crawler->filter('button:contains("Save")')->count());
-        $this->assertEquals(1, $crawler->filter('h5:contains("Cloud Section")')->count());
-
     }
 
     public function testDeleteprojectAction()
@@ -586,7 +584,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
             'PHP_AUTH_PW' => 'testerPASS',
         ));
         $client->followRedirects();
-        $crawler = $client->request('GET', 'utilities/deleteboard/33');
+        $crawler = $client->request('GET', 'utilities/deleteboard/34');
         $this->assertEquals(1, $crawler->filter('html:contains("was successfully deleted")')->count());
 
         $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
@@ -600,7 +598,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
             'PHP_AUTH_PW' => 'testaccPWD',
         ));
         $client->followRedirects();
-        $crawler = $client->request('GET', 'utilities/deleteboard/32');
+        $crawler = $client->request('GET', 'utilities/deleteboard/34');
         $this->assertEquals(1, $crawler->filter('html:contains("You have no permissions to delete this board.")')->count());
 
     }
@@ -670,31 +668,6 @@ class DefaultControllerFunctionalTest extends WebTestCase
 
         $client->request('GET', '/utilities/logdb/1/"{}"');
         $this->assertEquals('Invalid Action ID', $client->getResponse()->getContent());
-    }
-
-    public function testAcceptEula()
-    {
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'eulaTester',
-            'PHP_AUTH_PW' => 'eulaTesterPASS',
-        ));
-        $user = static::$kernel->getContainer()->get('doctrine')->getManager()->getRepository('CodebenderUserBundle:User')->findOneByUsername('eulaTester');
-
-        $this->assertEquals($user->getEula(), 0);
-
-        $crawler = $client->request('GET', '/');
-        $client->followRedirects();
-        $this->assertEquals(1, $crawler->filter('html:contains("Hi there, we\'d like to inform you that the Terms and Conditions for using codebender have been updated.")')->count());
-
-        $link = $crawler->selectLink('I accept the Terms and Conditions')->link()->getUri();
-
-        $crawler = $client->request('GET', $link);
-
-        $this->assertEquals(1, $crawler->filter('h2:contains("Hello eulaTester!")')->count());
-        $this->assertEquals(1, $crawler->filter('h4:contains("Create a new project:")')->count());
-        $user = static::$kernel->getContainer()->get('doctrine')->getManager()->getRepository('CodebenderUserBundle:User')->findOneByUsername('eulaTester');
-
-        $this->assertEquals($user->getEula(), 1);
     }
 
 }

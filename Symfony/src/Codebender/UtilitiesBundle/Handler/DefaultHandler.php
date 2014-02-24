@@ -82,14 +82,14 @@ class DefaultHandler
 	}
 
 	/**
-	\brief Extracts included headers from source code.
-
-	\param string $code The program's source code.
-	\return An array of headers.
-
-	Takes a string containing the source code of a C/C++ program, parses the
-	preprocessor directives and makes a list of header files to include. The
-	postfix <b>.h</b> is removed from the header names.
+	 * Brief Extracts included headers from source code.
+	 *
+	 * @param string $code The program's source code.
+	 * @return Array of headers.
+ 	 *
+	 * Takes a string containing the source code of a C/C++ program, parses the
+	 * preprocessor directives and makes a list of header files to include. The
+	 * postfix <b>.h</b> is removed from the header names.
 	 */
 	function read_headers($code)
 	{

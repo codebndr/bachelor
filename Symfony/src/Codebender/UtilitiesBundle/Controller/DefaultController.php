@@ -739,10 +739,10 @@ class DefaultController extends Controller
 
 	public function logAction($message)
 	{
-		header('Access-Control-Allow-Origin: *');
-
 		syslog(LOG_INFO, "codebender generic log: ".$message);
-		return new Response("OK");
+        $response = new Response("OK");
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+		return $response;
 	}
 
     public function logDatabaseAction($actionid, $meta)
