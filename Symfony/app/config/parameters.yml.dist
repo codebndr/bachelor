@@ -3,6 +3,7 @@ parameters:
     database_host: 127.0.0.1
     database_port: ~
     database_name: symfony
+    database_path: PATH/TO/SQLITE/DIRECTORY
     database_user: root
     database_pass: ~
     locale: en
