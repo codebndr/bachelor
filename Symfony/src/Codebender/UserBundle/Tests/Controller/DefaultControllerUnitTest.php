@@ -1173,7 +1173,7 @@ class MyQuery extends AbstractQuery
 	public function getSQL(){}
 
 	public function _doExecute(){}
-	public function getResult()
+	public function getResult($hydrationMode = 1)
 	{
 		return "hello";
 	}
