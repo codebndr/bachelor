@@ -476,7 +476,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
         $crawler = $client->request('POST', 'utilities/addboard');
 
 
-        $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("codebender Bachelor boards")')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("Error: Upload failed with error code 1")')->count());
     }
 
@@ -495,7 +495,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
         $crawler = $client->request('POST', 'utilities/addboard');
 
 
-        $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("codebender Bachelor boards")')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("Error: File type should be .txt.")')->count());
     }
 
@@ -513,7 +513,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
         $client->followRedirects();
         $crawler = $client->request('POST', 'utilities/addboard');
 
-        $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("codebender Bachelor boards")')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("Error: Cannot add personal board.")')->count());
     }
 
@@ -533,7 +533,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
         $crawler = $client->request('POST', 'utilities/addboard');
 
 
-        $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("codebender Bachelor boards")')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("Error: You can add up to")')->count());
     }
 
@@ -553,7 +553,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
         $crawler = $client->request('POST', 'utilities/addboard');
 
 
-        $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("codebender Bachelor boards")')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("Error: File does not have the required structure.")')->count());
     }
 
@@ -573,7 +573,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
         $crawler = $client->request('POST', 'utilities/addboard');
 
 
-        $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("codebender Bachelor boards")')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("1 boards were successfully added.")')->count());
     }
 
@@ -598,7 +598,7 @@ class DefaultControllerFunctionalTest extends WebTestCase
         $crawler = $client->request('GET', 'utilities/deleteboard/33');
         $this->assertEquals(1, $crawler->filter('html:contains("was successfully deleted")')->count());
 
-        $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
+        $this->assertEquals(1, $crawler->filter('html:contains("codebender Bachelor boards")')->count());
 
     }
 
