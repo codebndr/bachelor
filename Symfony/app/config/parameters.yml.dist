@@ -3,12 +3,13 @@ parameters:
     database_host: 127.0.0.1
     database_port: ~
     database_name: symfony
+    database_path: PATH/TO/SQLITE/DIRECTORY
     database_user: root
     database_pass: ~
     locale: en
     secret: hello
-    email.addr: ~
-    email.pass: ~
+    email.addr: localhost@codebender.dev
+    email.pass: localpass
     mykey: ~
     compiler: 'http://compiler.codebender.cc'
     library: 'http://libs.codebender.cc'
