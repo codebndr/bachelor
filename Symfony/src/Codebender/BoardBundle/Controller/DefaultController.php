@@ -51,7 +51,7 @@ class DefaultController extends Controller
         $this->em->persist($plan);
         $this->em->flush();
 
-        $response = new Response(json_encode(array("success" => true, "id" => $plan->getId()));
+        $response = new Response(json_encode(array("success" => true, "id" => $plan->getId())));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
@@ -368,14 +368,9 @@ class DefaultController extends Controller
         $current_user = $this->sc->getToken()->getUser();
 
         if($board->getOwner()!== null && $current_user !== "anon." && $current_user->getId() === $board->getOwner()->getId())
-            $returnVal = array("success" => true);
+            return json_encode(array("success" => true));
         else
-            $returnVal = array("success" => false, "error" => "You have no permissions for this board.", "id" => $id);
-
-        $response = new Response(json_encode($returnVal));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-
+            return json_encode(array("success" => false, "error" => "You have no permissions for this board.", "id" => $id));
     }
 
     /**
