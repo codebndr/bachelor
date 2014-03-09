@@ -577,20 +577,6 @@ class DefaultControllerFunctionalTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('html:contains("1 boards were successfully added.")')->count());
     }
 
-    public function testDeleteBoard_success()
-    {
-        $client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'tester',
-            'PHP_AUTH_PW' => 'testerPASS',
-        ));
-        $client->followRedirects();
-        $crawler = $client->request('GET', 'utilities/deleteboard/34');
-        $this->assertEquals(1, $crawler->filter('html:contains("was successfully deleted")')->count());
-
-        $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
-
-    }
-
     public function testDeleteBoard_noPermissions()
     {
         $client = static::createClient(array(), array(
@@ -598,8 +584,21 @@ class DefaultControllerFunctionalTest extends WebTestCase
             'PHP_AUTH_PW' => 'testaccPWD',
         ));
         $client->followRedirects();
-        $crawler = $client->request('GET', 'utilities/deleteboard/34');
+        $crawler = $client->request('GET', 'utilities/deleteboard/33');
         $this->assertEquals(1, $crawler->filter('html:contains("You have no permissions to delete this board.")')->count());
+    }
+
+    public function testDeleteBoard_success()
+    {
+        $client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'tester',
+            'PHP_AUTH_PW' => 'testerPASS',
+        ));
+        $client->followRedirects();
+        $crawler = $client->request('GET', 'utilities/deleteboard/33');
+        $this->assertEquals(1, $crawler->filter('html:contains("was successfully deleted")')->count());
+
+        $this->assertEquals(1, $crawler->filter('html:contains("codebender boards")')->count());
 
     }
 
