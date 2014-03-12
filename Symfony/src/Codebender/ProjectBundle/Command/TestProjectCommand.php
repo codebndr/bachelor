@@ -23,7 +23,7 @@ class TestProjectCommand extends ContainerAwareCommand
             ->setName('codebender:tests:install')
             ->setDescription('Install Test Files')
             ->setHelp(<<<EOT
-The <info>codebender:tests:install</info> command moves the test project files to the disk.directory:
+The <info>codebender:tests:install</info> command moves the test project files to the defined directory:
 
   <info>php app/console codebender:tests:install</info>
 EOT
@@ -33,7 +33,7 @@ EOT
     /**
      * @see Command
      *
-     * Gets disk.directory parameter and locates files in ProjectBundle.
+     * Gets directory parameter and locates files in ProjectBundle.
      * After this uses the Filesystem in Symfony to mirror the folders OR
      * stores files into MongoDB
      *
@@ -47,7 +47,7 @@ EOT
     /**
      * Install Disk Test Files onto Filesystem
      *
-     * Installs disk tests. Filesystem mirrors these, provided disk.directory
+     * Installs disk tests. Filesystem mirrors these, provided directory
      * value is valid.
      *
      * @throws InvalidConfigurationException

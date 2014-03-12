@@ -205,7 +205,6 @@ class OptionsControllerUnitTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getUsername', 'getFirstname', 'setFirstname', 'getLastname', 'setLastname', 'getEmail', 'getTwitter', 'setTwitter'))
             ->getMock();
 
-
         $utilitiesHandler = $this->getMockBuilder('Codebender\UtilitiesBundle\Handler\DefaultHandler')
             ->disableOriginalConstructor()
             ->setMethods(array('get_gravatar'))
@@ -296,7 +295,7 @@ class OptionsControllerUnitTest extends \PHPUnit_Framework_TestCase
         $user->expects($this->at(11))->method('getTwitter')->will($this->returnValue('twitter'));
         $user->expects($this->at(12))->method('setTwitter')->with($this->equalTo('newTwitter'));
 
-        $user->expects($this->at(13))->method('getEmail')->will($this->returnValue('sample@email.com'));
+        $user->expects($this->at(6))->method('getEmail')->will($this->returnValue('sample@email.com'));
         $em->expects($this->once())->method('flush');
         $userManager->expects($this->once())->method('reloadUser')->with($this->equalTo($user));
         $controller->expects($this->once())->method('getErrorMessages')->with($this->equalTo($form))->will($this->returnValue(array()));
@@ -313,7 +312,6 @@ class OptionsControllerUnitTest extends \PHPUnit_Framework_TestCase
             ->setMethods(array('getUsername', 'getFirstname', 'setFirstname', 'getLastname', 'setLastname', 'getEmail', 'setEmail', 'getTwitter', 'setTwitter'))
             ->getMock();
 
-
         $utilitiesHandler = $this->getMockBuilder('Codebender\UtilitiesBundle\Handler\DefaultHandler')
             ->disableOriginalConstructor()
             ->setMethods(array('get_gravatar'))
@@ -327,7 +325,6 @@ class OptionsControllerUnitTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(array('handleRequest', 'getName', 'get', 'isValid'))
             ->getMock();
-
 
         $formInterface = $this->getMockBuilder('Symfony\Component\Form\AbstractType')
             ->disableOriginalConstructor()
@@ -406,8 +403,7 @@ class OptionsControllerUnitTest extends \PHPUnit_Framework_TestCase
         $user->expects($this->at(11))->method('setTwitter')->with($this->equalTo('newTwitter'));
 
         $user->expects($this->at(12))->method('getEmail')->will($this->returnValue('sample@email.com'));
-        $user->expects($this->at(13))->method('getEmail')->will($this->returnValue('sample@email.com'));
-        $user->expects($this->at(14))->method('setEmail')->with($this->equalTo('newsample@email.com'));
+        $user->expects($this->at(12))->method('setEmail')->with($this->equalTo('newsample@email.com'));
         $em->expects($this->once())->method('flush');
         $userManager->expects($this->once())->method('reloadUser')->with($this->equalTo($user));
         $controller->expects($this->once())->method('getErrorMessages')->with($this->equalTo($form))->will($this->returnValue(array()));

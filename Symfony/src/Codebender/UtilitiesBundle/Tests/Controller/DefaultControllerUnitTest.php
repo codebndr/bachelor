@@ -2558,9 +2558,6 @@ class DefaultControllerUnitTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($response->getContent(), "");
     }
 
-    /**
-     * @runInSeparateProcess
-     */
 	public function testLogAction()
 	{
         $controller = $this->getMock("Codebender\UtilitiesBundle\Controller\DefaultController", NULL);
