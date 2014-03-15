@@ -9,6 +9,12 @@ use Codebender\UtilitiesBundle\Handler\DefaultHandler;
 
 class DefaultController extends Controller
 {
+	/**
+	 * TFTP Uploading
+	 *
+	 * @param $utilities_handler
+	 * @return JSON encoded response
+	 */
 	public function tftpAction($utilities_handler = null)
 	{
 		$response = array("success" => false);

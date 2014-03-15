@@ -21,6 +21,8 @@ use Codebender\UserBundle\Handler\MCAPI;
 
 /**
  * Controller managing the user profile
+ *
+ * @todo Update Password Encoder to BCrypt
  */
 class OptionsController extends Controller
 {
@@ -32,6 +34,11 @@ class OptionsController extends Controller
 	protected $encoderFactory;
 	protected $entityManager;
 	
+	/**
+	 * Handles editing of User Data
+	 * 
+	 * @return Rendered Template, or JSON 
+	 */
     public function optionsEditAction()
     {
 		// Get currently logged in user
@@ -178,11 +185,22 @@ class OptionsController extends Controller
 
     }
     
+    /**
+     * Checks if passwords are the same
+     *
+     * @param String $currentPassword
+     * @return Boolean True or False
+     */
     protected function isCurrentPass($currentPassword){
 		
 			return $this->comparePassword($currentPassword);
 	}
     
+    /**
+     * Checks if Curren Password (on Post)
+     *
+     * @return JSON password comparison
+     */
     public function isCurrentPasswordAction(){
 		
 		if("POST" === $this->request->getMethod()){
@@ -194,6 +212,12 @@ class OptionsController extends Controller
 		}
 	}
 	
+	/**
+	 * Compares current password to encoded password
+	 *
+	 * @param String $currentPassword
+	 * @return Boolean True or False
+	 */
 	protected function comparePassword($currentPassword){
 		
 		$currentUser = $this->sc->getToken()->getUser();
@@ -205,7 +229,12 @@ class OptionsController extends Controller
 		
 		return false;
 	}
-    
+
+	/**
+	 * Checks if Email is Available
+	 *
+	 * @return JSON encoded success or failure
+	 */    
     public function isEmailAvailableAction(){
 		
 		if("POST" === $this->request->getMethod()){
@@ -228,6 +257,12 @@ class OptionsController extends Controller
 		}
 	}
 
+	/**
+	 * Gets error messages from form submit
+	 *
+	 * @param Symfony\Component\Form\Form $form
+	 * @return Errors
+	 */
     protected function getErrorMessages(Form $form) {
 
 		$errors = array();
@@ -251,7 +286,18 @@ class OptionsController extends Controller
 
 		return $errors;
 	}
- 
+
+	/**
+	 * Constructor
+	 *
+	 * @param Symfony\Component\Templating\EngineInterface $templating
+	 * @param Symfony\Component\Security\Core\SecurityContext $securityContext
+	 * @param Symfony\Component\DependencyInjection\ContainerInterface $container
+	 * @param Symfony\Component\HttpFoundation\Request $request
+	 * @param FOS\UserBundle\Model\UserManagerInterface $userManager
+	 * @param Symfony\Component\Security\Core\Encoder\EncoderFactory $encoderFactory
+	 * @param Doctrine\ORM\EntityManager $entityManager
+	 */ 
 	public function __construct(EngineInterface $templating,
 								SecurityContext $securityContext,
 								ContainerInterface $container,

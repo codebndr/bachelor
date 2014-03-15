@@ -15,12 +15,27 @@ use Codebender\UserBundle\Handler\MCAPI;
 
 class RegistrationFormHandler extends BaseHandler
 {
-
+	/**
+	 * Constructor
+	 *
+	 * @param Symfony\Component\Form\Form $form
+	 * @param Symfony\Component\HttpFoundation\Request $request
+	 * @param FOS\UserBundle\Model\UserManagerInterface $userManager
+	 * @param FOS\UserBundle\Mailer\MailerInterface $mailer
+	 * @param FOS\UserBundle\Util\TokenGeneratorInterface $token
+	 */
     public function __construct(Form $form, Request $request, UserManagerInterface $userManager, MailerInterface $mailer, TokenGeneratorInterface $token)
     {
 		parent::__construct($form, $request, $userManager, $mailer, $token);
     }
 
+    /**
+     * Generates Referrals for New User
+	 *
+	 * @param String $referrer
+	 * @param String $referral_code
+	 * @return Rendered Form
+	 */
 	public function generateReferrals($referrer = null, $referral_code = null)
 	{
 		if($referrer == null)
@@ -36,6 +51,9 @@ class RegistrationFormHandler extends BaseHandler
 		return $this->form;
 	}
 
+	/**
+	 * Calls parent onSuccess Method
+	 */
 	protected function onSuccess(UserInterface $user, $confirmation)
 	{
 

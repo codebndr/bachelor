@@ -19,6 +19,13 @@ class UploadListener {
     private $securityContext;
     private $projectController;
 
+    /**
+     * Constructor
+     *
+     * @param Codebender\UtilitiesBundle\Controller\LogController $logController
+     * @param Symfony\Component\Security\Core\SecurityContext $securityContext
+     * @param Codebender\ProjectBundle\Controller\ProjectController $projectController
+     */
     function __construct(LogController $logController, SecurityContext $securityContext, ProjectController $projectController)
     {
         $this->logController = $logController;
@@ -26,6 +33,12 @@ class UploadListener {
         $this->projectController = $projectController;
     }
 
+    /**
+     * Ensures file being uploaded is valid
+     *
+     * @param Oneup\UploaderBundle\Event\ValidationEvent $event
+     * @throws Oneup\UploaderBundle\Uploader\Exception\ValidationException
+     */
     public function onValidate(ValidationEvent $event)
     {
         $request = $event->getRequest();
@@ -62,6 +75,12 @@ class UploadListener {
             throw new ValidationException('Error: Upload type not defined.');
     }
 
+    /**
+     * Ensures file is uploaded correctly
+     *
+     * @param Oneup\UploaderBundle\Event\PostPersistEvent $event
+     * @throws Symfony\Component\HttpFoundation\File\Exception\UploadException
+     */
     public function onUpload(PostPersistEvent $event)
     {
         $tempfile = $event->getFile();
@@ -226,6 +245,12 @@ class UploadListener {
         unlink($tempfile->getPathName());
     }
 
+    /** 
+     * Removes a given directory
+     *
+     * @param String $dir
+     * @return Boolean on success or failure
+     */
     private function unlinkDir($dir) {
         if (!is_dir($dir) || is_link($dir)) return unlink($dir);
         foreach (scandir($dir) as $file) {

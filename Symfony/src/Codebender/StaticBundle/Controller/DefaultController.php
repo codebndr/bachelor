@@ -18,6 +18,14 @@ class developer
 	public $image;
 	public $description;
 
+	/**
+	 * Constructor
+	 *
+	 * @param String $name
+	 * @param String $subtext
+	 * @param String $image
+	 * @param String $description
+	 */
 	function __construct($name, $subtext, $image, $description)
 	{
 		$this->name = $name;
@@ -27,9 +35,16 @@ class developer
 	}
 }
 
+/**
+ * @todo Much of this can be removed as it is no longer in use.
+ */
 class DefaultController extends Controller
 {
-
+	/**
+	 * About page
+	 *
+	 * @return Twig Rendered About Template
+	 */
 	public function aboutAction()
 	{
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -38,6 +53,11 @@ class DefaultController extends Controller
 		return $this->render('CodebenderStaticBundle:Default:about.html.twig');
 	}
 
+	/**
+	 * Tech page
+	 *
+	 * @return Twig Rendered Tech Template
+	 */
 	public function techAction()
 	{
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -46,6 +66,11 @@ class DefaultController extends Controller
 		return $this->render('CodebenderStaticBundle:Default:tech.html.twig');
 	}
 
+	/**
+	 * Team page
+	 *
+	 * @return Twig Rendered Team Template
+	 */
 	public function teamAction()
 	{
 
@@ -114,6 +139,11 @@ class DefaultController extends Controller
 		return $this->render('CodebenderStaticBundle:Default:team.html.twig', array("developers" => $developers, "friends" => $friends, "past" => $past));
 	}
 
+	/**
+	 * Tutorials page
+	 *
+	 * @return Twig Rendered Tutorials Template
+	 */
 	public function tutorialsAction()
 	{
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -123,6 +153,12 @@ class DefaultController extends Controller
 		return $this->render('CodebenderStaticBundle:Default:tutorials.html.twig');
 	}
 
+	/**
+	 * Walkthrough page
+	 *
+	 * @param Integer $page
+	 * @return Twig Rendered Walkthrough Template
+	 */
 	public function walkthroughAction($page)
 	{
 		if (file_exists(__DIR__."/../Resources/views/Walkthrough/page".intval($page).".html.twig"))
@@ -186,12 +222,21 @@ class DefaultController extends Controller
 //        ));
 //	}
 
-
+	/**
+	 * Plugin page
+	 *
+	 * @return Twig Rendered Plugin Template
+	 */
 	public function pluginAction()
 	{
 		return $this->render('CodebenderStaticBundle:Default:plugin.html.twig', array());
 	}
 
+	/**
+	 * Partner page
+	 *
+	 * @return Twig Rendered Partner Template
+	 */
 	public function partnerAction($name)
 	{
 		if(file_exists(__DIR__."/../Resources/views/Partner/".$name.".html.twig"))
@@ -200,16 +245,31 @@ class DefaultController extends Controller
 		return $this->redirect($this->generateUrl("CodebenderGenericBundle_index"));
 	}
 
+	/**
+	 * Info Points page
+	 *
+	 * @return Twig Rendered Info Points Template
+	 */
 	public function infoPointsAction()
 	{
 		return $this->render('CodebenderStaticBundle:Default:info_points.html.twig', array());
 	}
 
+	/**
+	 * Info Karma page
+	 *
+	 * @return Twig Rendered Info Karma Template
+	 */
 	public function infoKarmaAction()
 	{
 		return $this->render('CodebenderStaticBundle:Default:info_karma.html.twig', array());
 	}
 
+	/**
+	 * Info Private Projects page
+	 *
+	 * @return Twig Rendered Info Private Projects Template
+	 */
 	public function infoPrivateProjectsAction()
 	{
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -224,6 +284,11 @@ class DefaultController extends Controller
 		return $this->render('CodebenderStaticBundle:Default:info_private_projects.html.twig', array("records" => $records));
 	}
 
+	/**
+	 * Upload Bootloader page
+	 *
+	 * @return Twig Rendered Upload Bootloader Template
+	 */
 	public function uploadBootloaderAction()
 	{
 
@@ -279,6 +344,11 @@ class DefaultController extends Controller
 		return $this->render('CodebenderStaticBundle:Default:upload_bootloader.html.twig', array("programmers" => $programmers));
 	}
 
+	/**
+	 * EULA page
+	 *
+	 * @return Twig Rendered EULA Template
+	 */
 	public function eulaAction()
 	{
 		//TODO: Log this?

@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManager;
 use Codebender\UtilitiesBundle\Entity\ReferralCode;
 
+/**
+ * @deprecated This can be removed from Bachelor as it is no longer needed
+ */
 class ReferralCodeController extends Controller
 {
 	protected $em;
@@ -23,6 +26,12 @@ class ReferralCodeController extends Controller
 //		return new Response("");
 //	}
 //
+	/**
+	 * Referral Code User
+	 *
+	 * @param String $referral_code
+	 * @return JSON encoded success or failure
+	 */
 	public function useCodeAction($referral_code)
 	{
 
@@ -55,6 +64,11 @@ class ReferralCodeController extends Controller
 		return new Response(json_encode(array("success"=>false)));
 	}
 
+    /**
+     * Constructor
+     * 
+     * @param Doctrine\ORM\EntityManager $entityManager
+     */
 	public function __construct(EntityManager $entityManager)
 	{
 	    $this->em = $entityManager;

@@ -10,7 +10,9 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
+/**
+ * @todo Controller requires cleanup for Search methods as they are not needed in Bachelor
+ */
 class DefaultController extends Controller
 {
 	protected $templating;
@@ -18,6 +20,12 @@ class DefaultController extends Controller
 	protected $em;
 	protected $container;
 
+	/**
+	 * Checks if given Username exists
+	 *
+	 * @param String $username
+	 * @return True or False
+	 */
 	public function existsAction($username)
 	{
 		$response = json_decode($this->getUserAction($username)->getContent(), true);
@@ -27,9 +35,17 @@ class DefaultController extends Controller
 			return new Response("false");
 	}
 
+	/**
+	 * Checks if given Email exists
+	 *
+	 * @param String $email
+	 * @return True or False
+	 */
 	public function emailExistsAction($email)
 	{
-		//TODO: Fix this to use a generic function, not call the db directly
+		/**
+		 * @todo Fix this to use a generic function, not call the db directly
+		 */
 		$user = $this->em->getRepository('CodebenderUserBundle:User')->findOneByEmail($email);
 		if($user)
 			return new Response("true");
@@ -37,6 +53,12 @@ class DefaultController extends Controller
 			return new Response("false");
 	}
 
+	/**
+	 * Gets a user based on Username
+	 *
+	 * @param String $username
+	 * @return JSON encoded User array
+	 */
 	public function getUserAction($username)
 	{
 		$response = array("success" => false);
@@ -75,6 +97,11 @@ class DefaultController extends Controller
 		return new Response(json_encode($response));
 	}
 
+	/**
+	 * Gets the current authenticated user
+	 *
+	 * @return JSON encoded User array
+	 */
 	public function getCurrentUserAction()
 	{
 		$current_user = $this->sc->getToken()->getUser();
@@ -100,6 +127,12 @@ class DefaultController extends Controller
 
 	}
 
+	/**
+	 * Searches for User based on a given token
+	 *
+	 * @param String $token
+	 * @return JSON encoded search results
+	 */
 	public function searchAction($token)
 	{
 		$results_name = json_decode($this->searchNameAction($token)->getContent(), true);
@@ -109,6 +142,12 @@ class DefaultController extends Controller
 		return new Response(json_encode($results));
 	}
 
+	/**
+	 * Searches Users for user with a name
+	 *
+	 * @param String $token
+	 * @return JSON encoded search results
+	 */
 	public function searchNameAction($token)
 	{
 		$repository = $this->em->getRepository('CodebenderUserBundle:User');
@@ -124,6 +163,12 @@ class DefaultController extends Controller
 		return new Response(json_encode($result));
 	}
 
+	/**
+	 * Searches Users for user with a username
+	 *
+	 * @param String $token
+	 * @return JSON encoded search results
+	 */
 	public function searchUsernameAction($token)
 	{
 		$repository = $this->em->getRepository('CodebenderUserBundle:User');
@@ -139,6 +184,12 @@ class DefaultController extends Controller
 		return new Response(json_encode($result));
 	}
 
+	/**
+	 * Searches Users for user with twitter name
+	 *
+	 * @param String $token
+	 * @return JSON encoded search results
+	 */
 	public function searchTwitterAction($token)
 	{
 		$repository = $this->em->getRepository('CodebenderUserBundle:User');
@@ -154,6 +205,13 @@ class DefaultController extends Controller
 		return new Response(json_encode($result));
 	}
 
+	/**
+	 * Sets referrer on a user
+	 *
+	 * @param String $username
+	 * @param String $referrer_username
+	 * @return JSON encoded success of failure
+	 */
 	public function setReferrerAction($username, $referrer_username)
 	{
 
@@ -180,6 +238,13 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+	/**
+	 * Sets karma on given user
+	 *
+	 * @param String $username
+	 * @param Integer $karma
+	 * @return JSON encoded success or failure
+	 */
 	public function setKarmaAction($username, $karma)
 	{
 		$user = $this->em->getRepository('CodebenderUserBundle:User')->findOneByUsername($username);
@@ -193,6 +258,13 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+	/**
+	 * Sets points on given user
+	 *
+	 * @param String $username
+	 * @param Integer $points
+	 * @return JSON encoded success or failure
+	 */
 	public function setPointsAction($username, $points)
 	{
 		$user = $this->em->getRepository('CodebenderUserBundle:User')->findOneByUsername($username);
@@ -206,6 +278,12 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+	/**
+	 * Sets walkthrough status
+	 *
+	 * @param Integer $status
+	 * @return JSON encoded success or failure
+	 */
 	public function setWalkthroughStatusAction($status)
 	{
 		$response = json_decode($this->getCurrentUserAction()->getContent(), true);
@@ -226,6 +304,11 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+	/**
+	 * Sets EULA
+	 *
+	 * @return JSON encoded success or failure
+	 */
 	public function setEulaAction()
 	{
 		$response = json_decode($this->getCurrentUserAction()->getContent(), true);
@@ -241,6 +324,11 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+	/**
+	 * Updates Edit Count on User
+	 *
+	 * @return JSON encoded success or failure
+	 */
 	public function updateEditAction()
 	{
 		$response = json_decode($this->getCurrentUserAction()->getContent(), true);
@@ -256,6 +344,11 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+	/**
+	 * Updates compile count on User
+	 *
+	 * @return JSON encoded success or failure
+	 */
 	public function updateCompileAction()
 	{
 		$response = json_decode($this->getCurrentUserAction()->getContent(), true);
@@ -271,6 +364,11 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+	/**
+	 * Updates flash count on user
+	 *
+	 * @return JSON encoded success or failure
+	 */
 	public function updateFlashAction()
 	{
 		$response = json_decode($this->getCurrentUserAction()->getContent(), true);
@@ -286,6 +384,11 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+	/**
+	 * Updates cloning count on user
+	 *
+	 * @return JSON encoded success or failure
+	 */
 	public function updateCloningAction()
 	{
 		$response = json_decode($this->getCurrentUserAction()->getContent(), true);
@@ -301,6 +404,11 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+	/**
+	 * Gives a count of enabled users
+	 *
+	 * @return Integer number of enabled users
+	 */
 	public function enabledAction()
 	{
 		$repository = $this->em->getRepository('CodebenderUserBundle:User');
@@ -309,6 +417,11 @@ class DefaultController extends Controller
 
 	}
 
+	/**
+	 * Gets amount of users that are active
+	 *
+	 * @return Integer number of active users
+	 */
 	public function activeAction()
 	{
 		$repository = $this->em->getRepository('CodebenderUserBundle:User');
@@ -327,6 +440,13 @@ class DefaultController extends Controller
 
 	}
 
+	/**
+	 * Renders Inline Registration
+	 * 
+	 * @param String $referrer
+	 * @param Integer $referral_code
+	 * @return Rendered Inline Registration Template
+	 */
 	public function inlineRegisterAction($referrer=null, $referral_code=null)
 	{
 
@@ -342,6 +462,12 @@ class DefaultController extends Controller
 	        )));
 	}
 
+	/**
+	 * Gets users with top Karma
+	 *
+	 * @param Integer $count
+	 * @return JSON encoded array with $count many users
+	 */
 	public function getTopUsersAction($count)
 	{
 		$repository = $this->em->getRepository('CodebenderUserBundle:User');
@@ -359,6 +485,13 @@ class DefaultController extends Controller
 		return new Response(json_encode(array("success" => true, "list" => $users_array)));
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param Symfony\Component\Templating\EngineInterface $templating
+	 * @param Symfony\Component\Security\Core\SecurityContext $securityContext
+	 * @param Doctrine\ORM\EntityManager $entityManager
+	 */
 	public function __construct(EngineInterface $templating, SecurityContext $securityContext, EntityManager $entityManager, ContainerInterface $container)
 	{
 		$this->templating = $templating;

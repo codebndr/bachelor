@@ -10,6 +10,11 @@ use Codebender\UtilitiesBundle\Entity\Log;
 
 class RegistrationController extends BaseController
 {
+    /**
+     * Processes User Registration
+     *
+     * @return Twig Rendered Registration Template
+     */
     public function registerAction()
     {
         $form = $this->container->get('fos_user.registration.form');

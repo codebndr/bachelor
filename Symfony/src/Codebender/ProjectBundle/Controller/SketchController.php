@@ -17,7 +17,17 @@ class SketchController extends ProjectController
     protected $sc;
     protected $sl;
 
-
+    /**
+     * Creates a project
+     *
+     * @todo Remove isPublic as no longer needed in Bachelor
+     *
+     * @param Integer $user_id
+     * @param String $project_name
+     * @param String $code
+     * @param Boolean $isPublic
+     * @return JSON encoded success or failure with ID
+     */
 	public function createprojectAction($user_id, $project_name, $code, $isPublic = true)
 	{
 		$retval;
@@ -36,7 +46,13 @@ class SketchController extends ProjectController
 		return new Response(json_encode($retval));
 	}
 
-
+    /**
+     * Clones a project given owner and project id
+     *
+     * @param Integer $owner
+     * @param Integer $id
+     * @return JSON encoded success or failure with ID
+     */
 	public function cloneAction($owner, $id)
 	{
         $response = json_decode(parent::cloneAction($owner, $id)->getContent(), true);
@@ -55,6 +71,13 @@ class SketchController extends ProjectController
 
 	}
 
+    /**
+     * Renames a project given a project id
+     *
+     * @param Integer $id
+     * @param String $new_name
+     * @return JSON encoded success or failure
+     */
     public function renameAction($id, $new_name)
     {
         $response = json_decode(parent::renameAction($id, $new_name)->getContent(),true);
@@ -90,6 +113,13 @@ class SketchController extends ProjectController
 
     }
 
+    /**
+     * Checks if can create a file
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @return JSON encoded success or failure
+     */
     protected function canCreateFile($id, $filename)
     {
         $parentCreate = json_decode(parent::canCreateFile($id, $filename), true);
@@ -107,6 +137,12 @@ class SketchController extends ProjectController
             // @codeCoverageIgnoreEnd
     }
 
+    /**
+     * Checks if .ino file exists in project
+     *
+     * @param Integer $id
+     * @return JSON encoded success or failure
+     */
     protected function inoExists($id)
     {
         $list = json_decode($this->listFilesAction($id)->getContent(), true);
@@ -121,6 +157,13 @@ class SketchController extends ProjectController
         return json_encode(array("success" => false, "error" => ".ino file does not exist."));
     }
 
+    /**
+     * Constructor
+     *
+     * @param Doctrine\ORM\EntityManager $entityManager
+     * @param DiskFilesController $diskFilesController
+     * @param Symfony\Component\Security\Core\SecurityContext $securitycontext
+     */
 	public function __construct(EntityManager $entityManager, DiskFilesController $diskFilesController, SecurityContext $securitycontext)
 	{
 	    $this->em = $entityManager;

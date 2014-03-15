@@ -10,7 +10,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class LogController extends Controller
 {
-
+    /**
+     * Logs User Action
+     *
+     * @param Integer $user
+     * @param Integer $action
+     * @param String $description
+     * @param String $metadata
+     * @return JSON encoded success
+     */
     public function logAction($user, $action, $description, $metadata)
     {
 
@@ -28,6 +36,17 @@ class LogController extends Controller
         return new Response(json_encode(array('success' => true)));
     }
 
+    /**
+     * Logs when user views something
+     *
+     * @param Integer $user
+     * @param Integer $action
+     * @param String $description
+     * @param String $metadata
+     * @param String $session
+     * @param Boolean $hasPreviousSession
+     * @return JSON encoded success
+     */
     public function logViewAction($user, $action, $description, $metadata, $session, $hasPreviousSession)
     {
 
@@ -46,6 +65,11 @@ class LogController extends Controller
         return new Response(json_encode(array('success' => true)));
     }
 
+    /**
+     * Constructor
+     * 
+     * @param Doctrine\ORM\EntityManager $entityManager
+     */
     public function __construct(EntityManager $entityManager)
     {
         $this->em = $entityManager;

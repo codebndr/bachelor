@@ -13,6 +13,11 @@ use Codebender\UtilitiesBundle\Entity\Log;
 
 class DefaultController extends Controller
 {
+    /**
+     * Attempts to create a project
+     * 
+     * @return Redirects user to Generic Bundle Index or Project
+     */
 	public function newprojectAction()
 	{
 		syslog(LOG_INFO, "new project");
@@ -79,6 +84,12 @@ class DefaultController extends Controller
 		return $this->redirect($this->generateUrl('CodebenderGenericBundle_index'));
 	}
 
+    /**
+     * Deletes a Project
+     *
+     * @param Integer $id
+     * @return Redirects user to GenericBundle Index
+     */
 	public function deleteprojectAction($id)
 	{
 
@@ -95,6 +106,13 @@ class DefaultController extends Controller
         return $this->redirect($this->generateUrl('CodebenderGenericBundle_index'));
 	}
 
+    /**
+     * Lists Filenames in a Project
+     *
+     * @param Integer $id
+     * @param Integer $show_ino
+     * @return Twig rendered template of filenames list
+     */
 	public function listFilenamesAction($id, $show_ino)
 	{
 		$projectmanager = $this->get('codebender_project.sketchmanager');
@@ -114,6 +132,12 @@ class DefaultController extends Controller
 		return $this->render('CodebenderUtilitiesBundle:Default:list_filenames.html.twig', array('files' => $files));
 	}
 
+    /**
+     * Changes privacy of a project
+     * 
+     * @param Integer $id
+     * @return JSON encoded success or failure
+     */
 	public function changePrivacyAction($id)
 	{
 		$projectmanager = $this->get('codebender_project.sketchmanager');
@@ -146,7 +170,12 @@ class DefaultController extends Controller
 		return new Response($response);
 	}
 
-
+    /**
+     * Renders project description
+     *
+     * @param Integer $id
+     * @return Project Description or Not Found
+     */
 	public function renderDescriptionAction($id)
 	{
 		$projectmanager = $this->get('codebender_project.sketchmanager');
@@ -158,6 +187,12 @@ class DefaultController extends Controller
 			return new Response("Project description not found.");
 	}
 
+    /**
+     * Sets project Description
+     *
+     * @param Integer $id
+     * @return JSON encoded success or failure
+     */
 	public function setDescriptionAction($id)
 	{
 
@@ -172,6 +207,12 @@ class DefaultController extends Controller
         return new Response(json_encode($res));
 	}
 
+    /**
+     * Sets name of project
+     *
+     * @param Integer $id
+     * @return Renamed project name
+     */
 	public function setNameAction($id)
 	{
 
@@ -186,6 +227,12 @@ class DefaultController extends Controller
 		return new Response($response);
 	}
 
+    /**
+     * Renames a file
+     *
+     * @param Integer $id
+     * @return Renamed file name
+     */
 	public function renameFileAction($id)
 	{
 
@@ -201,6 +248,11 @@ class DefaultController extends Controller
 		return new Response($response);
 	}
 
+    /**
+     * Renders Sidebar
+     *
+     * @return Twig rendered sidebar template
+     */
 	public function sidebarAction()
 	{
 		$user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -212,6 +264,12 @@ class DefaultController extends Controller
 		return $this->render('CodebenderUtilitiesBundle:Default:sidebar.html.twig', array('files' => $files));
 	}
 
+    /**
+     * Downloads a Project
+     *
+     * @param Integer $id
+     * @return Response with appropriate data for downloading project
+     */ 
 	public function downloadAction($id)
 	{
 		syslog(LOG_INFO, "project download");
@@ -289,6 +347,13 @@ class DefaultController extends Controller
 		return new Response($value, $htmlcode, $headers);
 	}
 
+    /**
+     * Downloads an example
+     *
+     * @param String $name
+     * @param String $url
+     * @return Response with appropriate data for downloading example
+     */
     public function downloadExampleAction($name, $url)
     {
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -359,7 +424,12 @@ class DefaultController extends Controller
         return new Response($value, $htmlcode, $headers);
     }
 
-
+    /**
+     * Saves code in project
+     *
+     * @param Integer $id
+     * @return JSON encoded success or failure
+     */
     public function saveCodeAction($id)
 	{
 		syslog(LOG_INFO, "editor save");
@@ -396,6 +466,12 @@ class DefaultController extends Controller
         return new Response(json_encode($response));
 	}
 
+    /**
+     * Clones a project
+     *
+     * @param Integer $id
+     * @return Redirect to Project or Index
+     */
 	public function cloneAction($id)
 	{
 		syslog(LOG_INFO, "project cloned");
@@ -422,6 +498,11 @@ class DefaultController extends Controller
         }
 	}
 
+    /**
+     * Adds a Board
+     *
+     * @return Redirects user to appropriate location
+     */
     public function addBoardAction()
     {
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -501,6 +582,12 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * Deletes a Board
+     *
+     * @param Integer $id
+     * @return Redirects user to appropriate location
+     */
     public function deleteBoardAction($id)
     {
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -524,6 +611,11 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * Edits a board
+     *
+     * @return JSON encoded success or failure
+     */
     public function editBoardAction()
     {
 
@@ -539,6 +631,12 @@ class DefaultController extends Controller
         return new Response(json_encode($response));
     }
 
+    /**
+     * Creates a File
+     *
+     * @param Integer $id
+     * @return JSON encoded success of failure
+     */
 	public function createFileAction($id)
 	{
 		$user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -553,6 +651,12 @@ class DefaultController extends Controller
 		return new Response(json_encode($response));
 	}
 
+    /**
+     * Deletes a file
+     *
+     * @param Integer $id
+     * @return JSON encoded success of failure
+     */
 	public function deleteFileAction($id)
 	{
 		$user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -567,6 +671,11 @@ class DefaultController extends Controller
         return new Response(json_encode($response));
 	}
 
+    /**
+     * Gets users gravatar
+     *
+     * @return Twig rendered Gravatar
+     */
 	public function imageAction()
 	{
 		$user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -577,7 +686,12 @@ class DefaultController extends Controller
 		return $this->render('CodebenderUtilitiesBundle:Default:image.html.twig', array('user' => $user["username"],'image' => $image));
 	}
 
-	//TODO: Fail gracefully on wrong request content
+    /**
+     * Compiles a project
+     *
+     * @return Compiles Response
+     * @todo Fail gracefully on wrong request content
+     */
 	public function compileAction()
 	{
 		$request_content = $this->getRequest()->getContent();
@@ -642,7 +756,11 @@ class DefaultController extends Controller
 
 	}
 
-
+    /**
+     * Download Hex
+     *
+     * @return Appropriate data to download hex
+     */
     public function downloadHexAction()
     {
         $data = $this->getRequest()->request->get('hex');
@@ -657,9 +775,17 @@ class DefaultController extends Controller
             'Content-Disposition' => 'attachment;filename="project.hex"');
         return new Response($value, 200, $headers);
     }
+
+    /**
+     * Flashes Board
+     *
+     * @return Response OK
+     */
 	public function flashAction()
 	{
-		//TODO: Check this for authenticated/unauthenticated users
+		/**
+         * @todo Check this for authenticated/unauthenticated users
+         */
         $userController = $this->get('codebender_user.usercontroller');
         $user = json_decode($userController->getCurrentUserAction()->getContent(), true);
         $this->get('codebender_utilities.logcontroller')->logAction($user['success']?$user["id"]:null, Log::FLASH_PROJECT, 'FLASH_PROJECT', '');
@@ -667,7 +793,12 @@ class DefaultController extends Controller
 		return new Response("OK");
 	}
 
-
+    /**
+     * Intercom Communication 
+     *
+     * @return Response ""
+     * @deprecated No longer needed in Bachelor
+     */
 	public function intercomAction()
 	{
 		$user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -712,6 +843,11 @@ class DefaultController extends Controller
 		return new Response("");
 	}
 
+    /**
+     * Olark Information
+     *
+     * @deprecated No longer needed in Bachelor
+     */
 	public function olarkAction()
 	{
 		$user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -722,6 +858,11 @@ class DefaultController extends Controller
 		return new Response("");
 	}
 
+    /**
+     * Shows Modal window for EULA and Walkthrough
+     *
+     * @return Rendered Twig template or Blank Response
+     */
     public function walkthroughEulaModalAction()
     {
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -732,11 +873,22 @@ class DefaultController extends Controller
         return new Response("");
     }
 
+    /**
+     * Shows intercome hash
+     *
+     * @deprecated No longer needed in Bachelor
+     */
 	public function intercomHashAction($id)
 	{
 		return new Response(hash_hmac("sha256", $id, $this->container->getParameter('intercom_secret_key')));
 	}
 
+    /**
+     * Logs a Message to syslog
+     *
+     * @param String $message
+     * @return Response OK
+     */
 	public function logAction($message)
 	{
 		syslog(LOG_INFO, "codebender generic log: ".$message);
@@ -745,6 +897,11 @@ class DefaultController extends Controller
 		return $response;
 	}
 
+    /**
+     * Logs to Database
+     *
+     * @return Response OK or Invalid Action ID
+     */
     public function logDatabaseAction($actionid, $meta)
     {
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
@@ -778,6 +935,11 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * Accepts EULA
+     *
+     * @return Redirect or blank Response
+     */
 	public function acceptEulaAction()
 	{
 		$user = json_decode($this->get('codebender_user.usercontroller')->setEulaAction()->getContent(), true);
