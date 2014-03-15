@@ -14,7 +14,11 @@ class DiskFilesController extends FilesController
     protected $type;
     protected $sc;
 
-
+    /**
+     * Creates a new Project provided it is able to make directories
+     *
+     * @return JSON encoded Success or Failure string, with related messagd
+     */
     public function createAction()
     {
 
@@ -51,6 +55,12 @@ class DiskFilesController extends FilesController
         return ProjectErrorsHelper::success(ProjectErrorsHelper::SUCC_CREATE_PROJ_MSG, array("id" => $id));
     }
 
+    /**
+     * Deletes a project given an id
+     *
+     * @param Integer $id
+     * @return JSON encoded Success of Failure string, with related message.
+     */
     public function deleteAction($id)
     {
         $dir = $this->getDir($id);
@@ -60,15 +70,28 @@ class DiskFilesController extends FilesController
             return ProjectErrorsHelper::fail(ProjectErrorsHelper::FAIL_DELETE_PROJ_MSG, array("error" => "No projectfiles found with id: ".$id));
     }
 
+    /**
+     * Lists files in a project given an id
+     *
+     * @param Integer $id
+     * @return JSON encoded list of all files in a project
+     */
     public function listFilesAction($id)
     {
         $list = $this->listFiles($id);
         return json_encode(array("success" => true, "list" => $list));
     }
 
+    /**
+     * Creates a file in a project given an id, filename, and code
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @param String $code
+     * @return JSON encoded Success or Failure string, with related message.
+     */
     public function createFileAction($id, $filename, $code)
     {
-
         $canCreateFile = json_decode($this->canCreateFile($id, $filename), true);
         if(!$canCreateFile["success"])
             return json_encode($canCreateFile);
@@ -79,6 +102,13 @@ class DiskFilesController extends FilesController
             return ProjectErrorsHelper::success(ProjectErrorsHelper::SUCC_CREATE_FILE_MSG);
     }
 
+    /**
+     * Gets a files code given a name and project id
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @return JSON encoded code from file
+     */
     public function getFileAction($id, $filename)
     {
         $response = array("success" => false);
@@ -91,6 +121,14 @@ class DiskFilesController extends FilesController
         return json_encode($response);
     }
 
+    /**
+     * Sets a files code given a project id and filename
+     * 
+     * @param Integer $id
+     * @param String $filename
+     * @param String $code
+     * @return JSON encoded Success or Failure string, with related message.
+     */
     public function setFileAction($id, $filename, $code)
     {
         $dir = $this->getDir($id);
@@ -106,6 +144,13 @@ class DiskFilesController extends FilesController
 
     }
 
+    /**
+     * Deletes a file given a project id and a filename
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @return JSON encoded Success or Failure string, with related message.
+     */
     public function deleteFileAction($id, $filename)
     {
         $fileExists = json_decode($this->fileExists($id, $filename), true);
@@ -118,6 +163,14 @@ class DiskFilesController extends FilesController
             return ProjectErrorsHelper::success(ProjectErrorsHelper::SUCC_DELETE_FILE_MSG);
     }
 
+    /**
+     * Renames a file from $filename to $new_filename given a project id and a filename
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @param String $new_filename
+     * @return JSON encoded Success or Failure string, with related message.
+     */
     public function renameFileAction($id, $filename, $new_filename)
     {
         $fileExists = json_decode($this->fileExists($id, $filename), true);
@@ -136,7 +189,16 @@ class DiskFilesController extends FilesController
         return ProjectErrorsHelper::fail(ProjectErrorsHelper::FAIL_RENAME_FILE_MSG, array("id" => $id, "filename" => $new_filename, "error" => $canCreateFile['error'], "old_filename" => $filename));
     }
 
+    /******************/
+    /* Helper Methods */
+    /******************/
 
+    /**
+     * Lists the the files gien a project id
+     *
+     * @param Integer $id
+     * @return List of files
+     */
     protected function listFiles($id)
     {
         $dir = $this->getDir($id);
@@ -157,7 +219,12 @@ class DiskFilesController extends FilesController
         }
     }
 
-
+    /**
+     * Removes a directory given a directory
+     *
+     * @param String $dir
+     * @return Boolean - True on Success, False on Failure
+     */
     private function deleteDirectory($dir)
     {
         if (is_dir($dir))
@@ -182,12 +249,24 @@ class DiskFilesController extends FilesController
         else return false;
     }
 
-
+    /**
+     * Returns the directory
+     *
+     * @param Integer $id
+     * @return String directory
+     */
     public function getDir($id)
     {
         return $this->dir.$this->type."/".$id."/";
     }
 
+    /**
+     * Constructor
+     *
+     * @param String $directory
+     * @param String $type
+     * @param Symfony\Component\Security\Core\SecurityContext $sc
+     */
     public function __construct($directory, $type, SecurityContext $sc)
     {
         if(strlen($directory)>0 )

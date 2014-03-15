@@ -7,9 +7,17 @@ use Codebender\ProjectBundle\Controller\SketchController;
 
 class EditorController extends Controller
 {		
+	/**
+	 * Edit action for the Editor
+	 * 
+	 * @param Integer $id
+	 * @return Rendered template of the editor for project_id, project_name, files, etc.
+	 */
 	public function editAction($id)
 	{
-		/** @var SketchController $projectmanager */
+		/** 
+		 * @var SketchController $projectmanager 
+		 */
 		$projectmanager = $this->get('codebender_project.sketchmanager');
 
 		$permissions = json_decode($projectmanager->checkWriteProjectPermissionsAction($id)->getContent(), true);

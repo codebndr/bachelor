@@ -21,7 +21,16 @@ class ProjectController extends Controller
     protected $sc;
     protected $sl = "disk";
 
-
+    /**
+     * Creates a Project, based on if it is public or not.
+     * @todo Remove Public visibility from function, as this does not apply to Bachelor
+     * 
+     * @param Integer $user_id
+     * @param String $project_name
+     * @param String $code
+     * @param Boolean $isPublic
+     * @return JSON success or failure
+     */
 	public function createprojectAction($user_id, $project_name, $code, $isPublic)
 	{
 
@@ -48,6 +57,12 @@ class ProjectController extends Controller
 
 	}
 
+    /**
+     * Lists Projects based on a given owner
+     *
+     * @param Integer $owner
+     * @return JSON list of projects by a owner
+     */
 	public function listAction($owner)
 	{
 		$projects = $this->em->getRepository('CodebenderProjectBundle:Project')->findByOwner($owner);
@@ -62,6 +77,16 @@ class ProjectController extends Controller
 		return new Response(json_encode($list));
 	}
 
+    /**
+     * Creates a Project
+     * @todo Remove Public visibility from function, as this does not apply to Bachelor
+     *
+     * @param Integer $owner
+     * @param String $name
+     * @param String $description
+     * @param Boolean $isPublic
+     * @return JSON success or failure
+     */
 	public function createAction($owner, $name, $description, $isPublic)
 	{
 		$validName = json_decode($this->nameIsValid($name), true);
@@ -92,6 +117,12 @@ class ProjectController extends Controller
 			return new Response(json_encode(array("success" => false, "owner_id" => $user->getId(), "name" => $name, "error" => $response['error'], "message" => $response['message'])));
 	}
 	
+    /**
+     * Deletes a Project
+     *
+     * @param Integer $id
+     * @return JSON success or failure
+     */
 	public function deleteAction($id)
 	{
         $perm = json_decode($this->checkWriteProjectPermissions($id), true);
@@ -116,6 +147,13 @@ class ProjectController extends Controller
 		
 	}
 
+    /**
+     * Clone a public Project
+     *
+     * @param Integer $owner
+     * @param Integer $id
+     * @return JSON encoded success or failure with related file list, and new name
+     */
 	public function cloneAction($owner, $id)
 	{
         $perm = json_decode($this->checkReadProjectPermissions($id), true);
@@ -151,6 +189,13 @@ class ProjectController extends Controller
 
 	}
 
+    /**
+     * Renames a Project
+     *
+     * @param Integer $id
+     * @param String $new_name
+     * @return JSON success or failure with related data
+     */
     public function renameAction($id, $new_name)
     {
         $perm = json_decode($this->checkWriteProjectPermissions($id), true);
@@ -171,6 +216,12 @@ class ProjectController extends Controller
         }
     }
 
+    /**
+     * Sets a project to be Public
+     *
+     * @param Integer $id
+     * @return JSON success or failure
+     */
     public function setProjectPublicAction($id)
     {
         $perm = json_decode($this->checkWriteProjectPermissions($id), true);
@@ -193,6 +244,12 @@ class ProjectController extends Controller
 
     }
 
+    /**
+     * Sets a project to be Private
+     *
+     * @param Integer $id
+     * @return JSON success or failure
+     */
     public function setProjectPrivateAction($id)
     {
         $perm = json_decode($this->checkWriteProjectPermissions($id), true);
@@ -220,6 +277,12 @@ class ProjectController extends Controller
 
     }
 
+    /**
+     * Get name of Project
+     *
+     * @param Integer $id
+     * @return JSON name or permission denied
+     */
 	public function getNameAction($id)
 	{
         $perm = json_decode($this->checkReadProjectPermissions($id), true);
@@ -232,6 +295,12 @@ class ProjectController extends Controller
 		return new Response(json_encode(array("success" => true, "response" => $name)));
 	}
 
+    /**
+     * Get parent project 
+     *
+     * @param Integer $id
+     * @return JSON success with parent project, or error
+     */
 	public function getParentAction($id)
 	{
         $perm = json_decode($this->checkReadProjectPermissions($id), true);
@@ -256,6 +325,12 @@ class ProjectController extends Controller
 		return new Response(json_encode(array("success" => false)));
 	}
 
+    /**
+     * Gets owners of Project
+     *
+     * @param Integer $id
+     * @return JSON success with project owner
+     */
 	public function getOwnerAction($id)
 	{
         $perm = json_decode($this->checkReadProjectPermissions($id), true);
@@ -269,6 +344,12 @@ class ProjectController extends Controller
 		return new Response(json_encode(array("success" => true, "response" => $response)));
 	}
 
+    /**
+     * Gets description of project
+     *
+     * @param Integer $id
+     * @return JSON success with project description
+     */
 	public function getDescriptionAction($id)
 	{
         $perm = json_decode($this->checkReadProjectPermissions($id), true);
@@ -281,6 +362,12 @@ class ProjectController extends Controller
 		return new Response(json_encode(array("success" => true, "response" => $response)));
 	}
 
+    /**
+     * Gets project privacy settings
+     *
+     * @param Integer $id
+     * @return JSON success with project privacy settings
+     */
     public function getPrivacyAction($id)
     {
         $perm = json_decode($this->checkReadProjectPermissions($id), true);
@@ -293,6 +380,13 @@ class ProjectController extends Controller
         return new Response(json_encode(array("success" => true, "response" => $response)));
     }
 
+    /**
+     * Sets project description
+     *
+     * @param Integer $id
+     * @param String $description
+     * @return JSON success or failure
+     */
 	public function setDescriptionAction($id, $description)
 	{
         $perm = json_decode($this->checkWriteProjectPermissions($id), true);
@@ -308,6 +402,12 @@ class ProjectController extends Controller
 		return new Response(json_encode(array("success" => true)));
 	}
 
+    /**
+     * Lists files in project
+     * 
+     * @param Integer $id
+     * @return List of files
+     */
 	public function listFilesAction($id)
 	{
         $project = $this->getProjectById($id);
@@ -321,6 +421,14 @@ class ProjectController extends Controller
 
 	}
 
+    /**
+     * Creates a File in a given project
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @param String $code
+     * @return JSON success or failure
+     */
 	public function createFileAction($id, $filename, $code)
 	{
         $perm = json_decode($this->checkWriteProjectPermissions($id), true);
@@ -342,7 +450,14 @@ class ProjectController extends Controller
         }
         return new Response($retval);
 	}
-	
+
+    /**
+     * Gets a file from a project
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @return JSON file contents
+     */	
 	public function getFileAction($id, $filename)
 	{
         $perm = json_decode($this->checkReadProjectPermissions($id), true);
@@ -356,7 +471,15 @@ class ProjectController extends Controller
 		return new Response($get);
 		
 	}
-	
+
+    /**
+     * Sets a file in a project
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @param String $code
+     * @return JSON success with file data
+     */	
 	public function setFileAction($id, $filename, $code)
 	{
         $perm = json_decode($this->checkWriteProjectPermissions($id), true);
@@ -370,7 +493,14 @@ class ProjectController extends Controller
 		return new Response($set);
 		
 	}
-		
+
+    /**
+     * Deletes a file from a project
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @return JSON success or failure
+     */		
 	public function deleteFileAction($id, $filename)
 	{
         $perm = json_decode($this->checkWriteProjectPermissions($id), true);
@@ -384,6 +514,14 @@ class ProjectController extends Controller
 		return new Response($delete);
 	}
 
+    /**
+     * Rename a file in a project
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @param String $new_filename
+     * @return JSON success or failure
+     */
 	public function renameFileAction($id, $filename, $new_filename)
 	{
         $perm = json_decode($this->checkWriteProjectPermissions($id), true);
@@ -402,6 +540,12 @@ class ProjectController extends Controller
 		return new Response($delete);
 	}
 
+    /**
+     * Searchs for a Project given a token
+     *
+     * @param String $token
+     * @return JSON results based on token
+     */
 	public function searchAction($token)
 	{
 		$results_name = json_decode($this->searchNameAction($token)->getContent(), true);
@@ -410,6 +554,12 @@ class ProjectController extends Controller
 		return new Response(json_encode($results));
 	}
 
+    /**
+     * Searches for projects with given name
+     *
+     * @param String $token
+     * @return JSON results based on token
+     */
 	public function searchNameAction($token)
 	{
 		$em = $this->em;
@@ -430,6 +580,12 @@ class ProjectController extends Controller
 		return new Response(json_encode($result));
 	}
 
+    /**
+     * Searches a projects description with a given name
+     *
+     * @param String $token
+     * @return JSON results based on token
+     */
 	public function searchDescriptionAction($token)
 	{
 		$em = $this->em;
@@ -451,6 +607,12 @@ class ProjectController extends Controller
 		return new Response(json_encode($result));
 	}
 
+    /**
+     * Checks if project exists given an id
+     *
+     * @param Integer $id
+     * @return JSON success if exists, failure if it doesn't
+     */
 	public function checkExistsAction($id)
 	{
 		$em = $this->em;
@@ -460,6 +622,12 @@ class ProjectController extends Controller
 		return new Response(json_encode(array("success" => true)));
 	}
 
+    /**
+     * Gets a project by a given id
+     *
+     * @param Integer $id
+     * @return Project Entity
+     */
 	public function getProjectById($id)
 	{
 		$em = $this->em;
@@ -471,18 +639,35 @@ class ProjectController extends Controller
 		return $project;
 	}
 
+    /**
+     * Checks if project has write permissions
+     *
+     * @param Integer $id
+     * @return Success or Failure
+     */
     public function checkWriteProjectPermissionsAction($id)
     {
         $perm = $this->checkWriteProjectPermissions($id);
         return new Response($perm);
     }
 
+    /**
+     * Checks if project has read permissions
+     *
+     * @param Integer $id
+     * @return Success or Failure
+     */
     public function checkReadProjectPermissionsAction($id)
     {
         $perm = $this->checkReadProjectPermissions($id);
         return new Response($perm);
     }
 
+    /**
+     * Checks if there are Private Project records
+     *
+     * @return Success or Failure with accompanied message
+     */
 	public function currentPrivateProjectRecordsAction()
 	{
 		$current_user = $this->sc->getToken()->getUser();
@@ -507,13 +692,24 @@ class ProjectController extends Controller
 
 	}
 
+    /**
+     * Checks if user can create Private Projects
+     *
+     * @param Integer $owner
+     * @return Success or Failure
+     */
 	public function canCreatePrivateProjectAction($owner)
     {
         $canCreate = $this->canCreatePrivateProject($owner);
         return new Response($canCreate);
     }
 
-
+    /**
+     * Checks if user can create a Pricate Project
+     *
+     * @param Integer $owner
+     * @return JSON encoded success or failure
+     */
     protected function canCreatePrivateProject($owner)
     {
         $projects = $this->em->getRepository('CodebenderProjectBundle:Project')->findByOwner($owner);
@@ -542,11 +738,22 @@ class ProjectController extends Controller
 
     }
 
+    /**
+     * @todo Look into this
+     * 
+     * @return Always returns Success
+     */
     protected function canCreateFile($id, $filename)
     {
         return json_encode(array("success" => true));
     }
 
+    /**
+     * Checks if name is valid
+     *
+     * @param String $name
+     * @return JSON encoded Success or Failure
+     */
 	protected  function nameIsValid($name)
 	{
 		$project_name = str_replace(".", "", trim(basename(stripslashes($name)), ".\x00..\x20"));
@@ -556,6 +763,12 @@ class ProjectController extends Controller
 			return json_encode(array("success" => false, "error" => "Invalid Project Name. Please enter a new one."));
 	}
 
+    /**
+     * Checks if can read Project Permissions given an id
+     *
+     * @param Integer $id
+     * @return Success or Failure with accompanied message
+     */
     protected function checkReadProjectPermissions($id)
     {
         $project = $this->getProjectById($id);
@@ -570,6 +783,12 @@ class ProjectController extends Controller
 
     }
 
+    /**
+     * Checks if can write Project Permissions given an id
+     *
+     * @param Integer $id
+     * @return Success or Failure with accompanied message
+     */
     protected function checkWriteProjectPermissions($id)
     {
         $project = $this->getProjectById($id);
@@ -582,6 +801,13 @@ class ProjectController extends Controller
 
     }
 
+    /**
+     * Checks if name exists given an owner and name
+     *
+     * @param Integer $owner
+     * @param String $name
+     * @return JSON encoded Success or Failure
+     */
     protected  function nameExists($owner, $name)
     {
         $userProjects = json_decode($this->listAction($owner)->getContent(),true);
@@ -596,6 +822,13 @@ class ProjectController extends Controller
         return json_encode(array("success" => false));
     }
 
+    /**
+     * Constructor
+     * 
+     * @param Doctrine\ORM\EntityManager $entityManager
+     * @param FilesController $filesController
+     * @param Symfony\Component\Security\Core\SecurityContext $securityContext
+     */
     public function __construct(EntityManager $entityManager, FilesController $filesController, SecurityContext $securitycontext)
     {
         $this->em = $entityManager;

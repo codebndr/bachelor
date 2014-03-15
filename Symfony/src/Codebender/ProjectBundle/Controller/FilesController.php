@@ -1,6 +1,4 @@
 <?php
-// src/Codebender/ProjectBundle/Controller/DiskFilesController.php
-
 namespace Codebender\ProjectBundle\Controller;
 
 use Codebender\ProjectBundle\Helper\ProjectErrorsHelper;
@@ -29,6 +27,13 @@ abstract class FilesController extends Controller
 
     protected abstract function listFiles($id);
 
+    /**
+     * Checks if file exists
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @return JSON encoded Success of Failure string, with related message.
+     */
     protected function fileExists($id, $filename)
     {
         $list = $this->listFiles($id);
@@ -41,6 +46,13 @@ abstract class FilesController extends Controller
         return ProjectErrorsHelper::fail(ProjectErrorsHelper::FAIL_FILE_EXISTS_MSG, array("filename" => $filename, "error" => "File ".$filename." does not exist."));
     }
 
+    /**
+     * Checks if file can be created
+     *
+     * @param Integer $id
+     * @param String $filename
+     * @return JSON encoded Success or Failure string, with related message.
+     */
     protected function canCreateFile($id, $filename)
     {
         $fileExists = json_decode($this->fileExists($id,$filename),true);
@@ -55,9 +67,18 @@ abstract class FilesController extends Controller
 
     }
 
+    /**
+     * Checks if Name is valid
+     *
+     * @param Integer $id
+     * @param String $name
+     * @return JSON encoded Success or Failure string, with related message.
+     */
     protected function nameIsValid($id, $name)
     {
-	    //TODO: I removed the dots, probably added by baltas here. Make sure my fix doesn't break stuff
+	    /**
+         * @todo I removed the dots, probably added by baltas here. Make sure my fix doesn't break stuff
+         */
         $filename = trim(basename(stripslashes($name)), ".\x00..\x20");
         if($filename == $name && $name != "" && $filename == utf8_encode($filename) && preg_match("/[\\/:\"*?&~<>|]/",$filename) == 0)
             return json_encode(array("success" => true));

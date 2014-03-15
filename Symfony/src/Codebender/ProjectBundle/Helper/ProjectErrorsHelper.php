@@ -44,13 +44,26 @@ class ProjectErrorsHelper {
 	const SUCC_CUR_USER_PRIV_PROJ_RECORDS_MSG = "User records retrieved successfully.";
 	const FAIL_CUR_USER_PRIV_PROJ_RECORDS_MSG = "User not logged in";
 
-
+    /**
+     * Creates a Success message
+     *
+     * @param String $msg
+     * @param Array $info
+     * @return JSON success message
+     */
 	public static function success($msg, $info = array())
     {
         $toReturn = array("success" => true, "message" => $msg) + $info;
         return json_encode($toReturn);
     }
 
+    /**
+     * Creates a Failure message
+     *
+     * @param String $msg
+     * @param Array $info
+     * @return JSON failure message
+     */
     public static function fail($msg, $info = array())
     {
         $toReturn = array("success" => false, "message" => $msg) + $info;

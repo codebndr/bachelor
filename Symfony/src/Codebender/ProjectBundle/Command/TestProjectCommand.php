@@ -20,12 +20,12 @@ class TestProjectCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('codebender:tests:install')
+            ->setName('codebender:install:tests')
             ->setDescription('Install Test Files')
             ->setHelp(<<<EOT
-The <info>codebender:tests:install</info> command moves the test project files to the defined directory:
+The <info>codebender:install:tests</info> command moves the test project files to the defined directory:
 
-  <info>php app/console codebender:tests:install</info>
+  <info>php app/console codebender:install:tests</info>
 EOT
             );
     }

@@ -14,6 +14,11 @@ use Codebender\UtilitiesBundle\Entity\ViewLog;
 class DefaultController extends Controller
 {
 
+    /**
+     * Renders Homepage
+     *
+     * @return Authenticated home if logged in, normal homepage otherwise
+     */
 	public function indexAction()
 	{
         $session = $this->container->get('session');
@@ -24,8 +29,9 @@ class DefaultController extends Controller
             $usercontroller = $this->get('codebender_user.usercontroller');
 			$user = json_decode($usercontroller->getCurrentUserAction()->getContent(), true);
 			{
-
-				//TODO: Test this code!
+				/**
+                 * @todo Test this code!
+                 */
 				$projectmanager = $this->get('codebender_project.sketchmanager');
 				$priv_proj_avail = json_decode($projectmanager->canCreatePrivateProjectAction($user["id"])->getContent(), true);
 				if(!$priv_proj_avail["success"])
@@ -40,6 +46,13 @@ class DefaultController extends Controller
 		return $this->render('CodebenderGenericBundle:Index:index.html.twig');
 	}
 
+    /**
+     * Renders User Profile that shows projects they are working on
+     *
+     * @param String $user
+     * @return JSON string if $user ends in JSON, otherwise
+     *         returns Twig rendered template
+     */
 	public function userAction($user)
 	{
 		$json_output = false;
@@ -91,11 +104,23 @@ class DefaultController extends Controller
 		return $this->render('CodebenderGenericBundle:Default:user.html.twig', array('user' => $user, 'projects' => $projects, 'lastTweet' => $lastTweet, 'image' => $image));
 	}
 
+    /**
+     * Displays a Project, embed or JSON
+     *
+     * @param Integer $id
+     * @param Boolean $embed
+     * @param Boolean $json_output
+     * @return Renders Embed Twig Template if embed = true,
+     *         otherwise renders json if json = true
+     */
 	public function projectAction($id, $embed = false, $json_output = false)
 	{
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
         $session = $this->container->get('session');
-		/** @var SketchController $projectmanager */
+
+		/** 
+         * @var SketchController $projectmanager 
+         */
 		$projectmanager = $this->get('codebender_project.sketchmanager');
 		$projects = NULL;
 
@@ -178,6 +203,12 @@ class DefaultController extends Controller
     // @codeCoverageIgnoreStart
 	}
     // @codeCoverageIgnoreEnd
+
+    /**
+     * Displays Project Files
+     *
+     * @return JSON encoded response of project files
+     */
 	public function projectfilesAction()
 	{
 		$id = $this->getRequest()->request->get('project_id');
@@ -210,6 +241,11 @@ class DefaultController extends Controller
 		return $response;
 	}
 
+    /**
+     * Displays a list libraries available for Codebender
+     *
+     * @return Rendered twig template of available libraries
+     */
 	public function librariesAction()
 	{
 		$utilities = $this->get('codebender_utilities.handler');
@@ -226,6 +262,11 @@ class DefaultController extends Controller
 		return $this->render('CodebenderGenericBundle:Default:libraries.html.twig', array('categories' => $categories));
 	}
 
+    /**
+     * Displays an available library for Codebender
+     *
+     * @return Rendered twig template of an embedable Library
+     */
 	public function exampleAction($library, $example, $embed = false)
 	{
 		$utilities = $this->get('codebender_utilities.handler');
@@ -258,6 +299,11 @@ class DefaultController extends Controller
 
 	}
 
+    /**
+     * Displays available boards 
+     * 
+     * @return Twig rendered template of available boards
+     */
 	public function boardsAction()
 	{
 		$boardcontroller = $this->get('codebender_board.defaultcontroller');
@@ -281,7 +327,11 @@ class DefaultController extends Controller
 		return $this->render('CodebenderGenericBundle:Default:boards.html.twig', array('boards' => $boards, 'available_boards' => $available_boards));
 	}
 
-
+    /**
+     * Displays rendered JS 
+     *
+     * @return Javascript Renedered Template
+     */
 	public function embeddedCompilerFlasherJavascriptAction()
 	{
 		$response = $this->render('CodebenderGenericBundle:CompilerFlasher:compilerflasher.js.twig');
