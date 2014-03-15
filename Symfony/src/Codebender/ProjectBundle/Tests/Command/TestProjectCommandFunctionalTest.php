@@ -35,7 +35,7 @@ class TestProjectCommandFunctionalTest extends WebTestCase
         $application = new Application($kernel);
         $application->add(new TestProjectCommand());
 
-        $command = $application->find('codebender:tests:install');
+        $command = $application->find('codebender:install:tests');
         $commandTester = new CommandTester($command);
         $commandTester->execute(
             array(
