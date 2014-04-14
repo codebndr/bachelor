@@ -31,7 +31,7 @@ class ScriptHandler
         }
 
         $php = escapeshellarg(self::getPhp());
-        $cmd = escapeshellarg('codebender:tests:install');
+        $cmd = escapeshellarg('codebender:install');
         $appDir = escapeshellarg($appDir);
 
         error_log($php."\n".$cmd."\n".$appDir);
