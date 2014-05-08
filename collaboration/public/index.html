@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <style type="text/css" media="screen">
+            #editor { 
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="editor"></div>
+
+        <script src="http://ajaxorg.github.com/ace/build/src/ace.js"></script>
+        <script src="/channel/bcsocket.js"></script>
+        <script src="/share/share.js"></script>
+        <script src="/share/ace.js"></script>
+
+        <script>
+            var id = location.hash.substring(1) || "hello";
+
+            var editor = ace.edit("editor");
+
+            var options = {
+                authentication: {
+                    hash: 'bananapancakes',
+                    userId: 'banana',
+                    projectId: 'pancakes'
+                }
+            };
+
+            sharejs.open(id, 'text', options, function(error, doc) {
+                doc.attach_ace(editor);
+            });
+        </script>
+    </body>
+</html>

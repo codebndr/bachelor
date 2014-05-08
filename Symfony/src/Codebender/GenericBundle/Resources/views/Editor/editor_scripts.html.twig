@@ -341,12 +341,54 @@ load_files = function(){
 
 <script type="text/javascript">
 
+var openShareJsConnection = function(filename) {
+    if (window.doc) {
+        window.doc.detach_ace();
+        window.doc.close();
+    }
+
+    var share_options = {
+        origin: 'http://localhost:8000/channel',
+
+        authentication: {
+            hash: '{{ share_hash }}',
+            userId: '{{ user_id }}',
+            projectId: '{{ project_id }}'
+        }
+    };
+
+    var channel = '{{ project_id }}' + (filename || '');
+
+    // TODO(ddoucet) when is filename undefined?
+    sharejs.open(channel, 'text', share_options, function(error, doc) {
+        if (error)
+            console.error("Error opening connection with file \"" + filename + "\" sharejs: " + error);
+        else {
+
+            doc.attach_ace(editor);
+
+            if (doc.created)
+                editor.getSession()
+                    .setValue($("<div/>")
+                    .html(window.files[filename])
+                    .text()
+                    .replace(/&quot;/g, "\""));
+
+            window.doc = doc;
+        }
+    });
+};
+
 function selectFile(filename)
 {
 
     loadCode(filename);
-    editor.getSession().setValue($("<div/>").html(window.files[filename]).text().replace(/&quot;/g, "\""));
+    
+    //TODO: figure out if this is needed
+    //editor.getSession().setValue($("<div/>").html(window.files[filename]).text().replace(/&quot;/g, "\""));
+
     window.selectedFile = filename;
+    openShareJsConnection(window.selectedFile);
 
     $(".filelist").css("font-weight", "");
     $("ul#files_list li").each(function()

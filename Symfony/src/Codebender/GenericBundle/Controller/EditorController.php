@@ -45,6 +45,19 @@ class EditorController extends Controller
 		$boardcontroller = $this->get('codebender_board.defaultcontroller');
 		$boards = $boardcontroller->listAction()->getContent();
 
-		return $this->render('CodebenderGenericBundle:Editor:editor.html.twig', array('project_id' => $id, 'project_name' => $name, 'files' => $files, 'boards' => $boards, "is_public" => $is_public));
+		//return $this->render('CodebenderGenericBundle:Editor:editor.html.twig', array('project_id' => $id, 'project_name' => $name, 'files' => $files, 'boards' => $boards, "is_public" => $is_public));
+        
+        $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
+		$user_id = (string)$user["id"];
+		$project_id = (string)$id;
+
+		return $this->render('CodebenderGenericBundle:Editor:editor.html.twig', 
+			array('share_hash' => $user_id . $project_id,
+				'user_id' => $user_id,
+				'project_id' => $project_id,
+				'project_name' => $name,
+				'files' => $files,
+				'boards' => $boards,
+				'is_public' => $is_public));
 	}
 }

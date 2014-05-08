@@ -261,6 +261,8 @@
 				$(".filelist")[0].setAttribute("style", "font-weight:bold;");
 			{% endif %}
 
+      openShareJsConnection(window.selectedFile);
+
 			window.binary = null;
 			$("#line_count").html(editor.getSession().getValue().split("\n").length);
 

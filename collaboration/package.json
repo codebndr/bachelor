@@ -1,0 +1,18 @@
+{
+    "name": "codebender-collaboration",
+    "version": "0.0.1",
+    "description": "Server for realtime collaboration in codebender IDE",
+    "dependencies": 
+    {
+        "share": "0.6.0",
+        "connect": "<2.0.0",
+        "browserchannel": "1.0.8"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/codebender.cc"
+    },
+    "engines": {
+        "node": ">=0.10.24"
+    }
+}
