@@ -10,7 +10,7 @@ var isValidAgent = function(auth) {
 }
 
 var options = {
-	db: {type: 'redis'},
+	db: {type: 'none'},
 	browserChannel: { cors: "*" },  // TODO
 	auth: function(agent, action) {
 		if (action.type === 'connect' && !isValidAgent(agent.authentication))
