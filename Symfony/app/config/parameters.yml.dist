@@ -14,5 +14,7 @@ parameters:
     compiler: 'http://compiler.codebender.cc'
     library: 'http://libs.codebender.cc'
     sender: 'http://sender.codebender.cc'
+    collab_url: 'http://127.0.0.1:8000/channel'
+    collab_seed: '1'
     directory: ~
     islocalhost: true

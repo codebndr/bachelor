@@ -348,7 +348,7 @@ var openShareJsConnection = function(filename) {
     }
 
     var share_options = {
-        origin: 'http://localhost:8000/channel',
+        origin: '{{ share_host}}',
 
         authentication: {
             hash: '{{ share_hash }}',
