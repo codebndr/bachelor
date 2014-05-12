@@ -1,3 +1,9 @@
+var config = require('./config.json');
+
+if ( config.seed === "1" ) {
+    console.log("Warning: Seed not set");
+}
+
 var connect = require('connect'),
     sharejs = require('share').server;
 
@@ -6,7 +12,10 @@ var server = connect(
       connect.static(__dirname + '/public'));
 
 var isValidAgent = function(auth) {
-	return auth.hash === auth.userId + auth.projectId;
+    var crypto = require('crypto')
+    , shasum = crypto.createHash('sha256');
+    shasum.update(config.seed + auth.projectId);
+	  return auth.hash === shasum.digest('hex');
 }
 
 var options = {
