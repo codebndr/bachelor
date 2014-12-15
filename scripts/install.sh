@@ -94,6 +94,7 @@ sudo chown -R `whoami`:$HTTPDUSER /opt/codebender/files
 
 # TODO: find a better way to generate this
 touch app/config/parameters.yml
+echo "parameters:" >> app/config/parameters.yml
 echo "    directory: '/opt/codebender/files'" >> app/config/parameters.yml
 echo "    database_path: '/opt/codebender/codebender.sqlite'" >> app/config/parameters.yml
 
