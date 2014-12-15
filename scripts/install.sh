@@ -103,7 +103,7 @@ echo "Installing Dependencies"
 curl -s http://getcomposer.org/installer | php
 php composer.phar install
 echo "Configuring system"
-php app/console codebender:tests:install
+yes | php app/console codebender:install
 #php app/console doctrine:fixtures:load
 
 # TODO: Add this later on (Apache config)
