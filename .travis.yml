@@ -24,7 +24,7 @@ script:
 #  - php bin/coveralls -v
 
 notifications:
-0   irc: "chat.freenode.net#codebender.cc"
+  irc: "chat.freenode.net#codebender.cc"
   email:
     recipients:
       - girder@codebender.cc
