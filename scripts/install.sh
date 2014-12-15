@@ -89,13 +89,13 @@ cd Symfony
 # cp app/config/parameters.yml.dist app/config/parameters.yml
 #cat app/config/parameters.yml.dist  | sed 's/database_pass: ~/database_pass: hello/g' > app/config/parameters.yml
 
-sudo mkdir -p /opt/codebender/files
+sudo mkdir -p /opt/codebender/files/
 sudo chown -R `whoami`:$HTTPDUSER /opt/codebender/files
 
 # TODO: find a better way to generate this
 touch app/config/parameters.yml
 echo "parameters:" >> app/config/parameters.yml
-echo "    directory: '/opt/codebender/files'" >> app/config/parameters.yml
+echo "    directory: '/opt/codebender/files/'" >> app/config/parameters.yml
 echo "    database_path: '/opt/codebender/codebender.sqlite'" >> app/config/parameters.yml
 
 
