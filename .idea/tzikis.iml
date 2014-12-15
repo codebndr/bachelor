@@ -9,14 +9,12 @@
     <orderEntry type="module-library">
       <library name="PHARS">
         <CLASSES>
-          <root url="phar://$MODULE_DIR$/Symfony/composer.phar" />
-          <root url="phar://$MODULE_DIR$/Symfony/vendor/symfony/symfony/src/Symfony/Component/DependencyInjection/Tests/Fixtures/includes/ProjectWithXsdExtensionInPhar.phar" />
           <root url="phar:///Applications/XAMPP/xamppfiles/lib/php/pear/Zend/Service/WindowsAzure/CommandLine/Scaffolders/DefaultScaffolder.phar" />
+          <root url="phar://$MODULE_DIR$/Symfony/composer.phar" />
         </CLASSES>
         <SOURCES>
-          <root url="phar://$MODULE_DIR$/Symfony/composer.phar" />
-          <root url="phar://$MODULE_DIR$/Symfony/vendor/symfony/symfony/src/Symfony/Component/DependencyInjection/Tests/Fixtures/includes/ProjectWithXsdExtensionInPhar.phar" />
           <root url="phar:///Applications/XAMPP/xamppfiles/lib/php/pear/Zend/Service/WindowsAzure/CommandLine/Scaffolders/DefaultScaffolder.phar" />
+          <root url="phar://$MODULE_DIR$/Symfony/composer.phar" />
         </SOURCES>
       </library>
     </orderEntry>

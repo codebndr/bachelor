@@ -1,0 +1,30 @@
+language: php
+php:
+#  - 5.5
+#  - 5.4
+  - 5.3
+
+#before_install:
+#  - sudo apt-get update
+
+before_script:
+  - scripts/install.sh
+  - cd /opt/codebender/website/Symfony
+  - sudo chmod -R 777 app/cache app/logs
+  - echo 'error_reporting =  E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+
+script:
+  - mkdir -p build/logs
+  - bin/phpunit -c app/ --coverage-clover build/logs/clover.xml --stderr
+#  - bin/phpcpd --log-pmd build/pmd-cpd.xml --exclude app --exclude vendor --names-exclude *Test.php,PersonalBoards.php,PrivateProjects.php,Log.php,VieLog.php -n .
+  # - bin/phpmd src/Codebender/ xml cleancode,codesize,design,naming,unusedcode --exclude *Test.php --reportfile build/pmd.xml
+
+#after_script:
+#  - php composer.phar install --dev
+#  - php bin/coveralls -v
+
+notifications:
+0   irc: "chat.freenode.net#codebender.cc"
+  email:
+    recipients:
+      - girder@codebender.cc

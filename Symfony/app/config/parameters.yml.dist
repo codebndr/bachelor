@@ -1,5 +1,5 @@
 parameters:
-    database_driver: pdo_mysql
+    database_driver: pdo_sqlite
     database_host: 127.0.0.1
     database_port: ~
     database_name: symfony
@@ -10,9 +10,9 @@ parameters:
     secret: hello
     email.addr: localhost@codebender.dev
     email.pass: localpass
-    mykey: ~
+    mykey: someKey
     compiler: 'http://compiler.codebender.cc'
     library: 'http://libs.codebender.cc'
     sender: 'http://sender.codebender.cc'
-    directory: ~
+    directory: ""
     islocalhost: true
