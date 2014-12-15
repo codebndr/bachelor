@@ -91,6 +91,7 @@ cd Symfony
 
 sudo mkdir -p /opt/codebender/files/
 sudo chown -R `whoami`:$HTTPDUSER /opt/codebender/files
+sudo chmod -R 777 /opt/codebender/files
 
 # TODO: find a better way to generate this
 touch app/config/parameters.yml
