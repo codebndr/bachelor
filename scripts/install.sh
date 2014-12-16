@@ -116,7 +116,10 @@ sudo chmod -R ug+rwx /opt/codebender/files
 
 ###/housekeeping
 
-# TODO: Add this later on (Apache config)
-#sudo cp /opt/codebender/$PACKAGENAME/apache-config /etc/apache2/sites-available/codebender
-#cd /etc/apache2/sites-enabled
-#sudo ln -s ../sites-available/codebender 00-codebender
+# TODO: Fix this crap later on (Apache config), it's all hardcoded now
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+	sudo cp /opt/codebender/$PACKAGENAME/apache-config /etc/apache2/sites-available/codebender
+	cd /etc/apache2/sites-enabled
+	sudo ln -s ../sites-available/codebender 00-codebender
+	sudo service apache2 restart
+fi
