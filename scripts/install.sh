@@ -90,8 +90,7 @@ mkdir -p /opt/codebender/files/
 sudo chown -R `whoami`:$HTTPDUSER /opt/codebender/files
 
 # TODO: find a better way to generate this
-touch app/config/parameters.yml
-echo "parameters:" >> app/config/parameters.yml
+cat app/config/parameters.yml.dist | grep -iv "directory:" | grep -iv "database_path:" > app/config/parameters.yml
 echo "    directory: '/opt/codebender/files/'" >> app/config/parameters.yml
 echo "    database_path: '/opt/codebender/codebender.sqlite'" >> app/config/parameters.yml
 
