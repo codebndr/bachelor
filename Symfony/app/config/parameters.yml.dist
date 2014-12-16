@@ -8,7 +8,7 @@ parameters:
     database_pass: ~
     locale: en
     secret: hello
-    email.addr: localhost@codebender.dev
+    email.addr: localhost_codebender@gmail.com
     email.pass: localpass
     mykey: someKey
     compiler: 'http://compiler.codebender.cc'
