@@ -24,6 +24,13 @@
         "oneup/uploader-bundle": "1.0.*@dev",
         "doctrine/doctrine-fixtures-bundle": "dev-master"
     },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "squizlabs/php_codesniffer": "1.*",
+        "sebastian/phpcpd": "*",
+        "phpmd/phpmd" : "2.0.*"
+    },
     "scripts": {
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",

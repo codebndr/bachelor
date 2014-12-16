@@ -26,10 +26,6 @@ fi
 ##### Enable/Install phpunit in order to be able to run the tests
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
 	if [[ ! $TRAVIS ]]; then
-
-		##### Enable/Install phpunit
-		sudo apt-get install -y phpunit
-
 		#### Set Max nesting lvl to something Symfony is happy with
 		export ADDITIONAL_PATH=`php -i | grep -F --color=never 'Scan this dir for additional .ini files'`
 		echo 'xdebug.max_nesting_level=256' | sudo tee ${ADDITIONAL_PATH:42}/symfony2.ini
