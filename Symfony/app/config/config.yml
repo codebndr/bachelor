@@ -31,7 +31,7 @@ twig:
         site_name: "codebender Bachelor"
         email_addr: %email.addr%
         compiler: %compiler%
-        sender: %sender%
+#        sender: %sender%
         library: %library%
         islocalhost: %islocalhost%
 

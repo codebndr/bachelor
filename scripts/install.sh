@@ -103,6 +103,19 @@ echo "Configuring system"
 yes | php app/console codebender:install
 #php app/console doctrine:fixtures:load
 
+#housekeeping
+sudo chmod -R 777 app/cache app/logs
+sudo chown -R `whoami`:$HTTPDUSER /opt/codebender/codebender.sqlite
+#pdo_sqlite permissions are a bit weird
+sudo chmod ug+rwx /opt/codebender/
+sudo chmod ug+rwx /opt/codebender/codebender.sqlite
+
+#diskfiles permissions
+sudo chown -R `whoami`:$HTTPDUSER /opt/codebender/files
+sudo chmod -R ug+rwx /opt/codebender/files
+
+###/housekeeping
+
 # TODO: Add this later on (Apache config)
 #sudo cp /opt/codebender/$PACKAGENAME/apache-config /etc/apache2/sites-available/codebender
 #cd /etc/apache2/sites-enabled

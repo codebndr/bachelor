@@ -13,6 +13,5 @@ parameters:
     mykey: someKey
     compiler: 'http://compiler.codebender.cc'
     library: 'http://libs.codebender.cc'
-    sender: 'http://sender.codebender.cc'
     directory: ""
     islocalhost: true
