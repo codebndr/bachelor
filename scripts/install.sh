@@ -39,8 +39,9 @@ fi
 HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
 
 sudo mkdir -p /opt/codebender
-sudo cp -r . /opt/codebender/$PACKAGENAME
-sudo chown -R `whoami`:$HTTPDUSER /opt/codebender/$PACKAGENAME
+sudo chown -R `whoami`:$HTTPDUSER /opt/codebender/
+cp -r . /opt/codebender/$PACKAGENAME
+chown -R `whoami`:$HTTPDUSER /opt/codebender/$PACKAGENAME
 cd /opt/codebender/$PACKAGENAME
 
 #Set permissions for app/cache and app/logs
@@ -89,9 +90,8 @@ cd Symfony
 # cp app/config/parameters.yml.dist app/config/parameters.yml
 #cat app/config/parameters.yml.dist  | sed 's/database_pass: ~/database_pass: hello/g' > app/config/parameters.yml
 
-sudo mkdir -p /opt/codebender/files/
-sudo chown -R `whoami`:$HTTPDUSER /opt/codebender/files
-sudo chmod -R 777 /opt/codebender/files
+mkdir -p /opt/codebender/files/
+chown -R `whoami`:$HTTPDUSER /opt/codebender/files
 
 # TODO: find a better way to generate this
 touch app/config/parameters.yml
