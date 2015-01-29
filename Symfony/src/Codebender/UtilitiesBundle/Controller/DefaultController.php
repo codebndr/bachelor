@@ -695,13 +695,13 @@ class DefaultController extends Controller
 	public function compileAction()
 	{
 		$request_content = $this->getRequest()->getContent();
-        if($request_content == null)
+        if($request_content === null)
         {
             return new Response("No data.", 500);
         }
         $content = json_decode($request_content, true);
 
-        if($content == null)
+        if($content === null)
         {
             return new Response("Wrong data.", 500);
         }
@@ -712,12 +712,7 @@ class DefaultController extends Controller
 
 
         //TODO: Test this on a Linux machine
-		if($content["format"] == "syntax")
-        {
-            $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::VERIFY_PROJECT, 'VERIFY_PROJECT', "");
-            syslog(LOG_INFO, "verify");
-        }
-		else if ($content["format"] == "binary")
+		if ($content["format"] == "binary")
         {
             $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::COMPILE_PROJECT, 'COMPILE_PROJECT', "");
             syslog(LOG_INFO, "flash");
@@ -732,25 +727,13 @@ class DefaultController extends Controller
 
 		$utilities = $this->get('codebender_utilities.handler');
 
-		$headers = $utilities->read_libraries($files);
-
 		$libraries = array();
-        $libmanager_url = $this->container->getParameter('library');
-		foreach($headers as $header)
-		{
-			$data = $utilities->get($libmanager_url."/fetch?library=".$header);
-
-			$data = json_decode($data, true);
-			if($data["success"])
-			{
-				$libraries[$header] = $data["files"];
-			}
-		}
 
 		$content["libraries"] = $libraries;
-		$request_content = json_encode($content);
 
-        $data = $utilities->post_raw_data($this->container->getParameter('compiler'), $request_content);
+		$builderRequest = array("type" => "compiler", "data" => $content);
+		$requestContent = json_encode($builderRequest);
+        $data = $utilities->post_raw_data($this->container->getParameter('builder'), $requestContent);
 
 		return new Response($data);
 

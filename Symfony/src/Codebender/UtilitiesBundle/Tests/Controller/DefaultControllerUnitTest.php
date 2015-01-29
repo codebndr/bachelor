@@ -2108,59 +2108,60 @@ class DefaultControllerUnitTest extends \PHPUnit_Framework_TestCase
 
 	}
 
-    public function testCompileAction_syntax()
-    {
-        $controller = $this->getMock("Codebender\UtilitiesBundle\Controller\DefaultController", array("get", "getRequest", "render"));
-
-        $request = $this->getMockBuilder("Symfony\Component\HttpFoundation\Request")
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $usercontroller = $this->getMockBuilder("Codebender\UserBundle\Controller\DefaultController")
-            ->disableOriginalConstructor()
-            ->setMethods(array("getCurrentUserAction","updateCompileAction"))
-            ->getMock();
-
-        $handler = $this->getMockBuilder("Codebender\UtilitiesBundle\Handler\DefaultHandler")
-            ->disableOriginalConstructor()
-            ->setMethods(array("get", "post_raw_data"))
-            ->getMock();
-
-        $logController = $this->getMockBuilder('Codebender\UtilitiesBundle\Controller\LogController')
-            ->disableOriginalConstructor()
-            ->setMethods(array('logAction'))
-            ->getMock();
-
-        $container = $this->getMockBuilder("Symfony\Component\DependencyInjection\ContainerInterface")
-            ->disableOriginalConstructor()
-            ->setMethods(array('getParameter'))
-            ->getMockForAbstractClass();
-
-        $controller->setContainer($container);
-
-        $controller->expects($this->once())->method('getRequest')->will($this->returnValue(new Response('{"files":[{"filename":"project.ino","content":"#include <header.h> #include \"header2.h\" "}],"format":"syntax","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"}}' )));
-
-        $controller->expects($this->at(1))->method('get')->with($this->equalTo('codebender_user.usercontroller'))->will($this->returnValue($usercontroller));
-        $usercontroller->expects($this->once())->method('getCurrentUserAction')->will($this->returnValue(new Response('{"success":true,"id":1}')));
-        $usercontroller->expects($this->once())->method('updateCompileAction');
-        $logController->expects($this->once())->method('logAction')->with($this->equalTo(1), $this->equalTo(21), $this->equalTo('VERIFY_PROJECT'), $this->equalTo(''));
-        $controller->expects($this->at(2))->method('get')->with($this->equalTo('codebender_utilities.logcontroller'))->will($this->returnValue($logController));
-        $controller->expects($this->at(3))->method('get')->with($this->equalTo('codebender_utilities.handler'))->will($this->returnValue($handler));
-
-        $container->expects($this->at(0))->method('getParameter')->with($this->equalTo('library'))->will($this->returnValue('http://library/url'));
-
-        $handler->expects($this->at(0))->method('get')->with($this->equalTo('http://library/url/fetch?library=header'))->will($this->returnValue('{"success":true,"message":"Library found","files":[{"filename":"header.h","content":""}]}'));
-
-        $container->expects($this->at(1))->method('getParameter')->with($this->equalTo('compiler'))->will($this->returnValue('http://compiler/url'));
-
-        $handler->expects($this->once())->method('post_raw_data')->with($this->equalTo('http://compiler/url'), $this->equalTo('{"files":[{"filename":"project.ino","content":"#include <header.h> #include \"header2.h\" "}],"format":"syntax","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"},"libraries":{"header":[{"filename":"header.h","content":""}]}}')) -> will($this->returnValue('compiler response'));
-
-
-        $response = $controller->compileAction();
-
-        $this->assertEquals($response->getContent(), 'compiler response');
-
-    }
+    //Not used any more
+//    public function testCompileAction_syntax()
+//    {
+//        $controller = $this->getMock("Codebender\UtilitiesBundle\Controller\DefaultController", array("get", "getRequest", "render"));
+//
+//        $request = $this->getMockBuilder("Symfony\Component\HttpFoundation\Request")
+//            ->disableOriginalConstructor()
+//            ->getMock();
+//
+//        $usercontroller = $this->getMockBuilder("Codebender\UserBundle\Controller\DefaultController")
+//            ->disableOriginalConstructor()
+//            ->setMethods(array("getCurrentUserAction","updateCompileAction"))
+//            ->getMock();
+//
+//        $handler = $this->getMockBuilder("Codebender\UtilitiesBundle\Handler\DefaultHandler")
+//            ->disableOriginalConstructor()
+//            ->setMethods(array("get", "post_raw_data"))
+//            ->getMock();
+//
+//        $logController = $this->getMockBuilder('Codebender\UtilitiesBundle\Controller\LogController')
+//            ->disableOriginalConstructor()
+//            ->setMethods(array('logAction'))
+//            ->getMock();
+//
+//        $container = $this->getMockBuilder("Symfony\Component\DependencyInjection\ContainerInterface")
+//            ->disableOriginalConstructor()
+//            ->setMethods(array('getParameter'))
+//            ->getMockForAbstractClass();
+//
+//        $controller->setContainer($container);
+//
+//        $controller->expects($this->once())->method('getRequest')->will($this->returnValue(new Response('{"files":[{"filename":"project.ino","content":"#include <header.h> #include \"header2.h\" "}],"format":"syntax","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"}}' )));
+//
+//        $controller->expects($this->at(1))->method('get')->with($this->equalTo('codebender_user.usercontroller'))->will($this->returnValue($usercontroller));
+//        $usercontroller->expects($this->once())->method('getCurrentUserAction')->will($this->returnValue(new Response('{"success":true,"id":1}')));
+//        $usercontroller->expects($this->once())->method('updateCompileAction');
+//        $logController->expects($this->once())->method('logAction')->with($this->equalTo(1), $this->equalTo(21), $this->equalTo('VERIFY_PROJECT'), $this->equalTo(''));
+//        $controller->expects($this->at(2))->method('get')->with($this->equalTo('codebender_utilities.logcontroller'))->will($this->returnValue($logController));
+//        $controller->expects($this->at(3))->method('get')->with($this->equalTo('codebender_utilities.handler'))->will($this->returnValue($handler));
+//
+//        $container->expects($this->at(0))->method('getParameter')->with($this->equalTo('library'))->will($this->returnValue('http://library/url'));
+//
+//        $handler->expects($this->at(0))->method('get')->with($this->equalTo('http://library/url/fetch?library=header'))->will($this->returnValue('{"success":true,"message":"Library found","files":[{"filename":"header.h","content":""}]}'));
+//
+//        $container->expects($this->at(1))->method('getParameter')->with($this->equalTo('compiler'))->will($this->returnValue('http://compiler/url'));
+//
+//        $handler->expects($this->once())->method('post_raw_data')->with($this->equalTo('http://compiler/url'), $this->equalTo('{"files":[{"filename":"project.ino","content":"#include <header.h> #include \"header2.h\" "}],"format":"syntax","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"},"libraries":{"header":[{"filename":"header.h","content":""}]}}')) -> will($this->returnValue('compiler response'));
+//
+//
+//        $response = $controller->compileAction();
+//
+//        $this->assertEquals($response->getContent(), 'compiler response');
+//
+//    }
 
     public function testCompileAction_binary()
     {
@@ -2201,13 +2202,9 @@ class DefaultControllerUnitTest extends \PHPUnit_Framework_TestCase
         $controller->expects($this->at(2))->method('get')->with($this->equalTo('codebender_utilities.logcontroller'))->will($this->returnValue($logController));
         $controller->expects($this->at(3))->method('get')->with($this->equalTo('codebender_utilities.handler'))->will($this->returnValue($handler));
 
-        $container->expects($this->at(0))->method('getParameter')->with($this->equalTo('library'))->will($this->returnValue('http://library/url'));
-
-        $handler->expects($this->at(0))->method('get')->with($this->equalTo('http://library/url/fetch?library=header'))->will($this->returnValue('{"success":true,"message":"Library found","files":[{"filename":"header.h","content":""}]}'));
-
         $container->expects($this->at(1))->method('getParameter')->with($this->equalTo('compiler'))->will($this->returnValue('http://compiler/url'));
 
-        $handler->expects($this->once())->method('post_raw_data')->with($this->equalTo('http://compiler/url'), $this->equalTo('{"files":[{"filename":"project.ino","content":"#include <header.h> #include \"header2.h\" "}],"format":"binary","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"},"libraries":{"header":[{"filename":"header.h","content":""}]}}')) -> will($this->returnValue('compiler response'));
+        $handler->expects($this->once())->method('post_raw_data')->with($this->equalTo('http://compiler/url'), $this->equalTo('{"files":[{"filename":"project.ino","content":"#include <header.h> #include \"header2.h\" "}],"format":"binary","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"},"libraries":[]]}}')) -> will($this->returnValue('compiler response'));
 
 
         $response = $controller->compileAction();
@@ -2251,13 +2248,9 @@ class DefaultControllerUnitTest extends \PHPUnit_Framework_TestCase
         $controller->expects($this->at(2))->method('get')->with($this->equalTo('codebender_utilities.logcontroller'))->will($this->returnValue($logController));
         $controller->expects($this->at(3))->method('get')->with($this->equalTo('codebender_utilities.handler'))->will($this->returnValue($handler));
 
-        $container->expects($this->at(0))->method('getParameter')->with($this->equalTo('library'))->will($this->returnValue('http://library/url'));
-
-        $handler->expects($this->at(0))->method('get')->with($this->equalTo('http://library/url/fetch?library=header'))->will($this->returnValue('{"success":true,"message":"Library found","files":[{"filename":"header.h","content":""}]}'));
-
         $container->expects($this->at(1))->method('getParameter')->with($this->equalTo('compiler'))->will($this->returnValue('http://compiler/url'));
 
-        $handler->expects($this->once())->method('post_raw_data')->with($this->equalTo('http://compiler/url'), $this->equalTo('{"files":[{"filename":"project.ino","content":"#include <header.h> #include \"header2.h\" "}],"format":"hex","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"},"libraries":{"header":[{"filename":"header.h","content":""}]}}')) -> will($this->returnValue('compiler response'));
+        $handler->expects($this->once())->method('post_raw_data')->with($this->equalTo('http://compiler/url'), $this->equalTo('{"files":[{"filename":"project.ino","content":"#include <header.h> #include \"header2.h\" "}],"format":"hex","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"},"libraries":[]]}}')) -> will($this->returnValue('compiler response'));
 
 
         $response = $controller->compileAction();

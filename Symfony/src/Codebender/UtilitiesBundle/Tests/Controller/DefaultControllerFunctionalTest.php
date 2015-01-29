@@ -409,13 +409,14 @@ class DefaultControllerFunctionalTest extends WebTestCase
 
     }
 
-    public function testCompileAction_success_syntax()
-    {
-        $client = static::createClient();
-        $crawler = $client->request('POST', 'utilities/compile/', $parameters = array(), $files = array(), $server = array(), $content = '{"files":[{"filename":"header.h","content":""},{"filename":"sample.ino","content":"#include <Ethernet.h>\n\nvoid setup()\n{\n\t\n}\n\nvoid loop()\n{\n\t\n}\n"}],"format":"syntax","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"}}', $changeHistory = true);
-        $this->assertEquals(1, $crawler->filter('html:contains("success")')->count());
-        $this->assertEquals(1, $crawler->filter('html:contains("true")')->count());
-    }
+    // Not used any more
+//    public function testCompileAction_success_syntax()
+//    {
+//        $client = static::createClient();
+//        $crawler = $client->request('POST', 'utilities/compile/', $parameters = array(), $files = array(), $server = array(), $content = '{"files":[{"filename":"header.h","content":""},{"filename":"sample.ino","content":"#include <Ethernet.h>\n\nvoid setup()\n{\n\t\n}\n\nvoid loop()\n{\n\t\n}\n"}],"format":"syntax","version":"105","build":{"mcu":"atmega328p","f_cpu":"16000000L","core":"arduino","variant":"standard"}}', $changeHistory = true);
+//        $this->assertEquals(1, $crawler->filter('html:contains("success")')->count());
+//        $this->assertEquals(1, $crawler->filter('html:contains("true")')->count());
+//    }
 
     public function testCompileAction_fail_hex()
     {
