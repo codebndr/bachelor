@@ -12,6 +12,7 @@ parameters:
     email.pass: localpass
     mykey: someKey
     compiler: 'http://compiler.codebender.cc'
+    builder: 'http://builder.codebender.cc'
     library: 'http://libs.codebender.cc'
     directory: ""
     islocalhost: true
