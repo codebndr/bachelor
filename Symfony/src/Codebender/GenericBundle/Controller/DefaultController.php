@@ -250,7 +250,7 @@ class DefaultController extends Controller
 	{
 		$utilities = $this->get('codebender_utilities.handler');
 
-		$libraries = json_decode($utilities->get($this->container->getParameter('library')), true);
+		$libraries = json_decode($utilities->post_raw_data($this->container->getParameter('builder'), json_encode(array("type" => "library", "data" => array("type" => "list")))), true);
         if($libraries == NULL || $libraries['success'] == false)
             return $this->render('CodebenderGenericBundle:Default:minor_error.html.twig', array('error' => "Sorry! The library list could not be fetched."));
 		$categories = $libraries["categories"];
@@ -270,7 +270,7 @@ class DefaultController extends Controller
 	public function exampleAction($library, $example, $embed = false)
 	{
 		$utilities = $this->get('codebender_utilities.handler');
-		$response = json_decode($utilities->get($this->container->getParameter('library')."/get/".$library."/".$example ), true);
+		$response = json_decode($utilities->post_raw_data($this->container->getParameter('builder'), json_encode(array("type" => "library", "data" => array("type" => "getExampleCode", "library" => $library, "example" => $example)))), true);
         if($response == NULL || $response['success'] == false)
             return $this->render('CodebenderGenericBundle:Default:minor_error.html.twig', array('error' => "Sorry! The library list could not be fetched."));
         $files = array();
@@ -281,7 +281,7 @@ class DefaultController extends Controller
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
         $example_parts = explode(":",$example);
         $session = $this->container->get('session');
-        $json =  array("project" => array("name" => $example_parts[count($example_parts) - 1], "url" => ""), "user" => array("name" => "", "url" => ""), "clone_url" => "", "download_url" => $this->get('router')->generate('CodebenderUtilitiesBundle_downloadexample', array('name' => $example, 'url' => "/get/".$library."/".$example ), true), "files" => $files);
+        $json =  array("project" => array("name" => $example_parts[count($example_parts) - 1], "url" => ""), "user" => array("name" => "", "url" => ""), "clone_url" => "", "download_url" => $this->get('router')->generate('CodebenderUtilitiesBundle_downloadexample', array('name' => $example, 'library' => $library ), true), "files" => $files);
         $json = json_encode($json);
 
 

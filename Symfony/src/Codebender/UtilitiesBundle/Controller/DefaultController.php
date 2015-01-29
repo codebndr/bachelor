@@ -43,8 +43,9 @@ class DefaultController extends Controller
         $type = '';
         $code = $request->get('code');
 		if ($code)
-		{
+		{die(var_dump($code));
 			$files = json_decode($code, true);
+			die(var_dump($files));
                 $notIno = array();
                 foreach($files as $f)
                 {
@@ -354,7 +355,7 @@ class DefaultController extends Controller
      * @param String $url
      * @return Response with appropriate data for downloading example
      */
-    public function downloadExampleAction($name, $url)
+    public function downloadExampleAction($name, $library)
     {
         $user = json_decode($this->get('codebender_user.usercontroller')->getCurrentUserAction()->getContent(), true);
 
@@ -362,7 +363,7 @@ class DefaultController extends Controller
         $value = "";
 
         $utilities = $this->get('codebender_utilities.handler');
-        $data = json_decode($utilities->get($this->container->getParameter('library').$url), true);
+        $data = json_decode($utilities->post_raw_data($this->container->getParameter('builder'), array("type" => "library", "data" => array("type" => "getExampleCode", "library" => $library, "example" => $name ))), true);
         $files = $data['files'];
 
         if(isset($files[0]))
@@ -377,7 +378,7 @@ class DefaultController extends Controller
                 {
                     $value = "";
                     $htmlcode = 404;
-                    $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => false, 'url'=>$url)));
+                    $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => false, 'url'=>"$library/$name")));
 
                 }
                 else
@@ -386,7 +387,7 @@ class DefaultController extends Controller
                     {
                         $value = "";
                         $htmlcode = 404;
-                        $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => false, 'url'=>$url)));
+                        $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => false, 'url'=>"$library/$name")));
 
                     }
                     else
@@ -407,7 +408,7 @@ class DefaultController extends Controller
             {
                 $value = "";
                 $htmlcode = 404;
-                $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => false, 'url'=>$url)));
+                $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => false, 'url'=>"$library/$name")));
 
             }
         }
@@ -415,12 +416,12 @@ class DefaultController extends Controller
         {
             $value = "";
             $htmlcode = 404;
-            $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => false, 'url'=>$url)));
+            $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => false, 'url'=>"$library/$name")));
         }
 
         $headers = array('Content-Type'		=> 'application/octet-stream',
             'Content-Disposition' => 'attachment;filename="'.$name.'.zip"');
-        $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => true, 'url'=>$url)));
+        $this->get('codebender_utilities.logcontroller')->logAction($user['success']? $user["id"]:null, Log::DOWNLOAD_LIBRARY_EXAMPLE, 'DOWNLOAD_LIBRARY_EXAMPLE',json_encode(array('success' => true, 'url'=>"$library/$name")));
         return new Response($value, $htmlcode, $headers);
     }
 

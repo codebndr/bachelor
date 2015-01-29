@@ -49,7 +49,7 @@ CodebenderUtilitiesBundle_download:
   defaults: { _controller: CodebenderUtilitiesBundle:Default:download }
 
 CodebenderUtilitiesBundle_downloadexample:
-  pattern:  /downloadexample/{name}/{url}
+  pattern:  /downloadexample/{name}/{library}
   defaults: { _controller: CodebenderUtilitiesBundle:Default:downloadExample }
   requirements:
       url: ".+"
