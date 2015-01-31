@@ -43,9 +43,9 @@ class DefaultController extends Controller
         $type = '';
         $code = $request->get('code');
 		if ($code)
-		{die(var_dump($code));
+		{
 			$files = json_decode($code, true);
-			die(var_dump($files));
+			
                 $notIno = array();
                 foreach($files as $f)
                 {
@@ -734,8 +734,7 @@ class DefaultController extends Controller
 
 		$builderRequest = array("type" => "compiler", "data" => $content);
 		$requestContent = json_encode($builderRequest);
-        $data = $utilities->post_raw_data($this->container->getParameter('builder'), $requestContent);
-
+        	$data = $utilities->post_raw_data($this->container->getParameter('builder'), $requestContent);
 		return new Response($data);
 
 	}
