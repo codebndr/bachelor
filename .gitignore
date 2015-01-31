@@ -1,5 +1,6 @@
 *~
 .DS_Store
+*.swp
 vendor/codebendercc/arduino-files/.git
 Symfony/app/phpunit.xml
 Symfony/jlog.xml
